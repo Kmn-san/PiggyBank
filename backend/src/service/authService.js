@@ -28,6 +28,15 @@ export const registerUser = async (username, user_code, password) => {
             [username, user_code, hashedPassword]
         )
 
+        await client.query(`
+            INSERT INTO accounts
+                (user_id,name,type,current_amount)
+            VALUES
+                ($1,'Emergency Account','savings',0),
+                ($1,'Working Account','spending',0),
+                ($1,'Daily Expenses','spending',0)`,
+            [rows[0].id])
+
         await client.query("COMMIT")
         return rows[0]
     } catch (error) {
