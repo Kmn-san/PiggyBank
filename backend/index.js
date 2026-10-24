@@ -1,6 +1,7 @@
 import express from "express"
 import authRoutes from "./src/route/authRoutes.js"
 import dashboardRoutes from "./src/route/dashboardRoutes.js"
+import savingsRoutes from "./src/route/savingsRoute.js"
 
 import { ENV } from "./src/config/env.js"
 
@@ -11,6 +12,7 @@ app.use(express.json())
 
 app.use("/api/auth", authRoutes)
 app.use("/api/dashboard", dashboardRoutes)
+app.use("/api/savings", savingsRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}.`);
