@@ -1,15 +1,8 @@
 import { pool } from "../utlis/db.js"
+import { getMonthRange } from "../utlis/monthFormat.js";
 
 export const getDashboard = async (userId, month) => {
-    const selectedMonth = month ?? new Date().toISOString().slice(0, 7);
-
-    const monthStart = `${selectedMonth}-01`;
-
-    const [year, monthNumber] = selectedMonth.split("-").map(Number);
-
-    const nextMonthStart = new Date(
-        Date.UTC(year, monthNumber, 1)
-    ).toISOString().slice(0, 10);
+    const { selectedMonth, monthStart, nextMonthStart } = getMonthRange(month);
 
     const { rows: accounts } = await pool.query(`
             SELECT name,type,current_amount AS currentAmount
