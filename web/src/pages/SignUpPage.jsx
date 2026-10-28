@@ -6,9 +6,11 @@ import {
     Eye,
     EyeOff,
     CircleAlert,
-    ShieldCheck,
+    CircleCheck,
     Loader2,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../lib/api.js';
 
 const FONT_JP = "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif";
 
@@ -19,7 +21,7 @@ const fieldClass = (hasError) =>
 const inputClass =
     'grow bg-transparent outline-none text-base text-[#12202F] placeholder:text-[#12202F]/35 min-w-0';
 
-const PasswordField = ({ id, label, value, onChange, error, show, onToggle, autoComplete, hint }) => (
+const PasswordField = ({ id, label, value, onChange, error, show, onToggle, autoComplete, hint, disabled }) => (
     <div>
         <label htmlFor={id} className="block text-sm font-semibold text-[#12202F] mb-2">
             {label}
@@ -34,6 +36,7 @@ const PasswordField = ({ id, label, value, onChange, error, show, onToggle, auto
                 className={inputClass}
                 value={value}
                 onChange={onChange}
+                disabled={disabled}
                 aria-invalid={!!error}
                 aria-describedby={error ? `${id}-error` : hint ? `${id}-hint` : undefined}
             />
@@ -65,6 +68,7 @@ const PasswordField = ({ id, label, value, onChange, error, show, onToggle, auto
 );
 
 const SignupPage = () => {
+    const navigate = useNavigate();
     const [userCode, setUserCode] = useState('');
     const [password, setPassword] = useState('');
     const [confirm, setConfirm] = useState('');
@@ -73,6 +77,12 @@ const SignupPage = () => {
     const [showConfirm, setShowConfirm] = useState(false);
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+
+    // Called when the user presses OK in the success popup
+    const handleOk = () => {
+        navigate('/login', { state: { registered: true } });
+    };
 
     const validate = () => {
         const next = {};
@@ -94,16 +104,26 @@ const SignupPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validate()) return;
+        if (isSuccess || !validate()) return;
 
         setIsLoading(true);
         setErrors({});
         try {
-            // Replace with your real signup API call. Never log credentials.
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            alert('アカウントを作成しました');
+            const data = await registerUser(userCode, password);
+            if (!data.success) {
+                setErrors({ general: data.message });
+                return;
+            }
+            // Open the success popup; navigation happens when the user presses OK
+            setIsSuccess(true);
         } catch (err) {
-            setErrors({ general: 'アカウントを作成できませんでした。もう一度お試しください。' });
+            console.log(err);
+
+            setErrors({
+                general:
+                    err.response?.data?.message ??
+                    'アカウントを作成できませんでした。もう一度お試しください。',
+            });
         } finally {
             setIsLoading(false);
         }
@@ -130,6 +150,37 @@ const SignupPage = () => {
                         ユーザーコードとパスワードを設定してください
                     </p>
                 </header>
+
+                {/* Success popup: user must press OK to continue */}
+                {isSuccess && (
+                    <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-6">
+                        <div
+                            role="alertdialog"
+                            aria-modal="true"
+                            aria-labelledby="success-title"
+                            aria-describedby="success-desc"
+                            className="w-full max-w-xs bg-white rounded-2xl p-6 text-center shadow-xl"
+                        >
+                            <div className="mx-auto w-14 h-14 rounded-full bg-green-50 text-[#0F7B5F] flex items-center justify-center mb-4">
+                                <CircleCheck className="h-8 w-8" aria-hidden="true" />
+                            </div>
+                            <h2 id="success-title" className="text-xl font-bold text-[#12202F]">
+                                登録が完了しました
+                            </h2>
+                            <p id="success-desc" className="text-sm text-[#12202F]/65 mt-2 leading-relaxed">
+                                ログインページに移動します。
+                            </p>
+                            <button
+                                type="button"
+                                autoFocus
+                                onClick={handleOk}
+                                className="mt-6 h-12 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold active:bg-[#0B5F49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                )}
 
                 {/* General error */}
                 {errors.general && (
@@ -160,6 +211,7 @@ const SignupPage = () => {
                                 placeholder="ユーザーコードを入力"
                                 className={inputClass}
                                 value={userCode}
+                                disabled={isSuccess}
                                 onChange={(e) => {
                                     setUserCode(e.target.value);
                                     clearError('userCode');
@@ -193,6 +245,7 @@ const SignupPage = () => {
                         onToggle={() => setShowPassword((s) => !s)}
                         autoComplete="new-password"
                         hint="8文字以上"
+                        disabled={isSuccess}
                     />
 
                     {/* Confirm password */}
@@ -208,6 +261,7 @@ const SignupPage = () => {
                         show={showConfirm}
                         onToggle={() => setShowConfirm((s) => !s)}
                         autoComplete="new-password"
+                        disabled={isSuccess}
                     />
 
                     {/* Terms */}
@@ -216,6 +270,7 @@ const SignupPage = () => {
                             <input
                                 type="checkbox"
                                 checked={agreed}
+                                disabled={isSuccess}
                                 onChange={(e) => {
                                     setAgreed(e.target.checked);
                                     clearError('agreed');
@@ -245,13 +300,18 @@ const SignupPage = () => {
                     {/* Submit */}
                     <button
                         type="submit"
-                        disabled={isLoading}
-                        className="h-14 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-[#0B5F49] disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
+                        disabled={isLoading || isSuccess}
+                        className="h-14 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-[#0B5F49] disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
                     >
                         {isLoading ? (
                             <>
                                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                                 作成中…
+                            </>
+                        ) : isSuccess ? (
+                            <>
+                                <CircleCheck className="h-5 w-5" aria-hidden="true" />
+                                作成しました
                             </>
                         ) : (
                             'アカウントを作成'

@@ -8,6 +8,7 @@ import {
     CircleAlert,
     Loader2,
 } from 'lucide-react';
+import { loginUser } from '../lib/api.js';
 
 const FONT_JP = "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif";
 
@@ -34,13 +35,17 @@ const LoginPage = () => {
         setIsLoading(true);
         setErrors({});
         try {
-            console.log(password);
-            
-            // Replace with your real auth API call. Never log credentials.
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            alert('ログインしました');
+            const data = await loginUser(userCode, password);
+            if (!data.success) {
+                setErrors({ general: data.message });
+                return;
+            }
+            // success: continue (save token, navigate...)
         } catch (err) {
-            setErrors({ general: 'ユーザーコードまたはパスワードが正しくありません。' });
+            const data = err.response?.data;
+            setErrors({
+                general: data?.message ?? 'サーバーに接続できませんでした。',
+            });
         } finally {
             setIsLoading(false);
         }

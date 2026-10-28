@@ -23,8 +23,8 @@ export const registerUser = async (user_code, password) => {
             `INSERT INTO users
                 (user_code,hash_password)
             VALUES
-                ($1,$2,$3)
-            RETURNING id, username`,
+                ($1,$2)
+            RETURNING id`,
             [user_code, hashedPassword]
         )
 
