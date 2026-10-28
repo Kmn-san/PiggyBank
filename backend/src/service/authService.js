@@ -2,7 +2,7 @@ import { pool } from "../utlis/db.js"
 import bcrypt from "bcrypt"
 import { ACCESS_EXPIRED, generateAccessToken, generateRefreshToken, hashToken } from "./tokenService.js"
 
-export const registerUser = async (username, user_code, password) => {
+export const registerUser = async (user_code, password) => {
     const client = await pool.connect()
     try {
         await client.query("BEGIN")
@@ -21,11 +21,11 @@ export const registerUser = async (username, user_code, password) => {
 
         const { rows } = await client.query(
             `INSERT INTO users
-                (username,user_code,hash_password)
+                (user_code,hash_password)
             VALUES
                 ($1,$2,$3)
             RETURNING id, username`,
-            [username, user_code, hashedPassword]
+            [user_code, hashedPassword]
         )
 
         await client.query(`
