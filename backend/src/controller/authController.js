@@ -5,11 +5,11 @@ export const registerUser = async (req, res) => {
         const { user_code, password } = req.body;
         if (!user_code || !password) {
             return res.status(400).json({
-                success: false, message: "Fill in required fields."
+                success: false, message: "必要なところを埋めてください。"
             })
         }
         await authService.registerUser(user_code, password)
-        return res.status(201).json({ success: true, message: "Register successfully. Please login." })
+        return res.status(201).json({ success: true, message: "登録済みです。ログインしてください。" })
     } catch (error) {
         if (error.statusCode) {
             return res.status(error.statusCode).json({
@@ -18,7 +18,7 @@ export const registerUser = async (req, res) => {
         }
         console.error("Error in registerUser controller: ", error.message);
         return res.status(500).json({
-            success: false, message: "Internal Server Error"
+            success: false, message: "サーバーエラー"
         })
     }
 }
@@ -29,7 +29,7 @@ export const loginUser = async (req, res) => {
 
         if (!user_code || !password) {
             return res.status(400).json({
-                success: false, message: "Fill in required fields."
+                success: false, message: "必要なところを埋めてください。"
             })
         }
 
@@ -37,7 +37,7 @@ export const loginUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "Login successfully",
+            message: "ログインしました。",
             accessToken: token.accessToken,
             refreshToken: token.refreshToken,
             expiresIn: token.expiresIn
@@ -50,7 +50,7 @@ export const loginUser = async (req, res) => {
         }
         console.error("Error in loginUser controller: ", error.message);
         return res.status(500).json({
-            success: false, message: "Internal Server Error"
+            success: false, message: "サーバーエラー"
         })
     }
 }
@@ -67,7 +67,7 @@ export const logoutUser = async (req, res) => {
 
         await authService.logoutUser(refreshToken)
 
-        return res.status(200).json({ success: true, message: "Logout successfully." })
+        return res.status(200).json({ success: true, message: "ログアウトしました。" })
     } catch (error) {
         if (error.statusCode) {
             return res.status(error.statusCode).json({
@@ -76,7 +76,7 @@ export const logoutUser = async (req, res) => {
         }
         console.error("Error in logoutUser controller: ", error.message);
         return res.status(500).json({
-            success: false, message: "Internal Server Error"
+            success: false, message: "サーバーエラー"
         })
     }
 }
@@ -102,7 +102,7 @@ export const refreshToken = async (req, res) => {
         }
         console.error("Error in refreshToken controller: ", error.message);
         return res.status(500).json({
-            success: false, message: "Internal Server Error"
+            success: false, message: "サーバーエラー"
         })
     }
 }

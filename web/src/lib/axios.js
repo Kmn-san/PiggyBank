@@ -22,10 +22,6 @@ const clearSession = () => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("refreshToken");
     sessionStorage.removeItem("expiresIn");
-
-    const qrEntryPath = sessionStorage.getItem("qrEntryPath");
-
-    window.location.href = qrEntryPath || "/login";
 };
 
 // Attach access token to requests.

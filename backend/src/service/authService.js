@@ -12,7 +12,7 @@ export const registerUser = async (user_code, password) => {
             WHERE user_code = $1`
             , [user_code])
         if (existUser.length > 0) {
-            const error = new Error("This user code had been taken.Try a new one.")
+            const error = new Error("このユーザーコードはすでに使用されています。別のコードをお試しください。")
             error.statusCode = 409
             throw error
         }
@@ -56,14 +56,14 @@ export const loginUser = async (user_code, password) => {
 
     const existUser = rows[0]
     if (!existUser) {
-        const error = new Error("Invalid user code or password.")
+        const error = new Error("ユーザーコードまたはパスワードが正しくありません。")
         error.statusCode = 401
         throw error
     }
 
     const comparePassword = await bcrypt.compare(password, existUser.hash_password)
     if (!comparePassword) {
-        const error = new Error("Invalid user code or password.")
+        const error = new Error("ユーザーコードまたはパスワードが正しくありません。")
         error.statusCode = 401
         throw error
     }

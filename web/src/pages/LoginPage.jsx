@@ -5,10 +5,11 @@ import {
     LockKeyhole,
     Eye,
     EyeOff,
-    CircleAlert,
     Loader2,
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { loginUser } from '../lib/api.js';
+import { useNavigate } from 'react-router-dom';
 
 const FONT_JP = "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif";
 
@@ -18,6 +19,8 @@ const LoginPage = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+
+    const navigate = useNavigate();
 
     const validate = () => {
         const next = {};
@@ -33,18 +36,22 @@ const LoginPage = () => {
         if (!validate()) return;
 
         setIsLoading(true);
-        setErrors({});
         try {
             const data = await loginUser(userCode, password);
             if (!data.success) {
-                setErrors({ general: data.message });
+                // Backend says success: false (HTTP 200)
+                toast.error(data.message ?? 'ログインできませんでした。', { id: 'login' });
                 return;
             }
-            // success: continue (save token, navigate...)
+            localStorage.setItem('token', data.accessToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('expiresIn', String(data.expiresIn));
+
+            toast.success('ログインしました');
+            navigate('/dashboard');
         } catch (err) {
-            const data = err.response?.data;
-            setErrors({
-                general: data?.message ?? 'サーバーに接続できませんでした。',
+            toast.error(err.response?.data?.message ?? 'サーバーに接続できませんでした。', {
+                id: 'login',
             });
         } finally {
             setIsLoading(false);
@@ -80,17 +87,6 @@ const LoginPage = () => {
                         あなたの支出を記録、分析する
                     </p>
                 </header>
-
-                {/* General error */}
-                {errors.general && (
-                    <div
-                        role="alert"
-                        className="flex items-start gap-3 mb-5 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm"
-                    >
-                        <CircleAlert className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
-                        <span>{errors.general}</span>
-                    </div>
-                )}
 
                 <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
                     {/* User code */}
@@ -173,7 +169,7 @@ const LoginPage = () => {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="h-14 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-[#0B5F49] disabled:opacity-60focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
+                        className="h-14 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-[#0B5F49] disabled:opacity-60 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
                     >
                         {isLoading ? (
                             <>

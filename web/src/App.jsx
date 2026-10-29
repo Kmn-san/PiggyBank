@@ -1,22 +1,28 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import LoginPage from "./pages/LoginPage"
 import SignUpPage from "./pages/SignUpPage"
 import PrivacyPolicy from "./pages/PrivacyPage"
 import TermsOfService from "./pages/TermsPage"
+import PublicRoute from "./components/PublicRoute"
+import Dashboard from "./pages/Dashboard"
+import ProtectedRoute from "./components/ProtectRoute"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
 
-        <Route
-          path="/signup"
-          element={<SignUpPage />}
-        />
+        <Route element={<PublicRoute />}>
+          <Route
+            path="/login"
+            element={<LoginPage />}
+          />
+
+          <Route
+            path="/signup"
+            element={<SignUpPage />}
+          />
+        </Route>
 
         <Route
           path="/privacy"
@@ -27,6 +33,17 @@ function App() {
           path="/terms"
           element={<TermsOfService />}
         />
+
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+        </Route>
+
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>
     </BrowserRouter>
   )
