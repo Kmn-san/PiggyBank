@@ -7,6 +7,7 @@ import PublicRoute from "./components/PublicRoute"
 import Dashboard from "./pages/Dashboard"
 import ProtectedRoute from "./components/ProtectRoute"
 import AppLayout from "./components/AppLayout"
+import SavingsPage from "./pages/SavingsPage"
 
 function App() {
   return (
@@ -40,6 +41,11 @@ function App() {
             <Route
               path="/dashboard"
               element={<Dashboard />}
+            />
+
+            <Route
+              path="/savings"
+              element={<SavingsPage />}
             />
           </Route>
         </Route>

@@ -43,9 +43,9 @@ const RecentTransactions = ({ transactions = [] }) => {
                                         <s.Icon className="h-5 w-5" aria-hidden="true" />
                                     </div>
                                     <div className="min-w-0">
-                                        <p className="text-sm font-semibold break-words">{main}</p>
+                                        <p className="text-sm font-semibold wrap-break-word">{main}</p>
                                         {sub && (
-                                            <p className="text-xs text-[#12202F]/60 break-words">{sub}</p>
+                                            <p className="text-xs text-[#12202F]/60 wrap-break-word">{sub}</p>
                                         )}
                                     </div>
                                 </div>

@@ -174,7 +174,7 @@ const SignupPage = () => {
                                 type="button"
                                 autoFocus
                                 onClick={handleOk}
-                                className="mt-6 h-12 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold active:bg-[#0B5F49] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
+                                className="mt-6 h-12 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold active:bg-[#0B5F49] focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-[#0F7B5F]"
                             >
                                 OK
                             </button>

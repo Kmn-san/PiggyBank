@@ -1,9 +1,9 @@
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Receipt } from 'lucide-react';
+import { Banknote, LayoutDashboard, Receipt } from 'lucide-react';
 
 const TABS = [
     { to: '/dashboard', label: 'ホーム', Icon: LayoutDashboard },
-    { to: '/expenses', label: '支出', Icon: Receipt },
+    { to: '/savings', label: '貯金', Icon: Banknote },
 ];
 
 const TabBar = () => (

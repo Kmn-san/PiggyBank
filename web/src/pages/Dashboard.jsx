@@ -5,11 +5,26 @@ import Charts from '../components/Dashbaord/Charts';
 import RecentTransactions from '../components/Dashbaord/RecentTransactions';
 import MoneyFlow from '../components/Dashbaord/MoneyFlow';
 import { useDashboard } from '../hooks/useDashboard';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import TransactionModal from '../components/TransactionModal';
 
 const Dashboard = () => {
     const { data, isPending, error, isError } = useDashboard();
+
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState('income');
+
+    const openModal = (mode) => {
+        setModalMode(mode);
+        setModalOpen(true);
+    };
+
+    const handleSubmit = (payload) => {
+        console.log('Transaction submitted:', payload);
+
+    };
+
     useEffect(() => {
         if (isPending) {
             toast.loading('読み込み中…', { id: 'dashboard' });
@@ -23,10 +38,8 @@ const Dashboard = () => {
         }
     }, [isPending, isError, error]);
 
-    // Remove the toast if the user leaves the page while it is still loading
     useEffect(() => () => toast.dismiss('dashboard'), []);
 
-    // No data yet (loading or failed): show the empty page background only
     if (!data) {
         return <div className="min-h-screen bg-[#F5F6F4]" />;
     }
@@ -37,7 +50,7 @@ const Dashboard = () => {
             <main className="max-w-5xl mx-auto px-4 pt-6 pb-[max(2rem,env(safe-area-inset-bottom))] space-y-4">
 
                 {/* Summary cards */}
-                <SummaryCard accounts={data.accounts} />
+                <SummaryCard accounts={data.accounts} onOpenModal={openModal} />
 
                 {/* Money flow */}
                 <MoneyFlow />
@@ -47,6 +60,15 @@ const Dashboard = () => {
 
                 {/* Recent transactions */}
                 <RecentTransactions transactions={data.transactions} />
+
+
+                <TransactionModal
+                    isOpen={modalOpen}
+                    mode={modalMode}
+                    accounts={data.accounts}
+                    onClose={() => setModalOpen(false)}
+                    onSubmit={handleSubmit}
+                />
             </main>
         </div >
     );

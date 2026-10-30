@@ -42,7 +42,7 @@ function SummaryCard({ accounts = [], onOpenModal }) {
             </section>
 
             {/* Daily expenses: record expenses. First on phones, since it is the most-used action */}
-            <Card className="order-first md:order-none">
+            <Card className="order-first md:order-0">
                 <p className="text-xs font-semibold text-[#12202F]/60">日々の支出口座</p>
                 <p className="text-3xl font-bold mt-1">{formatYen(amountOf(ACCOUNT.daily))}</p>
                 <p className="text-xs text-[#12202F]/55 mt-1">日々の支出はここから使います</p>
