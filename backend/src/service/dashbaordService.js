@@ -28,16 +28,30 @@ export const getDashboard = async (userId, month) => {
 
         `, [userId, monthStart, nextMonthStart])
 
-    const { rows: transactions } = await pool.query(
-        `
-            SELECT id,type,category,amount,note,transaction_date
-            FROM transactions
-            WHERE user_id = $1
-                AND deleted_at IS NULL
-            ORDER BY transaction_date DESC, created_at DESC
-            LIMIT 5
-        `, [userId]
-    )
+    const { rows: transactions } = await pool.query(`
+        SELECT 
+            t.id,
+            t.type,
+            t.category,
+            t.amount,
+            t.transaction_date AS "transactionDate",
+            from_account.name AS "fromAccountName",
+            to_account.name AS "toAccountName"
+        FROM transactions t
+        LEFT JOIN accounts from_account
+            ON t.from_account_id = from_account.id
+            AND from_account.user_id = t.user_id
+        LEFT JOIN accounts to_account
+            ON t.to_account_id = to_account.id
+            AND to_account.user_id = t.user_id
+        WHERE t.user_id = $1
+            AND t.deleted_at IS NULL
+            AND t.transaction_date >= $2::date
+            AND t.transaction_date < $3::date
+        ORDER BY t.transaction_date DESC,t.created_at DESC
+        LIMIT 5
+        `, [userId, monthStart, nextMonthStart])
+
 
     const result = {
         month: selectedMonth,
