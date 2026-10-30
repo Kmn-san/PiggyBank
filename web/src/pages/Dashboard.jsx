@@ -8,9 +8,11 @@ import { useDashboard } from '../hooks/useDashboard';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
+import useTrasfer from '../hooks/useTrasfer';
 
 const Dashboard = () => {
     const { data, isPending, error, isError } = useDashboard();
+    const { transferAccounts } = useTrasfer()
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
@@ -21,8 +23,7 @@ const Dashboard = () => {
     };
 
     const handleSubmit = (payload) => {
-        console.log('Transaction submitted:', payload);
-
+        transferAccounts.mutate(payload)
     };
 
     useEffect(() => {

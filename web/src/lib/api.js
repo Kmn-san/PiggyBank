@@ -19,3 +19,17 @@ export const fetchDashboard = async () => {
     const response = await axiosInstance.get(`/dashboard`)
     return response.data.data
 }
+
+export const transferIncome = async () => {
+
+}
+
+export const transaferExpenses = async (amount, category) => {
+    const response = await axiosInstance.post(`/expenses`, { amount, category })
+    return response.data.data
+}
+
+export const transferAccounts = async (amount, fromAccount, toAccount) => {
+    const response = await axiosInstance.post(`/savings/transfer`, { amount, fromAccount, toAccount })
+    return response.data.data
+}

@@ -135,6 +135,8 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             toast.success('保存しました', { id: 'transaction' });
             onClose?.();
         } catch (err) {
+            console.log(err);
+
             toast.error(err?.response?.data?.message ?? '保存できませんでした。もう一度お試しください。', {
                 id: 'transaction',
             });

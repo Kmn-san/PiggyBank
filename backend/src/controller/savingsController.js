@@ -23,6 +23,8 @@ export const transferSavings = async (req, res) => {
     try {
         const { userId } = req.user;
         const { amount, fromAccount, toAccount } = req.body;
+        console.log(amount);
+
         if (!amount || !fromAccount || !toAccount) {
             return res.status(400).json({ success: false, message: "Fill in required fields." })
         }

@@ -3,7 +3,7 @@ import { Banknote, LayoutDashboard, Receipt } from 'lucide-react';
 
 const TABS = [
     { to: '/dashboard', label: 'ホーム', Icon: LayoutDashboard },
-    { to: '/savings', label: '貯金', Icon: Banknote },
+    { to: '/savings', label: '貯蓄', Icon: Banknote },
 ];
 
 const TabBar = () => (
