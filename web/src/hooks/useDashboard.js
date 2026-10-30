@@ -6,6 +6,5 @@ export const useDashboard = (month) => {
     return useQuery({
         queryKey: ["dashboard", month],
         queryFn: async () => fetchDashboard()
-
     });
 };

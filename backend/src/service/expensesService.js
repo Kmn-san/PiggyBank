@@ -6,7 +6,7 @@ export const getExpenses = async (userId, month) => {
     const { monthStart, nextMonthStart } = getMonthRange(month);
 
     const { rows: accounts } = await pool.query(`
-        SELECT name,current_amount
+        SELECT name,current_amount AS currentamount
         FROM accounts
         WHERE user_id = $1
             AND name = 'Daily Expenses'

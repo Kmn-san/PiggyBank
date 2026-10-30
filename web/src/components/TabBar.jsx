@@ -4,6 +4,7 @@ import { Banknote, LayoutDashboard, Receipt } from 'lucide-react';
 const TABS = [
     { to: '/dashboard', label: 'ホーム', Icon: LayoutDashboard },
     { to: '/savings', label: '貯蓄', Icon: Banknote },
+    { to: '/expenses', label: '消費', Icon: Receipt },
 ];
 
 const TabBar = () => (
@@ -11,7 +12,7 @@ const TabBar = () => (
         aria-label="メインメニュー"
         className="fixed bottom-0 inset-x-0 z-20 bg-white border-t border-[#D9DDD8] pb-[env(safe-area-inset-bottom)]"
     >
-        <ul className="max-w-5xl mx-auto grid grid-cols-2">
+        <ul className="max-w-5xl mx-auto grid grid-cols-4">
             {TABS.map(({ to, label, Icon }) => (
                 <li key={to}>
                     <NavLink

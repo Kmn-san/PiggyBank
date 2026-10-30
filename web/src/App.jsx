@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard"
 import ProtectedRoute from "./components/ProtectRoute"
 import AppLayout from "./components/AppLayout"
 import SavingsPage from "./pages/SavingsPage"
+import ExpensesPage from "./pages/ExpensesPage"
 
 function App() {
   return (
@@ -46,6 +47,11 @@ function App() {
             <Route
               path="/savings"
               element={<SavingsPage />}
+            />
+
+            <Route
+              path="/expenses"
+              element={<ExpensesPage />}
             />
           </Route>
         </Route>

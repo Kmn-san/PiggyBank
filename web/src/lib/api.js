@@ -20,6 +20,11 @@ export const fetchDashboard = async () => {
     return response.data.data
 }
 
+export const fetchExpenses = async (month) => {
+    const response = await axiosInstance.get(`/expenses?month=${month}`)
+    return response.data.result
+}
+
 export const transferIncome = async () => {
 
 }

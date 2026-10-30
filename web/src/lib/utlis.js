@@ -30,3 +30,34 @@ export const formatDateFull = (iso) => {
         day: '2-digit',
     }).format(d)
 }
+
+export const parts = (iso, opts) => new Intl.DateTimeFormat('sv-SE', { timeZone: TIMEZONE, ...opts }).format(new Date(iso));
+
+export const monthKeyOf = (iso) => parts(iso, { year: 'numeric', month: '2-digit' }); // "2026-10"
+
+export const dayKeyOf = (iso) => parts(iso, { year: 'numeric', month: '2-digit', day: '2-digit' }); // "2026-10-29"
+
+export const dayLabelOf = (iso) =>
+    new Intl.DateTimeFormat('ja-JP', { timeZone: TIMEZONE, month: 'long', day: 'numeric', weekday: 'short' }).format(new Date(iso)); // 10月29日(木)
+
+export const monthLabel = (key) => {
+    const [y, m] = key.split('-');
+    return `${y}年${Number(m)}月`;
+};
+
+export const shiftMonth = (key, delta) => {
+    const [y, m] = key.split('-').map(Number);
+    const idx = y * 12 + (m - 1) + delta;
+    return `${Math.floor(idx / 12)}-${String((idx % 12) + 1).padStart(2, '0')}`;
+};
+
+export const CATEGORY_COLORS = {
+    food: '#0F7B5F',
+    transport: '#E8A317',
+    education: '#2B7FB8',
+    entertainment: '#D9480F',
+    shopping: '#7C5CBF',
+}
+export const FALLBACK_COLORS = ['#64748B', '#B45309', '#7C5CBF']
+
+export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)

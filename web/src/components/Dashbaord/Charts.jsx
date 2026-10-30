@@ -6,17 +6,7 @@ import {
     Pie,
     Cell,
 } from 'recharts';
-import { FONT_JP, formatYen } from '../../lib/utlis'
-const CATEGORY_COLORS = {
-    food: '#0F7B5F',
-    transport: '#E8A317',
-    education: '#2B7FB8',
-    entertainment: '#D9480F',
-    shopping: '#7C5CBF',
-}
-const FALLBACK_COLORS = ['#64748B', '#B45309', '#7C5CBF']
-
-const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+import { capitalize, CATEGORY_COLORS, FALLBACK_COLORS, FONT_JP, formatYen } from '../../lib/utlis'
 
 function Charts({ expenses = [] }) {
     const chartData = expenses
