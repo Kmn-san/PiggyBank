@@ -5,7 +5,7 @@ export default function useTransferAccounts() {
     const queryClient = useQueryClient()
 
     const onSuccess = () => {
-        ;['dashboard', 'transactions', 'expenses'].forEach((key) =>
+        ;['dashboard', 'transactions', 'expenses', 'savings'].forEach((key) =>
             queryClient.invalidateQueries({ queryKey: [key] })
         )
     }

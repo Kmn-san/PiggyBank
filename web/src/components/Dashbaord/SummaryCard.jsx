@@ -11,7 +11,7 @@ const ACCOUNT = {
 function SummaryCard({ accounts = [], onOpenModal }) {
 
     const amountOf = (name) =>
-        accounts.find((a) => a.name === name)?.currentamount ?? 0
+        accounts.find((a) => a.name === name)?.currentAmount ?? 0
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -78,7 +78,7 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
     if (!isOpen) return null;
 
     const byName = (key) => accounts.find((a) => a.name === ACCT[key].name);
-    const balanceOf = (key) => Number(byName(key)?.currentamount ?? 0);
+    const balanceOf = (key) => Number(byName(key)?.currentAmount ?? 0);
     const selectFrom = (k) => {
         setFromKey(k);
         if (k === toKey) setToKey(Object.keys(ACCT).find((x) => x !== k));

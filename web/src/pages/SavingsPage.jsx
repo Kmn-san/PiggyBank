@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 import { useSavings } from '../hooks/useSavings';
+import useTransferAccounts from '../hooks/useTransferAccounts';
 
 const WORKING = 'Working Account';
 const EMERGENCY = 'Emergency Account';
@@ -15,6 +16,8 @@ const primaryBtn =
 
 const SavingsPage = () => {
     const { data, isPending, error, isError } = useSavings();
+    const { submit } = useTransferAccounts();
+
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
 
@@ -23,9 +26,7 @@ const SavingsPage = () => {
         setModalOpen(true);
     };
 
-    const handleSubmit = (payload) => {
-        console.log('Transaction submitted:', payload);
-    };
+
     useEffect(() => {
         if (isPending) {
             toast.loading('読み込み中…', { id: 'savings' });
@@ -43,6 +44,7 @@ const SavingsPage = () => {
     if (!data) {
         return <div className="min-h-screen bg-[#F5F6F4]" />;
     }
+
     const accounts = Array.isArray(data) ? data : data ?? [];
     const amountOf = (name) =>
         Number(accounts.find((a) => a.name === name)?.currentAmount ?? 0);
@@ -138,7 +140,7 @@ const SavingsPage = () => {
                 mode={modalMode}
                 accounts={accounts}
                 onClose={() => setModalOpen(false)}
-                onSubmit={handleSubmit}
+                onSubmit={submit}
             />
         </main>
     );

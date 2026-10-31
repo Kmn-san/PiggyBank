@@ -52,7 +52,6 @@ export const transferAccount = async (req, res) => {
     try {
         const { userId } = req.user;
         const { amount, fromAccount, toAccount, note, transactionDate } = req.body;
-        console.log(req.body);
 
         if (!amount || !fromAccount || !toAccount) {
             return res.status(400).json({ success: false, message: "Fill in required fields." })
