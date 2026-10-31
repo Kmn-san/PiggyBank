@@ -6,13 +6,13 @@ import RecordButton from '../components/Transaction/RecordButton';
 import PeriodSummary from '../components/Transaction/PeriodSummary';
 import TransactionList from '../components/Transaction/TransactionList';
 import MonthFilter from '../components/Expenses/MonthFilter';
-import useTrasaction from '../hooks/useTrasaction.js';
+import useTransactions from '../hooks/useTransactions.js';
 
 const TransactionsPage = ({ onOpenModal }) => {
     const thisMonth = monthKeyOf(new Date().toISOString());
     const [month, setMonth] = useState(thisMonth);
 
-    const { data, isFetching, error, isError } = useTrasaction(month);
+    const { data, isFetching, error, isError } = useTransactions(month);
 
 
     useEffect(() => {

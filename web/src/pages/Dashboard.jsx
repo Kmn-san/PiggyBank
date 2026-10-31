@@ -1,4 +1,3 @@
-import DashbaordHeader from '../components/Dashbaord/DashbaordHeader';
 import SummaryCard from '../components/Dashbaord/SummaryCard';
 import { FONT_JP } from '../lib/utlis';
 import Charts from '../components/Dashbaord/Charts';
@@ -8,11 +7,11 @@ import { useDashboard } from '../hooks/useDashboard';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
-import useTrasaction from '../hooks/useTrasaction';
+import useTransferAccounts from '../hooks/useTransferAccounts';
 
 const Dashboard = () => {
     const { data, isPending, error, isError } = useDashboard();
-    const { transferAccounts } = useTrasaction()
+    const transfer = useTransferAccounts();
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
@@ -23,7 +22,7 @@ const Dashboard = () => {
     };
 
     const handleSubmit = (payload) => {
-        transferAccounts.mutate(payload)
+        transfer.mutate(payload)
     };
 
     useEffect(() => {

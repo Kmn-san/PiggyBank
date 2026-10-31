@@ -21,12 +21,12 @@ export const fetchDashboard = async () => {
 }
 
 export const fetchExpenses = async (month) => {
-    const response = await axiosInstance.get(`/expenses?month=${month}`)
+    const response = await axiosInstance.get('/expenses', { params: { month } })
     return response.data.result
 }
 
 export const fetchTransactions = async (month) => {
-    const response = await axiosInstance.get(`/transactions?month=${month}`)
+    const response = await axiosInstance.get('/transactions', { params: { month } })
     return response.data.data
 }
 
