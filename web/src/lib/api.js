@@ -20,6 +20,11 @@ export const fetchDashboard = async () => {
     return response.data.data
 }
 
+export const fetchSavings = async () => {
+    const response = await axiosInstance.get(`/savings`)
+    return response.data.data
+}
+
 export const fetchExpenses = async (month) => {
     const response = await axiosInstance.get('/expenses', { params: { month } })
     return response.data.result
@@ -30,16 +35,17 @@ export const fetchTransactions = async (month) => {
     return response.data.data
 }
 
-export const transferIncome = async () => {
-
+export const transferIncome = async ({ amount, transactionDate, note }) => {
+    const response = await axiosInstance.post(`/transactions/income`, { amount, transactionDate, note })
+    return response.data.result
 }
 
-export const transaferExpenses = async (amount, category) => {
-    const response = await axiosInstance.post(`/expenses`, { amount, category })
+export const transferExpenses = async ({ amount, category, note, transactionDate }) => {
+    const response = await axiosInstance.post(`/expenses`, { amount, category, note, transactionDate })
     return response.data.data
 }
 
-export const transferAccounts = async (amount, fromAccount, toAccount) => {
-    const response = await axiosInstance.post(`/savings/transfer`, { amount, fromAccount, toAccount })
+export const transferAccounts = async ({ amount, fromAccount, toAccount, note, transactionDate }) => {
+    const response = await axiosInstance.post(`/transactions/transfer`, { amount, fromAccount, toAccount, note, transactionDate })
     return response.data.data
 }

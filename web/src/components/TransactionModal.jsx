@@ -1,28 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import {
-    X,
-    Plus,
-    ArrowLeftRight,
-    ShoppingBag,
-    Wallet,
-    ShieldCheck,
-    CircleAlert,
-    Loader2,
-    Coffee,
-    Car,
-    GraduationCap,
-    ShoppingCart,
-    Film,
-    MoreHorizontal,
+    X, Plus, ArrowLeftRight, ArrowDown, ShoppingBag, CircleAlert, Loader2,
+    Coffee, Car, GraduationCap, ShoppingCart, Film, MoreHorizontal,
 } from 'lucide-react';
 import { formatYen } from '../lib/utlis';
+import { AccountPicker } from './AccountPicker';
+import { ACCT } from '../lib/accounts';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
-const ACCT = {
-    working: { name: 'Working Account', label: 'メイン口座', Icon: Wallet },
-    daily: { name: 'Daily Expenses', label: '日々の支出口座', Icon: ShoppingBag },
-    emergency: { name: 'Emergency Account', label: '緊急資金口座', Icon: ShieldCheck },
-};
 
 // Category ids are sent to the backend, names are shown as-is (English)
 const CATEGORIES = [
@@ -36,7 +21,7 @@ const CATEGORIES = [
 
 const MODES = {
     income: { label: '収入', Icon: Plus, desc: 'メイン口座に入るお金を記録します' },
-    transfer: { label: '振替', Icon: ArrowLeftRight, desc: 'メイン口座から他の口座へお金を移します' },
+    transfer: { label: '振替', Icon: ArrowLeftRight, desc: '口座の間でお金を移します' },
     expense: { label: '支出', Icon: ShoppingBag, desc: '日々の支出口座から使ったお金を記録します' },
 };
 
@@ -53,11 +38,13 @@ const inputBase =
     'w-full bg-white border border-[#D9DDD8] rounded-xl text-base text-[#12202F] placeholder:text-[#12202F]/35 focus:outline-none focus:border-[#0F7B5F] focus:ring-2 focus:ring-[#0F7B5F]/40';
 
 const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [], onClose, onSubmit }) => {
+
     const [mode, setMode] = useState(initialMode);
     const [amount, setAmount] = useState('');
     const [note, setNote] = useState('');
     const [date, setDate] = useState(todayJst());
-    const [toKey, setToKey] = useState('daily'); // transfer destination
+    const [fromKey, setFromKey] = useState('working');
+    const [toKey, setToKey] = useState('daily');
     const [category, setCategory] = useState(CATEGORIES[0].id);
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,6 +56,7 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             setAmount('');
             setNote('');
             setDate(todayJst());
+            setFromKey('working');
             setToKey('daily');
             setCategory(CATEGORIES[0].id);
             setError('');
@@ -91,14 +79,21 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
 
     const byName = (key) => accounts.find((a) => a.name === ACCT[key].name);
     const balanceOf = (key) => Number(byName(key)?.currentamount ?? 0);
+    const selectFrom = (k) => {
+        setFromKey(k);
+        if (k === toKey) setToKey(Object.keys(ACCT).find((x) => x !== k));
+    };
 
     const validate = () => {
         const num = Number(amount);
         if (!amount || !Number.isInteger(num) || num <= 0) return '1円以上の金額を整数で入力してください';
         if (!date) return '日付を選択してください';
         if (mode === 'income' && !note.trim()) return '収入のメモを入力してください';
-        if (mode === 'transfer' && num > balanceOf('working'))
-            return `メイン口座の残高が足りません（残高 ${formatYen(balanceOf('working'))}）`;
+        if (mode === 'transfer') {
+            if (fromKey === toKey) return '移動元と移動先は別の口座を選んでください';
+            if (num > balanceOf(fromKey))
+                return `${ACCT[fromKey].label}の残高が足りません（残高 ${formatYen(balanceOf(fromKey))}）`;
+        }
         if (mode === 'expense' && num > balanceOf('daily'))
             return `日々の支出口座の残高が足りません（残高 ${formatYen(balanceOf('daily'))}）`;
         return null;
@@ -119,12 +114,11 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             amount: Number(amount),
             note: note.trim() || null,
             transactionDate: date,
-            ...(mode === 'income' && { toAccountId: byName('working')?.id }),
             ...(mode === 'transfer' && {
-                fromAccountId: byName('working')?.id,
-                toAccountId: byName(toKey)?.id,
+                fromAccount: byName(fromKey)?.id,
+                toAccount: byName(toKey)?.id,
             }),
-            ...(mode === 'expense' && { fromAccountId: byName('daily')?.id, category }),
+            ...(mode === 'expense' && { category }),
         };
 
         try {
@@ -132,8 +126,6 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             toast.success('保存しました', { id: 'transaction' });
             onClose?.();
         } catch (err) {
-            console.log(err);
-
             toast.error(err?.response?.data?.message ?? '保存できませんでした。もう一度お試しください。', {
                 id: 'transaction',
             });
@@ -251,41 +243,15 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                     {/* Transfer: from Working (fixed) to Daily Expenses or Emergency */}
                     {mode === 'transfer' && (
                         <>
-                            <div>
-                                <Label>移動元</Label>
-                                <LockedAccount k="working" balanceText="残高" />
-                            </div>
-                            <div>
-                                <Label>移動先</Label>
-                                <div className="grid grid-cols-1 gap-2" role="radiogroup" aria-label="移動先">
-                                    {['daily', 'emergency'].map((k) => {
-                                        const { Icon, label } = ACCT[k];
-                                        const selected = toKey === k;
-                                        return (
-                                            <button
-                                                key={k}
-                                                type="button"
-                                                role="radio"
-                                                aria-checked={selected}
-                                                onClick={() => setToKey(k)}
-                                                className={`flex items-center gap-3 p-3.5 rounded-xl border text-left transition ${selected ? 'border-[#0F7B5F] bg-green-50 ring-2 ring-[#0F7B5F]/30' : 'border-[#D9DDD8] bg-white'
-                                                    }`}
-                                            >
-                                                <div
-                                                    className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${selected ? 'bg-[#0F7B5F] text-white' : 'bg-[#12202F]/5 text-[#12202F]/60'
-                                                        }`}
-                                                >
-                                                    <Icon className="h-5 w-5" aria-hidden="true" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-sm font-bold">{label}</p>
-                                                    <p className="text-xs text-[#12202F]/60">残高 {formatYen(balanceOf(k))}</p>
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
+                            <AccountPicker legend="移動元" value={fromKey} onChange={selectFrom} balanceOf={balanceOf} />
+
+                            <div className="flex justify-center -my-2" aria-hidden="true">
+                                <div className="w-9 h-9 rounded-full bg-white border border-[#D9DDD8] flex items-center justify-center">
+                                    <ArrowDown className="h-4 w-4 text-[#12202F]/50" />
                                 </div>
                             </div>
+
+                            <AccountPicker legend="移動先" value={toKey} onChange={setToKey} disabledKey={fromKey} balanceOf={balanceOf} />
                         </>
                     )}
 

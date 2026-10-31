@@ -11,7 +11,7 @@ import useTransferAccounts from '../hooks/useTransferAccounts';
 
 const Dashboard = () => {
     const { data, isPending, error, isError } = useDashboard();
-    const transfer = useTransferAccounts();
+    const { submit } = useTransferAccounts();
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
@@ -19,10 +19,6 @@ const Dashboard = () => {
     const openModal = (mode) => {
         setModalMode(mode);
         setModalOpen(true);
-    };
-
-    const handleSubmit = (payload) => {
-        transfer.mutate(payload)
     };
 
     useEffect(() => {
@@ -67,7 +63,7 @@ const Dashboard = () => {
                     mode={modalMode}
                     accounts={data.accounts}
                     onClose={() => setModalOpen(false)}
-                    onSubmit={handleSubmit}
+                    onSubmit={submit}
                 />
             </main>
         </div >

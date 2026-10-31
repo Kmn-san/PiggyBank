@@ -19,31 +19,6 @@ export const getSavings = async (req, res) => {
     }
 }
 
-export const transferSavings = async (req, res) => {
-    try {
-        const { userId } = req.user;
-        const { amount, fromAccount, toAccount } = req.body;
-        console.log(amount);
-
-        if (!amount || !fromAccount || !toAccount) {
-            return res.status(400).json({ success: false, message: "Fill in required fields." })
-        }
-        const result = await savingsService.transferSavings(userId, amount, fromAccount, toAccount)
-
-        return res.status(200).json({ success: true, message: "Transfer successfully", result })
-    } catch (error) {
-        if (error.statusCode) {
-            return res.status(error.statusCode).json({
-                success: false, message: error.message
-            })
-        }
-        console.error("Error in transferSavings controller: ", error.message);
-        return res.status(500).json({
-            success: false, message: "Internal Server Error"
-        })
-    }
-}
-
 export const createGoal = async (req, res) => {
     try {
         const { userId } = req.user;

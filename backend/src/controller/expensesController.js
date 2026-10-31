@@ -24,8 +24,8 @@ export const getExpenses = async (req, res) => {
 export const transferExpenses = async (req, res) => {
     try {
         const { userId } = req.user;
-        const { amount, category, note } = req.body
-        console.log(amount);
+        const { amount, category, note, transactionDate } = req.body
+        console.log(req.body);
 
         if (!amount || !category) {
             return res.status(400).json({ success: false, message: "Missing required data." })

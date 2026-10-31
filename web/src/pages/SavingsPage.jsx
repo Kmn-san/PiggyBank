@@ -5,6 +5,7 @@ import { useDashboard } from '../hooks/useDashboard';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
+import { useSavings } from '../hooks/useSavings';
 
 const WORKING = 'Working Account';
 const EMERGENCY = 'Emergency Account';
@@ -13,7 +14,7 @@ const primaryBtn =
     'h-14 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-[#0B5F49]';
 
 const SavingsPage = () => {
-    const { data, isPending, error, isError } = useDashboard();
+    const { data, isPending, error, isError } = useSavings();
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
 
@@ -42,12 +43,11 @@ const SavingsPage = () => {
     if (!data) {
         return <div className="min-h-screen bg-[#F5F6F4]" />;
     }
-    const accounts = Array.isArray(data) ? data : data?.accounts ?? [];
+    const accounts = Array.isArray(data) ? data : data ?? [];
     const amountOf = (name) =>
-        Number(accounts.find((a) => a.name === name)?.currentamount ?? 0);
+        Number(accounts.find((a) => a.name === name)?.currentAmount ?? 0);
 
-    // Goal accounts = every savings account except the Emergency one
-    const goals = data?.accounts.filter((a) => a.type === 'savings' && a.name !== EMERGENCY);
+    const goals = data?.filter((a) => a.type === 'savings' && a.name !== EMERGENCY);
 
     return (
         <main className="max-w-5xl mx-auto px-4 pt-6 pb-8 space-y-6">

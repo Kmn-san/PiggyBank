@@ -5,7 +5,7 @@ export const getDashboard = async (userId, month) => {
     const { selectedMonth, monthStart, nextMonthStart } = getMonthRange(month);
 
     const { rows: accounts } = await pool.query(`
-            SELECT name,type,current_amount AS currentAmount
+            SELECT id,name,type,current_amount AS currentAmount
             FROM accounts
             WHERE user_id = $1
                 AND is_archived = FALSE
