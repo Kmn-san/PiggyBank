@@ -8,11 +8,11 @@ import { useDashboard } from '../hooks/useDashboard';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
-import useTrasfer from '../hooks/useTrasfer';
+import useTrasaction from '../hooks/useTrasaction';
 
 const Dashboard = () => {
     const { data, isPending, error, isError } = useDashboard();
-    const { transferAccounts } = useTrasfer()
+    const { transferAccounts } = useTrasaction()
 
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');

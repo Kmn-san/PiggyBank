@@ -18,9 +18,6 @@ import {
 } from 'lucide-react';
 import { formatYen } from '../lib/utlis';
 
-// Palette: ink #12202F, paper #F5F6F4, green #0F7B5F, line #D9DDD8
-
-// Account names must match the backend exactly
 const ACCT = {
     working: { name: 'Working Account', label: 'メイン口座', Icon: Wallet },
     daily: { name: 'Daily Expenses', label: '日々の支出口座', Icon: ShoppingBag },

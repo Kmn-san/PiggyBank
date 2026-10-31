@@ -21,7 +21,7 @@ const RecentTransactions = ({ transactions = [] }) => {
                 <h2 className="font-bold">最近の取引</h2>
                 <button
                     type="button"
-                    onClick={() => navigate('/transactions')}
+                    onClick={() => navigate('/transaction')}
                     className="h-11 -mr-2 px-2 text-sm font-semibold text-[#0F7B5F] flex items-center gap-0.5"
                 >
                     すべて見る

@@ -61,3 +61,10 @@ export const CATEGORY_COLORS = {
 export const FALLBACK_COLORS = ['#64748B', '#B45309', '#7C5CBF']
 
 export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
+
+export const getLabel = (tx) => {
+    if (tx.category) return { main: capitalize(tx.category), sub: tx.fromAccountName };
+    if (tx.fromAccountName && tx.toAccountName) return { main: tx.fromAccountName, sub: `→ ${tx.toAccountName}` };
+    return { main: 'Income', sub: tx.toAccountName ? `→ ${tx.toAccountName}` : null };
+};
+

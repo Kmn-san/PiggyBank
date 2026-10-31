@@ -25,6 +25,11 @@ export const fetchExpenses = async (month) => {
     return response.data.result
 }
 
+export const fetchTransactions = async (month) => {
+    const response = await axiosInstance.get(`/transactions?month=${month}`)
+    return response.data.data
+}
+
 export const transferIncome = async () => {
 
 }

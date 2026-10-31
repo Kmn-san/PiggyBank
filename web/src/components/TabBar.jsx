@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom';
-import { Banknote, LayoutDashboard, Receipt } from 'lucide-react';
+import { Banknote, History, LayoutDashboard, Receipt } from 'lucide-react';
 
 const TABS = [
     { to: '/dashboard', label: 'ホーム', Icon: LayoutDashboard },
     { to: '/savings', label: '貯蓄', Icon: Banknote },
-    { to: '/expenses', label: '消費', Icon: Receipt },
+    { to: '/expenses', label: '支出', Icon: Receipt },
+    { to: '/transaction', label: '取引', Icon: History },
 ];
 
 const TabBar = () => (

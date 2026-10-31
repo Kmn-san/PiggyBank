@@ -9,6 +9,7 @@ import ProtectedRoute from "./components/ProtectRoute"
 import AppLayout from "./components/AppLayout"
 import SavingsPage from "./pages/SavingsPage"
 import ExpensesPage from "./pages/ExpensesPage"
+import TransactionPage from "./pages/TransactionPage"
 
 function App() {
   return (
@@ -52,6 +53,11 @@ function App() {
             <Route
               path="/expenses"
               element={<ExpensesPage />}
+            />
+
+            <Route
+              path="/transaction"
+              element={<TransactionPage />}
             />
           </Route>
         </Route>
