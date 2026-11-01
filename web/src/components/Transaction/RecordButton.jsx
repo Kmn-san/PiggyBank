@@ -1,7 +1,7 @@
 import { Plus, ShoppingBag } from 'lucide-react'
 import React from 'react'
 
-function RecordButton() {
+function RecordButton({ onOpenModal }) {
     return (
         <div className="grid grid-cols-2 gap-3">
             <button

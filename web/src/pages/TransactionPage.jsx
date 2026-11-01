@@ -7,13 +7,25 @@ import PeriodSummary from '../components/Transaction/PeriodSummary';
 import TransactionList from '../components/Transaction/TransactionList';
 import MonthFilter from '../components/Expenses/MonthFilter';
 import useTransactions from '../hooks/useTransactions.js';
+import useTransferAccounts from '../hooks/useTransferAccounts.js';
+import TransactionModal from '../components/TransactionModal.jsx';
+import { useDashboard } from '../hooks/useDashboard.js';
 
-const TransactionsPage = ({ onOpenModal }) => {
+const TransactionsPage = () => {
     const thisMonth = monthKeyOf(new Date().toISOString());
     const [month, setMonth] = useState(thisMonth);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState('income');
 
     const { data, isFetching, error, isError } = useTransactions(month);
+    const { data: dashboard } = useDashboard();
 
+    const { submit } = useTransferAccounts();
+
+    const openModal = (mode) => {
+        setModalMode(mode);
+        setModalOpen(true);
+    };
 
     useEffect(() => {
         if (isFetching) {
@@ -48,7 +60,7 @@ const TransactionsPage = ({ onOpenModal }) => {
         <main className="max-w-5xl mx-auto px-4 pt-6 pb-8 space-y-4">
             <h1 className="text-2xl font-bold">取引履歴</h1>
 
-            <RecordButton onOpenModal={onOpenModal} />
+            <RecordButton onOpenModal={openModal} />
 
             <MonthFilter
                 month={month}
@@ -63,6 +75,14 @@ const TransactionsPage = ({ onOpenModal }) => {
                 income={income} />
 
             <TransactionList days={days} />
+
+            <TransactionModal
+                isOpen={modalOpen}
+                mode={modalMode}
+                accounts={dashboard?.accounts ?? []}
+                onClose={() => setModalOpen(false)}
+                onSubmit={submit}
+            />
         </main>
     );
 };

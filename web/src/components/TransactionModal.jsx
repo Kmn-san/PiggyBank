@@ -92,7 +92,6 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
         const num = Number(amount);
         if (!amount || !Number.isInteger(num) || num <= 0) return '1円以上の金額を整数で入力してください';
         if (!date) return '日付を選択してください';
-        if (mode === 'income' && !note.trim()) return '収入のメモを入力してください';
         if (mode === 'transfer') {
             const from = byId(fromId);
             if (!from || !byId(toId)) return '口座を選択してください';
@@ -309,11 +308,9 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                     <div>
                         <Label htmlFor="tx-note">
                             メモ{' '}
-                            {mode === 'income' ? (
-                                <span className="text-red-700">（必須）</span>
-                            ) : (
-                                <span className="text-[#12202F]/50 font-normal">（任意）</span>
-                            )}
+
+                            <span className="text-[#12202F]/50 font-normal">（任意）</span>
+
                         </Label>
                         <textarea
                             id="tx-note"

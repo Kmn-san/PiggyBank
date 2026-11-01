@@ -1,6 +1,6 @@
 import { pool } from "../utlis/db.js";
 
-export const transferExpenses = async (userId, amount, category, note) => {
+export const transferExpenses = async (userId, amount, category, note, transactionDate) => {
     const client = await pool.connect()
     try {
 
@@ -26,9 +26,9 @@ export const transferExpenses = async (userId, amount, category, note) => {
         const { rows: transaction } = await client.query(
             `
         INSERT INTO transactions
-             (user_id,type,from_account_id,category,amount,note)
+             (user_id,type,from_account_id,category,amount,note,transaction_date)
          VALUES
-             ($1,'expense',$2,$3,$4,$5)
+             ($1,'expense',$2,$3,$4,$5,$6)
          RETURNING  id,
                 type,
                 from_account_id AS "fromAccountId",
@@ -36,7 +36,7 @@ export const transferExpenses = async (userId, amount, category, note) => {
                 amount,
                 note,
                 transaction_date AS "transactionDate"
-         `, [userId, accountId, category, amount, note ?? null]
+         `, [userId, accountId, category, amount, note ?? null, transactionDate]
         )
 
         await client.query(`

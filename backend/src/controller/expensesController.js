@@ -4,7 +4,6 @@ export const transferExpenses = async (req, res) => {
     try {
         const { userId } = req.user;
         const { amount, category, note, transactionDate } = req.body
-        console.log(req.body);
 
         if (!amount || !category) {
             return res.status(400).json({ success: false, message: "Missing required data." })
@@ -14,7 +13,7 @@ export const transferExpenses = async (req, res) => {
             return res.status(400).json({ success: false, message: "Amount must be a positive number." })
         }
 
-        const result = await expensesService.transferExpenses(userId, amount, category, note)
+        const result = await expensesService.transferExpenses(userId, amount, category, note, transactionDate)
 
         return res.status(200).json({ success: true, message: "Transfer successfully!", result })
     } catch (error) {
