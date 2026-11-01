@@ -3,7 +3,7 @@ import { Card } from '../Card'
 
 const FLOW_STEPS = [
     { title: '収入を入金', text: 'メイン口座に入ります' },
-    { title: '週ごとに振替', text: 'メイン口座 → 週の予算' },
+    { title: '週ごとに振替', text: 'メイン口座 → 日々の支出口座' },
     { title: '余ったら貯蓄', text: 'メイン口座 → 緊急資金・目標' },
 ];
 function MoneyFlow() {
