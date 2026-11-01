@@ -1,8 +1,9 @@
 import React from 'react'
+import { Pencil } from 'lucide-react'
 import { Card } from '../Card';
 import { formatYen, getLabel, TX_STYLE } from '../../lib/utlis';
 
-function TransactionList({ days }) {
+function TransactionList({ days, onEdit }) {
     return (
         <Card>
             <h2 className="font-bold">すべての取引</h2>
@@ -18,7 +19,7 @@ function TransactionList({ days }) {
                                 const s = TX_STYLE[tx.type] ?? TX_STYLE.transfer;
                                 const { main, sub } = getLabel(tx);
                                 return (
-                                    <li key={tx.id} className="py-3 flex items-center justify-between gap-3">
+                                    <li key={tx.id} className="py-3 flex items-center justify-between gap-2">
                                         <div className="flex items-center gap-3 min-w-0">
                                             <div className={`w-10 h-10 rounded-xl shrink-0 flex items-center justify-center ${s.badge}`}>
                                                 <s.Icon className="h-5 w-5" aria-hidden="true" />
@@ -29,10 +30,21 @@ function TransactionList({ days }) {
                                                 {tx.note && <p className="text-xs text-[#12202F]/50 wrap-break-word">{tx.note}</p>}
                                             </div>
                                         </div>
-                                        <p className={`text-sm font-bold shrink-0 ${s.amount}`}>
-                                            {s.sign}
-                                            {formatYen(tx.amount)}
-                                        </p>
+
+                                        <div className="flex items-center gap-1 shrink-0">
+                                            <p className={`text-sm font-bold ${s.amount}`}>
+                                                {s.sign}
+                                                {formatYen(tx.amount)}
+                                            </p>
+                                            <button
+                                                type="button"
+                                                onClick={() => onEdit?.(tx)}
+                                                className="-mr-2 w-11 h-11 flex items-center justify-center rounded-lg text-[#12202F]/50 active:bg-black/5"
+                                                aria-label={`${main}を編集`}
+                                            >
+                                                <Pencil className="h-4 w-4" aria-hidden="true" />
+                                            </button>
+                                        </div>
                                     </li>
                                 );
                             })}

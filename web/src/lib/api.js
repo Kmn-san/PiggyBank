@@ -30,6 +30,11 @@ export const fetchTransactions = async (month) => {
     return response.data.data
 }
 
+export const editTransaction = async ({ transactionId, amount, transactionDate, note }) => {
+    const response = await axiosInstance.patch(`/transactions/${transactionId}`, { amount, transactionDate, note })
+    return response.data.result
+}
+
 export const createGoal = async (name) => {
     const response = await axiosInstance.post('/savings/createGoal', name)
     return response.data.data

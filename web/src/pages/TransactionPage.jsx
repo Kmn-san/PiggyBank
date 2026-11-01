@@ -10,12 +10,18 @@ import useTransactions from '../hooks/useTransactions.js';
 import useTransferAccounts from '../hooks/useTransferAccounts.js';
 import TransactionModal from '../components/TransactionModal.jsx';
 import { useDashboard } from '../hooks/useDashboard.js';
+import EditTransactionModal from '../components/Transaction/EditTransactionModal.jsx';
+import useEditTransaction from '../hooks/useEditTransaction.js';
 
 const TransactionsPage = () => {
     const thisMonth = monthKeyOf(new Date().toISOString());
     const [month, setMonth] = useState(thisMonth);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
+    const [editing, setEditing] = useState(null);   // the transaction being edited
+    const editMutation = useEditTransaction();
+    console.log(editing);
+
 
     const { data, isFetching, error, isError } = useTransactions(month);
     const { data: dashboard } = useDashboard();
@@ -74,8 +80,16 @@ const TransactionsPage = () => {
                 count={count}
                 income={income} />
 
-            <TransactionList days={days} />
+            <TransactionList days={days} onEdit={setEditing} />
 
+            {editing && (
+                <EditTransactionModal
+                    key={editing.id}
+                    transaction={editing}
+                    onClose={() => setEditing(null)}
+                    onSubmit={(values) => editMutation.mutateAsync({ transactionId: editing.id, ...values })}
+                />
+            )}
             <TransactionModal
                 isOpen={modalOpen}
                 mode={modalMode}

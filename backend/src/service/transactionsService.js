@@ -33,36 +33,6 @@ export const fetchTransactions = async (userId, month) => {
     return transactions
 }
 
-export const fetchTransaction = async (userId, transactionId) => {
-
-    const { rows } = await pool.query(`
-        SELECT 
-            t.id,
-            t.type,
-            t.category,
-            t.amount,
-            t.note,
-            t.transaction_date AS "transactionDate",
-            t.from_account_id AS "fromAccountId",
-            from_account.name AS "fromAccountName",
-            t.to_account_id AS "toAccountId",
-            to_account.name AS "toAccountName"
-        FROM transactions t
-        LEFT JOIN accounts from_account
-            ON t.from_account_id = from_account.id
-            AND from_account.user_id = t.user_id
-        LEFT JOIN accounts to_account
-            ON t.to_account_id = to_account.id
-            AND to_account.user_id = t.user_id
-        WHERE t.user_id = $1
-            AND t.deleted_at IS NULL
-            AND t.id = $2
-        ORDER BY t.transaction_date DESC,t.created_at DESC
-        `, [userId, transactionId])
-
-    return rows[0]
-}
-
 export const transferAccount = async (userId, amount, fromAccount, toAccount, note, transactionDate) => {
 
     const client = await pool.connect()
@@ -222,6 +192,7 @@ export const editTransaction = async (userId, transactionId, amount, transaction
                 FOR UPDATE
             `, [userId, transactionId])
         const data = transaction[0]
+        console.log(transactionId);
 
         if (!data) {
             const error = new Error(
