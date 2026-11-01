@@ -166,7 +166,7 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             aria-labelledby="tx-title"
         >
             <div
-                className="w-full sm:max-w-md bg-[#F5F6F4] rounded-t-2xl sm:rounded-2xl shadow-xl max-h-[92dvh] overflow-y-auto"
+                className="w-full sm:max-w-md bg-[#F5F6F4] rounded-t-2xl sm:rounded-2xl shadow-xl max-h-[92dvh] overflow-y-auto overflow-x-hidden"
                 style={{ fontFamily: "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif" }}
                 onClick={(e) => e.stopPropagation()}
             >
@@ -300,7 +300,7 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                             value={date}
                             max={todayJst()}
                             onChange={(e) => setDate(e.target.value)}
-                            className={`${inputBase} h-14 px-4`}
+                            className={`${inputBase} h-14 px-4 block min-w-0 max-w-full appearance-none text-left [&::-webkit-date-and-time-value]:text-left`}
                         />
                     </div>
 
