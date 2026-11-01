@@ -20,7 +20,7 @@ const Row = ({ account, selected, disabled, onSelect }) => {
                 <Icon className="h-5 w-5" aria-hidden="true" />
             </div>
             <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold break-words">{label}</p>
+                <p className="text-sm font-bold wrap-break-word">{label}</p>
                 <p className="text-xs text-[#12202F]/60">残高 {formatYen(Number(account.currentAmount ?? 0))}</p>
             </div>
         </button>

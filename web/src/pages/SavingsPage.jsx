@@ -7,6 +7,8 @@ import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 import { useSavings } from '../hooks/useSavings';
 import useTransferAccounts from '../hooks/useTransferAccounts';
+import useCreateGoal from '../hooks/useCreateGoal';
+import CreateGoalModal from '../components/Savings/CreateGoalModal';
 
 const WORKING = 'Working Account';
 const EMERGENCY = 'Emergency Account';
@@ -15,12 +17,16 @@ const primaryBtn =
     'h-14 w-full rounded-xl bg-[#0F7B5F] text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-[#0B5F49]';
 
 const SavingsPage = () => {
-    const { data, isPending, error, isError } = useSavings();
-    const { submit } = useTransferAccounts();
-
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
+    const [goalOpen, setGoalOpen] = useState(false);
 
+    const { data, isPending, error, isError } = useSavings();
+    const { submit } = useTransferAccounts();
+    const createGoal = useCreateGoal();
+
+    const newGoalBtn =
+        'h-11 px-4 rounded-xl bg-[#0F7B5F] text-white text-sm font-semibold flex items-center gap-1.5 active:bg-[#0B5F49]';
     const openModal = (mode) => {
         setModalMode(mode);
         setModalOpen(true);
@@ -106,13 +112,23 @@ const SavingsPage = () => {
                     <h2 className="font-bold flex items-center gap-2">
                         <Target className="h-5 w-5 text-[#0F7B5F]" aria-hidden="true" />
                         目標口座
+                        <span className="text-xs font-normal text-[#12202F]/55">{goals.length}件</span>
                     </h2>
-                    <span className="text-xs text-[#12202F]/55">{goals.length}件</span>
+                    <button type="button" onClick={() => setGoalOpen(true)} className={newGoalBtn}>
+                        <Plus className="h-4 w-4" aria-hidden="true" />
+                        目標を作成
+                    </button>
                 </div>
 
                 {goals.length === 0 ? (
                     <Card>
-                        <p className="text-sm text-[#12202F]/55 py-6 text-center">目標口座はまだありません</p>
+                        <p className="text-sm text-[#12202F]/55 pt-4 text-center">目標口座はまだありません</p>
+                        <div className="flex justify-center py-4">
+                            <button type="button" onClick={() => setGoalOpen(true)} className={newGoalBtn}>
+                                <Plus className="h-4 w-4" aria-hidden="true" />
+                                最初の目標を作成
+                            </button>
+                        </div>
                     </Card>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -121,7 +137,7 @@ const SavingsPage = () => {
                                 key={goal.id ?? goal.name}
                                 Icon={Target}
                                 title={goal.name}
-                                amount={Number(goal.currentamount ?? 0)}
+                                amount={Number(goal.currentAmount ?? 0)}
                                 desc="目標のために貯めているお金です"
                                 amountClass="text-[#0F7B5F]"
                                 target={goal.target ? Number(goal.target) : null}
@@ -142,7 +158,13 @@ const SavingsPage = () => {
                 onClose={() => setModalOpen(false)}
                 onSubmit={submit}
             />
+            <CreateGoalModal
+                isOpen={goalOpen}
+                onClose={() => setGoalOpen(false)}
+                onSubmit={createGoal.mutateAsync}
+            />
         </main>
+
     );
 };
 

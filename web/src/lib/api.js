@@ -35,6 +35,11 @@ export const fetchTransactions = async (month) => {
     return response.data.data
 }
 
+export const createGoal = async (name) => {
+    const response = await axiosInstance.post('/savings/createGoal', name)
+    return response.data.data
+}
+
 export const transferIncome = async ({ amount, transactionDate, note }) => {
     const response = await axiosInstance.post(`/transactions/income`, { amount, transactionDate, note })
     return response.data.result

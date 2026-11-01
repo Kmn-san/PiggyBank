@@ -24,9 +24,9 @@ function TransactionList({ days }) {
                                                 <s.Icon className="h-5 w-5" aria-hidden="true" />
                                             </div>
                                             <div className="min-w-0">
-                                                <p className="text-sm font-semibold break-words">{main}</p>
-                                                {sub && <p className="text-xs text-[#12202F]/60 break-words">{sub}</p>}
-                                                {tx.note && <p className="text-xs text-[#12202F]/50 break-words">{tx.note}</p>}
+                                                <p className="text-sm font-semibold wrap-break-word">{main}</p>
+                                                {sub && <p className="text-xs text-[#12202F]/60 wrap-break-word">{sub}</p>}
+                                                {tx.note && <p className="text-xs text-[#12202F]/50 wrap-break-word">{tx.note}</p>}
                                             </div>
                                         </div>
                                         <p className={`text-sm font-bold shrink-0 ${s.amount}`}>
