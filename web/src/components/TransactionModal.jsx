@@ -4,7 +4,7 @@ import {
 } from 'lucide-react';
 import { formatYen } from '../lib/utlis';
 import { AccountPicker } from './AccountPicker';
-import { ACCT } from '../lib/accounts';
+import { ACCT, getAccountMeta } from '../lib/accounts';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -43,21 +43,22 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
     const [amount, setAmount] = useState('');
     const [note, setNote] = useState('');
     const [date, setDate] = useState(todayJst());
-    const [fromKey, setFromKey] = useState('working');
-    const [toKey, setToKey] = useState('daily');
+    const [fromId, setFromId] = useState('');
+    const [toId, setToId] = useState('');
     const [category, setCategory] = useState(CATEGORIES[0].id);
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Reset every time the modal opens
     useEffect(() => {
         if (isOpen) {
             setMode(initialMode);
             setAmount('');
             setNote('');
             setDate(todayJst());
-            setFromKey('working');
-            setToKey('daily');
+            // default transfer: Working Account -> Daily Expenses
+            const idOf = (name) => accounts.find((a) => a.name === name)?.id ?? '';
+            setFromId(idOf(ACCT.working.name));
+            setToId(idOf(ACCT.daily.name));
             setCategory(CATEGORIES[0].id);
             setError('');
         }
@@ -79,9 +80,12 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
 
     const byName = (key) => accounts.find((a) => a.name === ACCT[key].name);
     const balanceOf = (key) => Number(byName(key)?.currentAmount ?? 0);
-    const selectFrom = (k) => {
-        setFromKey(k);
-        if (k === toKey) setToKey(Object.keys(ACCT).find((x) => x !== k));
+    const byId = (id) => accounts.find((a) => a.id === id);
+
+    const selectFrom = (id) => {
+        setFromId(id);
+        // if the new source is the current destination, pick another destination
+        if (id === toId) setToId(accounts.find((a) => a.id !== id)?.id ?? '');
     };
 
     const validate = () => {
@@ -90,9 +94,11 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
         if (!date) return '日付を選択してください';
         if (mode === 'income' && !note.trim()) return '収入のメモを入力してください';
         if (mode === 'transfer') {
-            if (fromKey === toKey) return '移動元と移動先は別の口座を選んでください';
-            if (num > balanceOf(fromKey))
-                return `${ACCT[fromKey].label}の残高が足りません（残高 ${formatYen(balanceOf(fromKey))}）`;
+            const from = byId(fromId);
+            if (!from || !byId(toId)) return '口座を選択してください';
+            if (fromId === toId) return '移動元と移動先は別の口座を選んでください';
+            if (num > Number(from.currentAmount ?? 0))
+                return `${getAccountMeta(from).label}の残高が足りません（残高 ${formatYen(Number(from.currentAmount ?? 0))}）`;
         }
         if (mode === 'expense' && num > balanceOf('daily'))
             return `日々の支出口座の残高が足りません（残高 ${formatYen(balanceOf('daily'))}）`;
@@ -114,10 +120,7 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             amount: Number(amount),
             note: note.trim() || null,
             transactionDate: date,
-            ...(mode === 'transfer' && {
-                fromAccount: byName(fromKey)?.id,
-                toAccount: byName(toKey)?.id,
-            }),
+            ...(mode === 'transfer' && { fromAccount: fromId, toAccount: toId }),
             ...(mode === 'expense' && { category }),
         };
 
@@ -243,15 +246,14 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                     {/* Transfer: from Working (fixed) to Daily Expenses or Emergency */}
                     {mode === 'transfer' && (
                         <>
-                            <AccountPicker legend="移動元" value={fromKey} onChange={selectFrom} balanceOf={balanceOf} />
-
+                            <AccountPicker legend="移動元" accounts={accounts} value={fromId} onChange={selectFrom} />
                             <div className="flex justify-center -my-2" aria-hidden="true">
                                 <div className="w-9 h-9 rounded-full bg-white border border-[#D9DDD8] flex items-center justify-center">
                                     <ArrowDown className="h-4 w-4 text-[#12202F]/50" />
                                 </div>
                             </div>
 
-                            <AccountPicker legend="移動先" value={toKey} onChange={setToKey} disabledKey={fromKey} balanceOf={balanceOf} />
+                            <AccountPicker legend="移動先" accounts={accounts} value={toId} onChange={setToId} disabledId={fromId} />
                         </>
                     )}
 

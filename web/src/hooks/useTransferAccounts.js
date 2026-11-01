@@ -15,7 +15,6 @@ export default function useTransferAccounts() {
     const transfer = useMutation({ mutationFn: transferAccounts, onSuccess })
 
     const submit = (payload) => {
-        console.log(payload);
 
         switch (payload.type) {
             case 'income':

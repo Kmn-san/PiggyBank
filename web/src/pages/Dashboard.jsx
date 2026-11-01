@@ -13,6 +13,7 @@ const Dashboard = () => {
     const { data, isPending, error, isError } = useDashboard();
     const { submit } = useTransferAccounts();
 
+
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
 

@@ -9,11 +9,6 @@ export const getDashboard = async (userId, month) => {
             FROM accounts
             WHERE user_id = $1
                 AND is_archived = FALSE
-                AND name IN(
-                    'Emergency Account',
-                    'Working Account',
-                    'Daily Expenses'
-                )
         `, [userId])
 
     const { rows: expenses } = await pool.query(`

@@ -126,7 +126,7 @@ const SavingsPage = () => {
                                 amountClass="text-[#0F7B5F]"
                                 target={goal.target ? Number(goal.target) : null}
                             >
-                                <button type="button" onClick={() => onOpenModal?.('transfer', goal.name)} className={primaryBtn}>
+                                <button type="button" onClick={() => openModal?.('transfer', goal.name)} className={primaryBtn}>
                                     <Plus className="h-5 w-5" aria-hidden="true" />
                                     積み立てる
                                 </button>
