@@ -1,13 +1,16 @@
 // pages/ExpensesPage.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { monthKeyOf } from '../lib/utlis';
+import { monthKeyOf, monthLabel } from '../lib/utlis';
 import DailyExpenses from '../components/Expenses/DailyExpenses';
 import MonthFilter from '../components/Expenses/MonthFilter';
 import ExpensesCategories from '../components/Expenses/ExpensesCategories';
 import TransactionModal from '../components/TransactionModal';
 import useTransferAccounts from '../hooks/useTransferAccounts';
 import { useDashboard } from '../hooks/useDashboard';
+import CopyReportButton from '../components/Expenses/CopyReportButton';
+import useTransactions from '../hooks/useTransactions';
+import { buildExpenseReport } from '../lib/buildExpenseReport';
 
 const ExpensesPage = () => {
     const thisMonth = monthKeyOf(new Date().toISOString());
@@ -17,6 +20,9 @@ const ExpensesPage = () => {
     const [modalMode, setModalMode] = useState('income');
     const { data, isFetching, error, isError } = useDashboard(month)
     const { submit } = useTransferAccounts();
+
+    const { data: txData, isFetching: txFetching } = useTransactions(month);
+    const transactions = Array.isArray(txData) ? txData : txData?.transactions ?? [];
 
     const openModal = (mode) => {
         setModalMode(mode);
@@ -59,6 +65,18 @@ const ExpensesPage = () => {
                         count={categories.length}
                         total={total}
                         setMonth={setMonth}
+                    />
+                    <CopyReportButton
+                        label={`${monthLabel(month)}のデータをコピー`}
+                        disabled={isFetching || txFetching || !data}
+                        getText={() =>
+                            buildExpenseReport({
+                                month,
+                                accounts: data?.accounts,
+                                categories: data?.expenses,
+                                transactions,
+                            })
+                        }
                     />
                 </div>
 
