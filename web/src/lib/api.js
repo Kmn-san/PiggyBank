@@ -15,19 +15,14 @@ export const logoutUser = async (refreshToken) => {
     return response.data
 }
 
-export const fetchDashboard = async () => {
-    const response = await axiosInstance.get(`/dashboard`)
+export const fetchDashboard = async (month) => {
+    const response = await axiosInstance.get(`/dashboard`, { params: { month } })
     return response.data.data
 }
 
 export const fetchSavings = async () => {
     const response = await axiosInstance.get(`/savings`)
     return response.data.data
-}
-
-export const fetchExpenses = async (month) => {
-    const response = await axiosInstance.get('/expenses', { params: { month } })
-    return response.data.result
 }
 
 export const fetchTransactions = async (month) => {

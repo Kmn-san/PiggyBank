@@ -1,37 +1,4 @@
 import { pool } from "../utlis/db.js";
-import { getMonthRange } from "../utlis/monthFormat.js"
-
-export const getExpenses = async (userId, month) => {
-
-    const { monthStart, nextMonthStart } = getMonthRange(month);
-
-    const { rows: accounts } = await pool.query(`
-        SELECT name,current_amount AS currentamount
-        FROM accounts
-        WHERE user_id = $1
-            AND name = 'Daily Expenses'
-            AND is_archived IS FALSE
-            `, [userId])
-
-    const { rows } = await pool.query(`
-        SELECT 
-        category, SUM(amount) AS amount
-        FROM transactions
-        WHERE user_id = $1
-            AND type = 'expense'
-            AND transaction_date >= $2::date
-            AND transaction_date < $3::date
-            AND deleted_at IS NULL
-        GROUP BY category
-        `, [userId, monthStart, nextMonthStart])
-    return {
-        account: accounts[0] ?? null,
-        expenses: rows.map(row => ({
-            ...row,
-            amount: Number(row.amount)
-        }))
-    }
-}
 
 export const transferExpenses = async (userId, amount, category, note) => {
     const client = await pool.connect()

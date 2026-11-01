@@ -5,13 +5,23 @@ import { monthKeyOf } from '../lib/utlis';
 import DailyExpenses from '../components/Expenses/DailyExpenses';
 import MonthFilter from '../components/Expenses/MonthFilter';
 import ExpensesCategories from '../components/Expenses/ExpensesCategories';
-import { useExpenses } from '../hooks/useExpenses';
+import TransactionModal from '../components/TransactionModal';
+import useTransferAccounts from '../hooks/useTransferAccounts';
+import { useDashboard } from '../hooks/useDashboard';
 
-const ExpensesPage = ({ onOpenModal }) => {
+const ExpensesPage = () => {
     const thisMonth = monthKeyOf(new Date().toISOString());
     const [month, setMonth] = useState(thisMonth);
 
-    const { data, isFetching, error, isError } = useExpenses(month);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMode, setModalMode] = useState('income');
+    const { data, isFetching, error, isError } = useDashboard(month)
+    const { submit } = useTransferAccounts();
+
+    const openModal = (mode) => {
+        setModalMode(mode);
+        setModalOpen(true);
+    };
 
     useEffect(() => {
         if (isFetching) {
@@ -40,7 +50,7 @@ const ExpensesPage = ({ onOpenModal }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
                 <div className="space-y-4">
-                    <DailyExpenses account={data?.account} onOpenModal={onOpenModal} />
+                    <DailyExpenses account={data?.accounts} onOpenModal={openModal} />
 
                     <MonthFilter
                         month={month}
@@ -54,6 +64,13 @@ const ExpensesPage = ({ onOpenModal }) => {
 
                 <ExpensesCategories categories={categories} total={total} month={month} />
             </div>
+            <TransactionModal
+                isOpen={modalOpen}
+                mode={modalMode}
+                accounts={data?.accounts}
+                onClose={() => setModalOpen(false)}
+                onSubmit={submit}
+            />
         </main>
     );
 };

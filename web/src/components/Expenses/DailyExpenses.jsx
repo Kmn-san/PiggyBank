@@ -1,10 +1,10 @@
 import { ShoppingBag } from 'lucide-react'
-import React from 'react'
 import { Card } from '../Card'
 import { formatYen } from '../../lib/utlis'
 
 function DailyExpenses({ account = [], onOpenModal }) {
-    const dailyBalance = account?.currentamount;
+    const daily = account.find((a) => a.name === 'Daily Expenses')
+    const dailyBalance = daily?.currentAmount ?? 0
 
     return (
         <Card>
