@@ -7,6 +7,7 @@ import dashboardRoutes from "./src/route/dashboardRoutes.js"
 import savingsRoutes from "./src/route/savingsRoute.js"
 import expensesRoutes from "./src/route/expensesRoutes.js"
 import transactionsRoutes from "./src/route/transactionsRoutes.js"
+import adminRoutes from "./src/route/adminRoutes.js"
 
 import { ENV } from "./src/config/env.js"
 
@@ -32,6 +33,7 @@ app.use("/api/dashboard", dashboardRoutes)
 app.use("/api/savings", savingsRoutes)
 app.use("/api/expenses", expensesRoutes)
 app.use("/api/transactions", transactionsRoutes)
+app.use("/api/admin", adminRoutes)
 
 if (ENV.NODE_ENV === 'production') {
     app.use(express.static(path.join(

@@ -49,7 +49,7 @@ export const registerUser = async (user_code, password) => {
 
 export const loginUser = async (user_code, password) => {
     const { rows } = await pool.query(`
-    SELECT id,hash_password
+    SELECT id,hash_password,role
     FROM users 
     WHERE user_code = $1`,
         [user_code])
@@ -68,9 +68,9 @@ export const loginUser = async (user_code, password) => {
         throw error
     }
 
-    const accessToken = generateAccessToken(existUser.id)
+    const accessToken = generateAccessToken(existUser.id, existUser.role)
     const refresh = generateRefreshToken()
-
+    
     await pool.query(`
         UPDATE users
         SET 

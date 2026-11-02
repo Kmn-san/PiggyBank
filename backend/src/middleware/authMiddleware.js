@@ -18,6 +18,7 @@ export const protectRoute = (req, res, next) => {
         const decoded = jwt.verify(token, ENV.JWT_SECRET);
 
         req.user = { userId: decoded.userId };
+
         next();
     } catch (error) {
         const isExpired = error.name === "TokenExpiredError";

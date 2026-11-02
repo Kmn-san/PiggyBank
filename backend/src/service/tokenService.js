@@ -5,8 +5,8 @@ import { ENV } from "../config/env.js"
 export const REFRESH_EXPIRED_DAYS = 30
 export const ACCESS_EXPIRED = 15 * 60
 
-export const generateAccessToken = (userId) => {
-    return jwt.sign({ userId }, ENV.JWT_SECRET, { expiresIn: ACCESS_EXPIRED })
+export const generateAccessToken = (userId, role) => {
+    return jwt.sign({ userId, role }, ENV.JWT_SECRET, { expiresIn: ACCESS_EXPIRED })
 }
 
 export const generateRefreshToken = () => {
