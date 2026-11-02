@@ -103,3 +103,28 @@ export const archiveGoal = async (req, res) => {
         })
     }
 }
+
+export const deleteGoal = async (req, res) => {
+    try {
+        const { userId } = req.user
+        const { goalId } = req.params
+        if (!goalId) {
+            return res.status(400).json({ success: false, message: "Missing goal id." })
+        }
+
+        const result = await savingsService.deleteGoal(userId, goalId)
+
+        return res.status(200).json({ success: true, message: "Goal archived.", result })
+
+    } catch (error) {
+        if (error.statusCode) {
+            return res.status(error.statusCode).json({
+                success: false, message: error.message
+            })
+        }
+        console.error("Error in archiveGoal controller: ", error.message);
+        return res.status(500).json({
+            success: false, message: "Internal Server Error"
+        })
+    }
+}

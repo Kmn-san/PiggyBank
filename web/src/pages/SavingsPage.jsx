@@ -1,4 +1,4 @@
-import { ArrowLeftRight, Plus, ShieldCheck, Target, Wallet } from 'lucide-react';
+import { ArrowLeftRight, Plus, ShieldCheck, Target, Trash2, Wallet } from 'lucide-react';
 import { Card } from '../components/Card';
 import AccountCard from '../components/Savings/AccountCard';
 import { useDashboard } from '../hooks/useDashboard';
@@ -9,6 +9,8 @@ import { useSavings } from '../hooks/useSavings';
 import useTransferAccounts from '../hooks/useTransferAccounts';
 import useCreateGoal from '../hooks/useCreateGoal';
 import CreateGoalModal from '../components/Savings/CreateGoalModal';
+import useDeleteGoal from '../hooks/useDeleteGoal';
+import DeleteGoalModal from '../components/Savings/DeleteGoalModal';
 
 const WORKING = 'Working Account';
 const EMERGENCY = 'Emergency Account';
@@ -20,7 +22,9 @@ const SavingsPage = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
     const [goalOpen, setGoalOpen] = useState(false);
+    const [deleting, setDeleting] = useState(null);   // the goal about to be deleted
 
+    const deleteMutation = useDeleteGoal();
     const { data, isPending, error, isError } = useSavings();
     const { submit } = useTransferAccounts();
     const createGoal = useCreateGoal();
@@ -142,10 +146,20 @@ const SavingsPage = () => {
                                 amountClass="text-[#0F7B5F]"
                                 target={goal.target ? Number(goal.target) : null}
                             >
-                                <button type="button" onClick={() => openModal?.('transfer', goal.name)} className={primaryBtn}>
-                                    <Plus className="h-5 w-5" aria-hidden="true" />
-                                    積み立てる
-                                </button>
+                                <div className="space-y-2">
+                                    <button type="button" onClick={() => openModal?.('transfer', goal.name)} className={primaryBtn}>
+                                        <Plus className="h-5 w-5" aria-hidden="true" />
+                                        積み立てる
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={() => setDeleting(goal)}
+                                        className="h-11 w-full rounded-xl text-sm font-semibold text-red-700 flex items-center justify-center gap-1.5 active:bg-red-50"
+                                    >
+                                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                                        この目標を削除
+                                    </button>
+                                </div>
                             </AccountCard>
                         ))}
                     </div>
@@ -163,6 +177,15 @@ const SavingsPage = () => {
                 onClose={() => setGoalOpen(false)}
                 onSubmit={createGoal.mutateAsync}
             />
+            {deleting && (
+                <DeleteGoalModal
+                    key={deleting.id}
+                    goal={deleting}
+                    onClose={() => setDeleting(null)}
+                    onConfirm={() => deleteMutation.mutateAsync(deleting.id)}
+                    onTransfer={() => openModal?.('transfer')}
+                />
+            )}
         </main>
 
     );

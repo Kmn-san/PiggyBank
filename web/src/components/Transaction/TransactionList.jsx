@@ -4,6 +4,7 @@ import { Card } from '../Card';
 import { formatYen, getLabel, TX_STYLE } from '../../lib/utlis';
 
 function TransactionList({ days, onEdit }) {
+
     return (
         <Card>
             <h2 className="font-bold">すべての取引</h2>
@@ -36,14 +37,19 @@ function TransactionList({ days, onEdit }) {
                                                 {s.sign}
                                                 {formatYen(tx.amount)}
                                             </p>
-                                            <button
-                                                type="button"
-                                                onClick={() => onEdit?.(tx)}
-                                                className="-mr-2 w-11 h-11 flex items-center justify-center rounded-lg text-[#12202F]/50 active:bg-black/5"
-                                                aria-label={`${main}を編集`}
-                                            >
-                                                <Pencil className="h-4 w-4" aria-hidden="true" />
-                                            </button>
+
+                                            {tx.type !== 'income' ? (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => onEdit?.(tx)}
+                                                    className="-mr-2 w-11 h-11 flex items-center justify-center rounded-lg text-[#12202F]/50 active:bg-black/5"
+                                                    aria-label={`${main}を編集`}
+                                                >
+                                                    <Pencil className="h-4 w-4" aria-hidden="true" />
+                                                </button>
+                                            ) : (
+                                                <span className="-mr-2 w-11 h-11 shrink-0" aria-hidden="true" />
+                                            )}
                                         </div>
                                     </li>
                                 );

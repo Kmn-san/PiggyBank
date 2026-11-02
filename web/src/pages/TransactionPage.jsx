@@ -20,8 +20,6 @@ const TransactionsPage = () => {
     const [modalMode, setModalMode] = useState('income');
     const [editing, setEditing] = useState(null);   // the transaction being edited
     const editMutation = useEditTransaction();
-    console.log(editing);
-
 
     const { data, isFetching, error, isError } = useTransactions(month);
     const { data: dashboard } = useDashboard();
