@@ -1,4 +1,29 @@
+import { ENV } from "../config/env.js";
 import * as authService from "../service/authService.js"
+
+export const fetchUser = async (req, res) => {
+    try {
+        const { userId } = req.user
+
+        const userData = await authService.fetchUser(userId)
+
+        if (!userData) {
+            return res.status(401).json({
+                success: false,
+                message: "User not found."
+            });
+        }
+
+        return res.status(200).json({ success: true, userData })
+    } catch (error) {
+        console.error("Error in fetchUser controller:", error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "サーバーエラー"
+        });
+    }
+}
 
 export const registerUser = async (req, res) => {
     try {
@@ -35,12 +60,25 @@ export const loginUser = async (req, res) => {
 
         const token = await authService.loginUser(user_code, password)
 
+        res.cookie("accessToken", token.accessToken, {
+            httpOnly: true,
+            secure: ENV.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 15 * 60 * 1000,
+            path: "/"
+        })
+
+        res.cookie("refreshToken", token.refreshToken, {
+            httpOnly: true,
+            secure: ENV.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            path: "/api/auth"
+        })
+
         return res.status(200).json({
             success: true,
-            message: "ログインしました。",
-            accessToken: token.accessToken,
-            refreshToken: token.refreshToken,
-            expiresIn: token.expiresIn
+            message: "ログインしました。"
         })
     } catch (error) {
         if (error.statusCode) {
@@ -57,15 +95,25 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
     try {
-        const { refreshToken } = req.body
+        const refreshToken = req.cookies?.refreshToken;
 
-        if (!refreshToken) {
-            return res.status(400).json({
-                success: false, message: "Refresh token is required."
-            })
+        if (refreshToken) {
+            await authService.logoutUser(refreshToken)
         }
 
-        await authService.logoutUser(refreshToken)
+        res.clearCookie("accessToken", {
+            httpOnly: true,
+            secure: ENV.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/"
+        })
+
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/api/auth"
+        })
 
         return res.status(200).json({ success: true, message: "ログアウトしました。" })
     } catch (error) {
@@ -83,16 +131,37 @@ export const logoutUser = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
     try {
-        const { refreshToken } = req.body;
+        const refreshToken = req.cookies?.refreshToken;
+
+        if (!refreshToken) {
+            return res.status(401).json({
+                success: false,
+                code: "NO_REFRESH_TOKEN",
+                message: "Refresh token is required."
+            });
+        }
 
         const result = await authService.refresh(refreshToken)
 
+        res.cookie("accessToken", result.accessToken, {
+            httpOnly: true,
+            secure: ENV.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 15 * 60 * 1000,
+            path: "/"
+        })
+
+        res.cookie("refreshToken", result.refreshToken, {
+            httpOnly: true,
+            secure: ENV.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 30 * 24 * 60 * 60 * 1000,
+            path: "/api/auth"
+        })
+
         return res.status(200).json({
             success: true,
-            message: "Token refresh successfully.",
-            accessToken: result.accessToken,
-            refreshToken: result.refreshToken,
-            expiresIn: result.expiresIn
+            message: "Token refresh successfully."
         })
     } catch (error) {
         if (error.statusCode) {

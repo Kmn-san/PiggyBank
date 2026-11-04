@@ -1,10 +1,11 @@
 import express from "express"
-import { adminRoute } from "../middleware/adminMiddleware.js";
 import { fetchData } from "../controller/adminController.js";
+import { protectRoute } from "../middleware/authMiddleware.js";
+import { adminMiddleware } from "../middleware/adminMiddleware.js";
 
 const router = express.Router()
 
 
-router.get("/", adminRoute, fetchData)
+router.get("/", protectRoute, adminMiddleware, fetchData)
 
 export default router;

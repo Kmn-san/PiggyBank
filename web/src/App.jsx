@@ -10,6 +10,8 @@ import AppLayout from "./components/AppLayout"
 import SavingsPage from "./pages/SavingsPage"
 import ExpensesPage from "./pages/ExpensesPage"
 import TransactionPage from "./pages/TransactionPage"
+import AdminRoute from "./components/AdminRoute"
+import AdminPage from "./pages/AdminPage"
 
 function App() {
   return (
@@ -37,6 +39,12 @@ function App() {
           path="/terms"
           element={<TermsOfService />}
         />
+
+        <Route element={<AdminRoute />}>
+          <Route
+            path="/admin"
+            element={<AdminPage />} />
+        </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>

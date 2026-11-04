@@ -1,7 +1,10 @@
 import express from "express"
-import { loginUser, logoutUser, refreshToken, registerUser } from "../controller/authController.js"
+import { fetchUser, loginUser, logoutUser, refreshToken, registerUser } from "../controller/authController.js"
+import { protectRoute } from "../middleware/authMiddleware.js"
 
 const router = express.Router()
+
+router.get("/me", protectRoute, fetchUser)
 
 router.post("/register", registerUser)
 router.post("/login", loginUser)

@@ -43,9 +43,6 @@ const LoginPage = () => {
                 toast.error(data.message ?? 'ログインできませんでした。', { id: 'login' });
                 return;
             }
-            localStorage.setItem('token', data.accessToken);
-            localStorage.setItem('refreshToken', data.refreshToken);
-            localStorage.setItem('expiresIn', String(data.expiresIn));
 
             toast.success('ログインしました');
             navigate('/dashboard');

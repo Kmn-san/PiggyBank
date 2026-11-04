@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors";
 import path from "path"
+import cookieParser from "cookie-parser";
 
 import authRoutes from "./src/route/authRoutes.js"
 import dashboardRoutes from "./src/route/dashboardRoutes.js"
@@ -16,6 +17,7 @@ const PORT = ENV.PORT
 
 const __dirname = path.resolve();
 
+app.use(cookieParser());
 app.use(express.json())
 
 const allowedOrigins = [

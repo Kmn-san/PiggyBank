@@ -8,32 +8,17 @@ const BASE_URI =
 
 export const axiosInstance = axios.create({
     baseURL: BASE_URI,
+    withCredentials: true
 });
 
 // Separate instance: refreshing must not trigger this
 // instance's response interceptor again.
 const refreshClient = axios.create({
     baseURL: BASE_URI,
+    withCredentials: true
 });
 
 let refreshPromise = null;
-
-const clearSession = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("expiresIn");
-};
-
-// Attach access token to requests.
-axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-
-    return config;
-});
 
 // Refresh expired access token and retry the original request.
 axiosInstance.interceptors.response.use(
@@ -55,65 +40,14 @@ axiosInstance.interceptors.response.use(
         originalRequest._retry = true;
 
         try {
-            // Reuse one refresh request if several API calls
-            // fail at approximately the same time.
             if (!refreshPromise) {
-                refreshPromise = (async () => {
-                    const refreshToken =
-                        localStorage.getItem("refreshToken");
-
-                    if (!refreshToken) {
-                        throw new Error("Refresh token missing.");
-                    }
-
-                    const { data } = await refreshClient.post(
-                        "/auth/refresh",
-                        { refreshToken }
-                    );
-
-                    const {
-                        accessToken,
-                        refreshToken: newRefreshToken,
-                        expiresIn
-                    } = data;
-
-                    if (!accessToken) {
-                        throw new Error("Access token missing from response.");
-                    }
-
-                    localStorage.setItem("token", accessToken);
-
-                    // If your backend rotates refresh tokens,
-                    // save the newly issued token too.
-                    if (newRefreshToken) {
-                        localStorage.setItem(
-                            "refreshToken",
-                            newRefreshToken
-                        );
-                    }
-
-                    if (expiresIn != null) {
-                        localStorage.setItem(
-                            "expiresIn",
-                            String(expiresIn)
-                        );
-                    }
-
-                    return accessToken;
-                })();
+                refreshPromise = refreshClient.post("/auth./refresh")
             }
+            await refreshPromise;
 
-            const newAccessToken = await refreshPromise;
-
-            originalRequest.headers =
-                originalRequest.headers || {};
-
-            originalRequest.headers.Authorization =
-                `Bearer ${newAccessToken}`;
-
-            return axiosInstance(originalRequest);
+            return axiosInstance(originalRequest)
         } catch (refreshError) {
-            clearSession();
+
             return Promise.reject(refreshError);
         } finally {
             refreshPromise = null;

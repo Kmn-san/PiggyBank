@@ -70,7 +70,7 @@ export const loginUser = async (user_code, password) => {
 
     const accessToken = generateAccessToken(existUser.id, existUser.role)
     const refresh = generateRefreshToken()
-    
+
     await pool.query(`
         UPDATE users
         SET 
@@ -126,4 +126,16 @@ export const refresh = async (refreshToken) => {
         refreshToken: refresh.token,
         expiresIn: ACCESS_EXPIRED
     }
+}
+
+export const fetchUser = async (userId) => {
+    const { rows } = await pool.query(`
+        SELECT id,role
+        FROM users
+        WHERE id = $1
+        AND is_deleted IS FALSE 
+        AND deleted_at IS NULL
+        `, [userId])
+
+    return rows[0] || null
 }

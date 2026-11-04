@@ -2,22 +2,19 @@ import jwt from "jsonwebtoken"
 import { ENV } from "../config/env.js"
 
 export const protectRoute = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    const token = req.cookies?.accessToken;
 
-    if (!authHeader?.startsWith("Bearer ")) {
+    if (!token) {
         return res.status(401).json({
             success: false,
-            code: "ACCESS_TOKEN_MISSING",
-            message: "Access token is required."
+            code: "NO_ACCESS_TOKEN",
+            message: "Authentication required."
         });
     }
-
-    const token = authHeader.split(" ")[1];
-
     try {
         const decoded = jwt.verify(token, ENV.JWT_SECRET);
 
-        req.user = { userId: decoded.userId };
+        req.user = { userId: decoded.userId, role: decoded.role };
 
         next();
     } catch (error) {

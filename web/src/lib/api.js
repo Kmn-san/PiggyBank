@@ -5,13 +5,18 @@ export const loginUser = async (userCode, password) => {
     return response.data
 }
 
+export const fetchUser = async () => {
+    const response = await axiosInstance.get(`/auth/me`)
+    return response.data.userData
+}
+
 export const registerUser = async (userCode, password) => {
     const response = await axiosInstance.post(`/auth/register`, { user_code: userCode, password })
     return response.data
 }
 
-export const logoutUser = async (refreshToken) => {
-    const response = await axiosInstance.post(`/auth/logout`, { refreshToken })
+export const logoutUser = async () => {
+    const response = await axiosInstance.post(`/auth/logout`)
     return response.data
 }
 

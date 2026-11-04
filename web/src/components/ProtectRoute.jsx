@@ -1,17 +1,15 @@
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.js";
 
 const ProtectedRoute = () => {
-    const token = localStorage.getItem("token");
-    const location = useLocation();
+    const { data: user, isLoading, isError } = useAuth()
 
-    if (!token) {
-        return (
-            <Navigate
-                to="/login"
-                state={{ from: location }}
-                replace
-            />
-        );
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (isError || !user) {
+        return <Navigate to="/login" replace />;
     }
 
     return <Outlet />;
