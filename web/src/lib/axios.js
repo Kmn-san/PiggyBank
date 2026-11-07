@@ -41,7 +41,7 @@ axiosInstance.interceptors.response.use(
 
         try {
             if (!refreshPromise) {
-                refreshPromise = refreshClient.post("/auth./refresh")
+                refreshPromise = refreshClient.post("/auth/refresh")
             }
             await refreshPromise;
 
