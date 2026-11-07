@@ -64,3 +64,9 @@ export const transferAccounts = async ({ amount, fromAccount, toAccount, note, t
     const response = await axiosInstance.post(`/transactions/transfer`, { amount, fromAccount, toAccount, note, transactionDate })
     return response.data.data
 }
+
+export const fetchAdminDashboard = async (startDate, endDate) => {
+
+    const response = await axiosInstance.get("/admin", { params: { startDate, endDate } })
+    return response.data.data
+}

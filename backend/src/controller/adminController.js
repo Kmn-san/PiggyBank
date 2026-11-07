@@ -3,7 +3,7 @@ import { isRealDate } from "../utlis/dateFormat.js";
 
 export const fetchData = async (req, res) => {
     try {
-        const { startDate, endDate } = req.body;
+        const { startDate, endDate } = req.query;
 
         if (!isRealDate(startDate) || !isRealDate(endDate)) {
             return res.status(400).json({ success: false, message: 'Insert with the fromat of YYYY-MM_DD' })
