@@ -26,3 +26,4 @@ export const fetchData = async (req, res) => {
         })
     }
 }
+

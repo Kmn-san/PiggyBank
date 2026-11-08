@@ -12,6 +12,7 @@ import ExpensesPage from "./pages/ExpensesPage"
 import TransactionPage from "./pages/TransactionPage"
 import AdminRoute from "./components/AdminRoute"
 import AdminPage from "./pages/AdminPage"
+import UserPage from "./pages/UserPage"
 
 function App() {
   return (
@@ -66,6 +67,11 @@ function App() {
             <Route
               path="/transaction"
               element={<TransactionPage />}
+            />
+
+            <Route
+              path="/me"
+              element={<UserPage />}
             />
           </Route>
         </Route>

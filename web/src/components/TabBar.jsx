@@ -1,11 +1,12 @@
 import { NavLink } from 'react-router-dom';
-import { Banknote, History, LayoutDashboard, Receipt } from 'lucide-react';
+import { Banknote, History, LayoutDashboard, Receipt, User } from 'lucide-react';
 
 const TABS = [
     { to: '/dashboard', label: 'ホーム', Icon: LayoutDashboard },
     { to: '/savings', label: '貯蓄', Icon: Banknote },
     { to: '/expenses', label: '支出', Icon: Receipt },
     { to: '/transaction', label: '取引', Icon: History },
+    { to: '/me', label: 'アカウント', Icon: User },
 ];
 
 const TabBar = () => (
@@ -13,7 +14,7 @@ const TabBar = () => (
         aria-label="メインメニュー"
         className="fixed bottom-0 inset-x-0 z-20 bg-white border-t border-[#D9DDD8] pb-[env(safe-area-inset-bottom)]"
     >
-        <ul className="max-w-5xl mx-auto grid grid-cols-4">
+        <ul className="max-w-5xl mx-auto grid grid-cols-5">
             {TABS.map(({ to, label, Icon }) => (
                 <li key={to}>
                     <NavLink

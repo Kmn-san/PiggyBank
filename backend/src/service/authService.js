@@ -51,7 +51,9 @@ export const loginUser = async (user_code, password) => {
     const { rows } = await pool.query(`
     SELECT id,hash_password,role
     FROM users 
-    WHERE user_code = $1`,
+    WHERE user_code = $1
+        AND is_deleted IS FALSE
+        AND deleted_at IS NULL`,
         [user_code])
 
     const existUser = rows[0]
@@ -130,12 +132,25 @@ export const refresh = async (refreshToken) => {
 
 export const fetchUser = async (userId) => {
     const { rows } = await pool.query(`
-        SELECT id,role
+        SELECT id,role,user_code
         FROM users
         WHERE id = $1
         AND is_deleted IS FALSE 
         AND deleted_at IS NULL
         `, [userId])
+
+    return rows[0] || null
+}
+
+export const deleteAccount = async (userId) => {
+    const { rows } = await pool.query(`
+        UPDATE users
+        SET 
+            is_deleted = TRUE,
+            deleted_at = NOW(),
+            updated_at = NOW()
+        WHERE id = $1`
+        , [userId])
 
     return rows[0] || null
 }

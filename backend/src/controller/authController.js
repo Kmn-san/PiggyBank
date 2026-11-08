@@ -175,3 +175,32 @@ export const refreshToken = async (req, res) => {
         })
     }
 }
+
+export const deleteAccount = async (req, res) => {
+    try {
+        const { userId } = req.user
+
+        await authService.deleteAccount(userId)
+
+        res.clearCookie("accessToken", {
+            httpOnly: true,
+            secure: ENV.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/"
+        })
+
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/api/auth"
+        })
+
+        return res.status(200).json({ success: true, message: "削除ウされました。" })
+    } catch (error) {
+        console.error("Error in deleteAccount controller: ", error.message);
+        return res.status(500).json({
+            success: false, message: "サーバーエラー"
+        })
+    }
+}

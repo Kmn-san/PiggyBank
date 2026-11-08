@@ -38,6 +38,8 @@ const LoginPage = () => {
         setIsLoading(true);
         try {
             const data = await loginUser(userCode, password);
+            console.log(data);
+
             if (!data.success) {
                 // Backend says success: false (HTTP 200)
                 toast.error(data.message ?? 'ログインできませんでした。', { id: 'login' });

@@ -66,7 +66,16 @@ export const transferAccounts = async ({ amount, fromAccount, toAccount, note, t
 }
 
 export const fetchAdminDashboard = async (startDate, endDate) => {
-
     const response = await axiosInstance.get("/admin", { params: { startDate, endDate } })
     return response.data.data
+}
+
+export const fetchUserData = async () => {
+    const response = await axiosInstance.get("/auth/me")
+    return response.data.userData
+}
+
+export const deleteAccount = async () => {
+    const response = await axiosInstance.delete("/auth/delete")
+    return response.data
 }
