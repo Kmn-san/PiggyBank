@@ -11,8 +11,6 @@ export const axiosInstance = axios.create({
     withCredentials: true
 });
 
-// Separate instance: refreshing must not trigger this
-// instance's response interceptor again.
 const refreshClient = axios.create({
     baseURL: BASE_URI,
     withCredentials: true
@@ -20,7 +18,6 @@ const refreshClient = axios.create({
 
 let refreshPromise = null;
 
-// Refresh expired access token and retry the original request.
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -28,10 +25,30 @@ axiosInstance.interceptors.response.use(
         const status = error.response?.status;
         const code = error.response?.data?.code;
 
+        if (!originalRequest || status !== 401) {
+            return Promise.reject(error);
+        }
+
+        // Never refresh login, register, logout or refresh requests
+        const excludedUrls = [
+            "/auth/login",
+            "/auth/register",
+            "/auth/logout",
+            "/auth/refresh"
+        ];
+
         if (
-            status !== 401 ||
+            excludedUrls.some((url) =>
+                originalRequest.url?.includes(url)
+            )
+        ) {
+            return Promise.reject(error);
+        }
+
+        // Only refresh when access token has expired.
+        // NO_ACCESS_TOKEN should not automatically trigger refresh.
+        if (
             code !== "ACCESS_TOKEN_EXPIRED" ||
-            !originalRequest ||
             originalRequest._retry
         ) {
             return Promise.reject(error);
@@ -41,16 +58,23 @@ axiosInstance.interceptors.response.use(
 
         try {
             if (!refreshPromise) {
-                refreshPromise = refreshClient.post("/auth/refresh")
+                refreshPromise = refreshClient
+                    .post("/auth/refresh")
+                    .finally(() => {
+                        refreshPromise = null;
+                    });
             }
+
             await refreshPromise;
 
-            return axiosInstance(originalRequest)
+            return axiosInstance(originalRequest);
+
         } catch (refreshError) {
+            if (window.location.pathname !== "/login") {
+                window.location.assign("/login");
+            }
 
             return Promise.reject(refreshError);
-        } finally {
-            refreshPromise = null;
         }
     }
 );

@@ -1,0 +1,338 @@
+{
+    "common": {
+        "close": "关闭",
+        "cancel": "取消",
+        "optional": "选填"
+    },
+    "login": {
+        "title": "登录",
+        "subtitle": "记录并分析你的支出",
+        "userCode": "用户代码",
+        "userCodePlaceholder": "请输入用户代码",
+        "password": "密码",
+        "passwordPlaceholder": "请输入密码",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "submit": "登录",
+        "loggingIn": "正在登录...",
+        "noAccount": "还没有账户？",
+        "signup": "创建账户",
+        "validation": {
+            "userCodeRequired": "请输入用户代码",
+            "passwordRequired": "请输入密码",
+            "passwordMinLength": "密码至少需要8个字符"
+        },
+        "toast": {
+            "loginFailed": "登录失败",
+            "loginSuccess": "登录成功",
+            "serverError": "无法连接到服务器"
+        }
+    },
+    "register": {
+        "title": "创建账户",
+        "subtitle": "请设置用户代码和密码",
+        "userCode": "用户代码",
+        "userCodePlaceholder": "请输入用户代码",
+        "userCodeHint": "4–20个字符：字母、数字、连字符和下划线",
+        "password": "密码",
+        "passwordPlaceholder": "请输入密码",
+        "passwordHint": "至少8个字符",
+        "confirmPassword": "确认密码",
+        "confirmPasswordPlaceholder": "请再次输入密码",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "termsPrefix": "我同意",
+        "terms": "服务条款",
+        "and": "和",
+        "privacy": "隐私政策",
+        "agreement": "。",
+        "creating": "正在创建账户...",
+        "created": "账户已创建",
+        "submit": "创建账户",
+        "haveAccount": "已经有账户了吗？",
+        "login": "登录",
+        "validation": {
+            "userCodeRequired": "请输入用户代码",
+            "userCodeFormat": "请输入4–20个字母、数字、连字符或下划线",
+            "passwordRequired": "请输入密码",
+            "passwordMinLength": "密码至少需要8个字符",
+            "confirmRequired": "请确认密码",
+            "passwordMismatch": "两次输入的密码不一致",
+            "agreementRequired": "请同意服务条款和隐私政策"
+        },
+        "success": {
+            "title": "注册成功",
+            "description": "即将跳转到登录页面。",
+            "ok": "确定"
+        },
+        "toast": {
+            "createFailed": "无法创建账户，请重试。"
+        }
+    },
+    "dashboard": {
+        "loading": "正在加载...",
+        "fetchError": "无法获取仪表板数据。",
+        "header": {
+            "admin": "管理后台",
+            "logout": "退出登录",
+            "loggingOut": "正在退出登录...",
+            "logoutSuccess": "已成功退出登录",
+            "logoutError": "无法从服务器退出登录。"
+        },
+        "summary": {
+            "working": {
+                "title": "主要账户",
+                "description": "所有收入都会存入这里",
+                "recordIncome": "记录收入",
+                "transfer": "转移资金"
+            },
+            "daily": {
+                "title": "日常支出账户",
+                "description": "日常消费从这里支出",
+                "recordExpense": "记录支出"
+            },
+            "emergency": {
+                "title": "应急储蓄账户",
+                "description": "为突发开支而储蓄的钱"
+            }
+        },
+        "moneyFlow": {
+            "title": "资金流向",
+            "steps": {
+                "income": {
+                    "title": "收入入账",
+                    "description": "收入会存入主要账户"
+                },
+                "transfer": {
+                    "title": "每周转账",
+                    "description": "主要账户 → 日常支出账户"
+                },
+                "savings": {
+                    "title": "将剩余资金存起来",
+                    "description": "主要账户 → 应急储蓄 / 储蓄目标"
+                }
+            }
+        },
+        "charts": {
+            "title": "本月支出明细",
+            "subtitle": "按类别分类",
+            "empty": "本月尚无支出记录"
+        },
+        "recentTransactions": {
+            "title": "最近的交易",
+            "viewAll": "查看全部",
+            "empty": "暂无交易记录"
+        }
+    },
+    "categories": {
+        "food": "餐饮",
+        "transport": "交通",
+        "shopping": "购物",
+        "entertainment": "娱乐",
+        "housing": "住房",
+        "utilities": "水电燃气",
+        "education": "教育",
+        "health": "医疗",
+        "other": "其他"
+    },
+    "accounts": {
+        "working": "主要账户",
+        "daily": "日常支出账户",
+        "emergency": "应急储蓄账户"
+    },
+    "navigation": {
+        "mainMenu": "主菜单",
+        "home": "首页",
+        "savings": "储蓄",
+        "expenses": "支出",
+        "transactions": "交易记录",
+        "account": "账户"
+    },
+    "user": {
+        "title": "账户",
+        "userCode": "用户代码",
+        "loading": "正在加载...",
+        "fetchError": "无法获取账户数据。",
+        "language": {
+            "title": "语言设置",
+            "description": "请选择您希望使用的语言。"
+        },
+        "delete": {
+            "title": "删除账户",
+            "description": "删除账户后，您将无法登录，也无法查看已记录的数据。此操作无法撤销。",
+            "button": "删除我的账户"
+        }
+    },
+    "savings": {
+        "title": "储蓄",
+        "description": "查看应急储蓄、主要账户和储蓄目标的余额。",
+        "loading": "正在加载储蓄数据...",
+        "fetchError": "无法获取储蓄数据。",
+        "emergency": {
+            "title": "应急储蓄账户",
+            "description": "为突发开支而储蓄的钱。",
+            "transfer": "从主要账户转入储蓄"
+        },
+        "working": {
+            "title": "主要账户",
+            "description": "所有收入都会存入这里。",
+            "recordIncome": "记录收入",
+            "transfer": "转移资金"
+        },
+        "goals": {
+            "title": "储蓄目标",
+            "count_one": "{{count}}个目标",
+            "count_other": "{{count}}个目标",
+            "create": "创建目标",
+            "empty": "您还没有创建任何储蓄目标。",
+            "createFirst": "创建第一个目标",
+            "description": "为实现目标而储蓄的钱。",
+            "deposit": "存入储蓄",
+            "delete": "删除此目标"
+        }
+    },
+    "createGoal": {
+        "title": "创建储蓄目标",
+        "description": "添加一个用于实现储蓄目标的账户。",
+        "nameLabel": "目标名称",
+        "placeholder": "例如：旅行、笔记本电脑",
+        "submitting": "正在创建...",
+        "submit": "创建目标",
+        "success": "储蓄目标创建成功。",
+        "error": "无法创建目标，请重试。",
+        "validation": {
+            "required": "请输入目标名称。",
+            "maxLength": "目标名称不能超过30个字符。"
+        }
+    },
+    "deleteGoal": {
+        "transferRequired": {
+            "title": "请先转出账户余额",
+            "description": "「{{name}}」中仍有 {{amount}}。请先将余额转移到其他账户，确保余额为0元后再删除。",
+            "transfer": "转移资金"
+        },
+        "confirm": {
+            "title": "确定删除此储蓄目标吗？",
+            "description": "您确定要删除「{{name}}」吗？过去的交易记录将会保留。",
+            "delete": "删除"
+        },
+        "deleting": "正在删除...",
+        "success": "储蓄目标已成功删除。",
+        "error": "无法删除目标，请重试。"
+    },
+    "transaction": {
+        "title": "记录交易",
+        "amount": "金额",
+        "date": "日期",
+        "note": "备注",
+        "saving": "正在保存...",
+        "save": "保存{{mode}}",
+        "success": "交易记录已保存。",
+        "error": "无法保存交易，请重试。",
+        "fixed": "固定",
+        "balance": "余额",
+        "availableBalance": "可用余额",
+        "category": "类别",
+        "modes": {
+            "income": {
+                "label": "收入",
+                "description": "记录存入主要账户的收入。"
+            },
+            "transfer": {
+                "label": "转账",
+                "description": "在不同账户之间转移资金。"
+            },
+            "expense": {
+                "label": "支出",
+                "description": "记录从日常支出账户中花费的钱。"
+            }
+        },
+        "income": {
+            "destination": "存入账户"
+        },
+        "transfer": {
+            "from": "转出账户",
+            "to": "转入账户"
+        },
+        "expense": {
+            "source": "付款账户"
+        },
+        "notePlaceholder": {
+            "income": "例如：兼职工资",
+            "transfer": "例如：转入应急储蓄",
+            "expense": "例如：和朋友吃午餐"
+        },
+        "validation": {
+            "invalidAmount": "请输入不低于1日元的整数金额。",
+            "dateRequired": "请选择日期。",
+            "accountRequired": "请选择转出和转入账户。",
+            "sameAccount": "转出账户和转入账户不能相同。",
+            "insufficientAccount": "{{account}}余额不足（余额：{{balance}}）。",
+            "insufficientDaily": "日常支出账户余额不足（余额：{{balance}}）。"
+        }
+    },
+    "accountPicker": {
+        "balance": "余额：{{amount}}",
+        "goalsHeading": "目标账户（{{count}}）"
+    },
+    "expenses": {
+        "title": "支出",
+        "loading": "加载中...",
+        "fetchError": "无法获取支出数据。",
+        "copyReport": "复制{{month}}的报告",
+        "daily": {
+            "title": "日常支出账户",
+            "description": "日常开销从这个账户中支出。",
+            "recordExpense": "记录支出"
+        },
+        "monthFilter": {
+            "previousMonth": "上个月",
+            "nextMonth": "下个月",
+            "thisMonth": "本月",
+            "backToThisMonth": "返回本月",
+            "totalExpenses": "支出总额",
+            "count": "{{count}}笔"
+        },
+        "copyReportButton": {
+            "successToast": "已复制！请粘贴到AI聊天中。",
+            "errorToast": "复制失败，请重试。",
+            "copied": "已复制",
+            "description": "将复制的内容粘贴到AI聊天中，即可获得支出分析和储蓄建议。"
+        },
+        "categories": {
+            "title": "{{month}}分类支出",
+            "sortDescription": "按金额从高到低排序",
+            "empty": "本月没有支出"
+        }
+    },
+    "transactions": {
+        "title": "交易记录",
+        "loading": "加载中...",
+        "fetchError": "无法获取交易数据。",
+        "periodSummary": {
+            "income": "收入",
+            "count": "交易笔数",
+            "countSuffix": "笔"
+        },
+        "list": {
+            "title": "所有交易",
+            "empty": "此期间没有交易记录",
+            "edit": "编辑{{name}}"
+        },
+        "edit": {
+            "title": "编辑交易",
+            "cannotChange": "无法更改交易类型、账户和类别。",
+            "amount": "金额",
+            "date": "日期",
+            "note": "备注",
+            "saving": "保存中...",
+            "save": "保存更改",
+            "success": "修改成功。",
+            "error": "无法保存更改，请重试。",
+            "validation": {
+                "invalidAmount": "请输入不小于¥1的整数金额。",
+                "dateRequired": "请选择日期。"
+            }
+        }
+    }
+}

@@ -1,17 +1,25 @@
+
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Loader2, TriangleAlert } from 'lucide-react';
 import { formatYen } from '../../lib/utlis';
+import { useTranslation } from 'react-i18next';
 
 const DeleteGoalModal = ({ goal, onClose, onConfirm, onTransfer }) => {
+    const { t } = useTranslation();
+
     const [isSubmitting, setIsSubmitting] = useState(false);
+
     const balance = Number(goal.currentAmount ?? 0);
     const hasMoney = balance > 0;
 
     useEffect(() => {
-        const onKey = (e) => e.key === 'Escape' && !isSubmitting && onClose?.();
+        const onKey = (e) =>
+            e.key === 'Escape' && !isSubmitting && onClose?.();
+
         window.addEventListener('keydown', onKey);
         document.body.style.overflow = 'hidden';
+
         return () => {
             window.removeEventListener('keydown', onKey);
             document.body.style.overflow = '';
@@ -20,12 +28,20 @@ const DeleteGoalModal = ({ goal, onClose, onConfirm, onTransfer }) => {
 
     const handleDelete = async () => {
         setIsSubmitting(true);
+
         try {
             await onConfirm?.();
-            toast.success('目標口座を削除しました', { id: 'goal-delete' });
+
+            toast.success(t('deleteGoal.success'), {
+                id: 'goal-delete'
+            });
+
             onClose?.();
         } catch (err) {
-            toast.error(err?.response?.data?.message ?? '削除できませんでした。もう一度お試しください。', { id: 'goal-delete' });
+            toast.error(
+                err?.response?.data?.message ?? t('deleteGoal.error'),
+                { id: 'goal-delete' }
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -42,39 +58,69 @@ const DeleteGoalModal = ({ goal, onClose, onConfirm, onTransfer }) => {
         >
             <div
                 className="w-full sm:max-w-sm bg-white rounded-t-2xl sm:rounded-2xl shadow-xl p-6 text-[#12202F] pb-[max(1.5rem,env(safe-area-inset-bottom))]"
-                style={{ fontFamily: "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif" }}
+                style={{
+                    fontFamily: "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif"
+                }}
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${hasMoney ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'}`}>
-                    <TriangleAlert className="h-6 w-6" aria-hidden="true" />
+                {/* Warning icon */}
+                <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center mb-4 ${hasMoney
+                            ? 'bg-amber-50 text-amber-700'
+                            : 'bg-red-50 text-red-700'
+                        }`}
+                >
+                    <TriangleAlert
+                        className="h-6 w-6"
+                        aria-hidden="true"
+                    />
                 </div>
 
+                {/* Title */}
                 <h2 id="del-title" className="text-lg font-bold">
-                    {hasMoney ? '先にお金を移してください' : '目標口座を削除しますか？'}
-                </h2>
-                <p id="del-desc" className="text-sm text-[#12202F]/70 mt-2 leading-relaxed wrap-break-word">
                     {hasMoney
-                        ? `「${goal.name}」にはまだ ${formatYen(balance)} 残っています。他の口座へ移して残高を0円にしてから、もう一度削除してください。`
-                        : `「${goal.name}」を削除します。過去の取引の履歴は残ります。`}
+                        ? t('deleteGoal.transferRequired.title')
+                        : t('deleteGoal.confirm.title')}
+                </h2>
+
+                {/* Description */}
+                <p
+                    id="del-desc"
+                    className="text-sm text-[#12202F]/70 mt-2 leading-relaxed wrap-break-word"
+                >
+                    {hasMoney
+                        ? t('deleteGoal.transferRequired.description', {
+                            name: goal.name,
+                            amount: formatYen(balance)
+                        })
+                        : t('deleteGoal.confirm.description', {
+                            name: goal.name
+                        })}
                 </p>
 
+                {/* Buttons */}
                 <div className="grid grid-cols-2 gap-3 mt-6">
                     <button
                         type="button"
                         onClick={onClose}
                         disabled={isSubmitting}
-                        className="h-12 rounded-xl border border-[#D9DDD8] bg-white text-base font-semibold active:bg-black/5"
+                        className="h-12 rounded-xl border border-[#D9DDD8] bg-white text-base font-semibold active:bg-black/5 disabled:opacity-60"
                     >
-                        {hasMoney ? '閉じる' : 'キャンセル'}
+                        {hasMoney
+                            ? t('common.close')
+                            : t('common.cancel')}
                     </button>
 
                     {hasMoney ? (
                         <button
                             type="button"
-                            onClick={() => { onClose?.(); onTransfer?.(); }}
+                            onClick={() => {
+                                onClose?.();
+                                onTransfer?.();
+                            }}
                             className="h-12 rounded-xl bg-[#0F7B5F] text-white text-base font-semibold active:bg-[#0B5F49]"
                         >
-                            お金を移す
+                            {t('deleteGoal.transferRequired.transfer')}
                         </button>
                     ) : (
                         <button
@@ -83,7 +129,17 @@ const DeleteGoalModal = ({ goal, onClose, onConfirm, onTransfer }) => {
                             disabled={isSubmitting}
                             className="h-12 rounded-xl bg-red-700 text-white text-base font-semibold flex items-center justify-center gap-2 active:bg-red-800 disabled:opacity-60"
                         >
-                            {isSubmitting ? <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> : '削除する'}
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2
+                                        className="h-5 w-5 animate-spin"
+                                        aria-hidden="true"
+                                    />
+                                    {t('deleteGoal.deleting')}
+                                </>
+                            ) : (
+                                t('deleteGoal.confirm.delete')
+                            )}
                         </button>
                     )}
                 </div>

@@ -1,6 +1,8 @@
-// pages/TransactionsPage.jsx
+
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
+
 import { dayKeyOf, dayLabelOf, monthKeyOf } from '../lib/utlis';
 import RecordButton from '../components/Transaction/RecordButton';
 import PeriodSummary from '../components/Transaction/PeriodSummary';
@@ -14,11 +16,14 @@ import EditTransactionModal from '../components/Transaction/EditTransactionModal
 import useEditTransaction from '../hooks/useEditTransaction.js';
 
 const TransactionsPage = () => {
+    const { t } = useTranslation();
+
     const thisMonth = monthKeyOf(new Date().toISOString());
     const [month, setMonth] = useState(thisMonth);
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('income');
-    const [editing, setEditing] = useState(null);   // the transaction being edited
+    const [editing, setEditing] = useState(null);
+
     const editMutation = useEditTransaction();
 
     const { data, isFetching, error, isError } = useTransactions(month);
@@ -33,36 +38,62 @@ const TransactionsPage = () => {
 
     useEffect(() => {
         if (isFetching) {
-            toast.loading('読み込み中…', { id: 'transactions' });
+            toast.loading(t('transactions.loading'), {
+                id: 'transactions',
+            });
         } else if (isError) {
-            toast.error(error?.response?.data?.message ?? 'データを取得できませんでした。', { id: 'transactions' });
+            toast.error(
+                error?.response?.data?.message ?? t('transactions.fetchError'),
+                { id: 'transactions' }
+            );
         } else {
             toast.dismiss('transactions');
         }
-    }, [isFetching, isError, error]);
+    }, [isFetching, isError, error, t]);
 
     useEffect(() => () => toast.dismiss('transactions'), []);
 
     const { days, income, expense, count } = useMemo(() => {
-        const list = [...(Array.isArray(data) ? data : data?.transactions ?? [])]
-            .sort((a, b) => b.transactionDate.localeCompare(a.transactionDate));
+        const list = [
+            ...(Array.isArray(data) ? data : data?.transactions ?? []),
+        ].sort((a, b) =>
+            b.transactionDate.localeCompare(a.transactionDate)
+        );
 
         const byDay = new Map();
+
         list.forEach((tx) => {
             const key = dayKeyOf(tx.transactionDate);
-            if (!byDay.has(key)) byDay.set(key, { key, label: dayLabelOf(tx.transactionDate), items: [] });
+
+            if (!byDay.has(key)) {
+                byDay.set(key, {
+                    key,
+                    label: dayLabelOf(tx.transactionDate),
+                    items: [],
+                });
+            }
+
             byDay.get(key).items.push(tx);
         });
 
         const sumOf = (type) =>
-            list.filter((tx) => tx.type === type).reduce((s, tx) => s + Number(tx.amount), 0);
+            list
+                .filter((tx) => tx.type === type)
+                .reduce((s, tx) => s + Number(tx.amount), 0);
 
-        return { days: [...byDay.values()], income: sumOf('income'), expense: sumOf('expense'), count: list.length };
+        return {
+            days: [...byDay.values()],
+            income: sumOf('income'),
+            expense: sumOf('expense'),
+            count: list.length,
+        };
     }, [data]);
 
     return (
         <main className="max-w-5xl mx-auto px-4 pt-6 pb-8 space-y-4">
-            <h1 className="text-2xl font-bold">取引履歴</h1>
+            <h1 className="text-2xl font-bold">
+                {t('transactions.title')}
+            </h1>
 
             <RecordButton onOpenModal={openModal} />
 
@@ -76,18 +107,28 @@ const TransactionsPage = () => {
 
             <PeriodSummary
                 count={count}
-                income={income} />
+                income={income}
+            />
 
-            <TransactionList days={days} onEdit={setEditing} />
+            <TransactionList
+                days={days}
+                onEdit={setEditing}
+            />
 
             {editing && (
                 <EditTransactionModal
                     key={editing.id}
                     transaction={editing}
                     onClose={() => setEditing(null)}
-                    onSubmit={(values) => editMutation.mutateAsync({ transactionId: editing.id, ...values })}
+                    onSubmit={(values) =>
+                        editMutation.mutateAsync({
+                            transactionId: editing.id,
+                            ...values,
+                        })
+                    }
                 />
             )}
+
             <TransactionModal
                 isOpen={modalOpen}
                 mode={modalMode}

@@ -1,3 +1,4 @@
+
 import SummaryCard from '../components/Dashbaord/SummaryCard';
 import { FONT_JP } from '../lib/utlis';
 import Charts from '../components/Dashbaord/Charts';
@@ -8,8 +9,11 @@ import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import TransactionModal from '../components/TransactionModal';
 import useTransferAccounts from '../hooks/useTransferAccounts';
+import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
+    const { t } = useTranslation();
+
     const { data, isPending, error, isError } = useDashboard();
     const { submit } = useTransferAccounts();
 
@@ -23,16 +27,16 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (isPending) {
-            toast.loading('読み込み中…', { id: 'dashboard' });
+            toast.loading(t('dashboard.loading'), { id: 'dashboard' });
         } else if (isError) {
             toast.error(
-                error?.response?.data?.message ?? 'データを取得できませんでした。',
+                error?.response?.data?.message ?? t('dashboard.fetchError'),
                 { id: 'dashboard' }
             );
         } else {
             toast.dismiss('dashboard');
         }
-    }, [isPending, isError, error]);
+    }, [isPending, isError, error, t]);
 
     useEffect(() => () => toast.dismiss('dashboard'), []);
 
@@ -41,12 +45,17 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#F5F6F4] text-[#12202F]" style={{ fontFamily: FONT_JP }}>
-
+        <div
+            className="min-h-screen bg-[#F5F6F4] text-[#12202F]"
+            style={{ fontFamily: FONT_JP }}
+        >
             <main className="max-w-5xl mx-auto px-4 pt-6 pb-[max(2rem,env(safe-area-inset-bottom))] space-y-4">
 
                 {/* Summary cards */}
-                <SummaryCard accounts={data.accounts} onOpenModal={openModal} />
+                <SummaryCard
+                    accounts={data.accounts}
+                    onOpenModal={openModal}
+                />
 
                 {/* Money flow */}
                 <MoneyFlow />
@@ -57,7 +66,6 @@ const Dashboard = () => {
                 {/* Recent transactions */}
                 <RecentTransactions transactions={data.transactions} />
 
-
                 <TransactionModal
                     isOpen={modalOpen}
                     mode={modalMode}
@@ -66,7 +74,7 @@ const Dashboard = () => {
                     onSubmit={submit}
                 />
             </main>
-        </div >
+        </div>
     );
 };
 

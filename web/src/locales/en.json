@@ -1,0 +1,339 @@
+{
+    "common": {
+        "close": "Close",
+        "cancel": "Cancel",
+        "optional": "Optional"
+    },
+    "login": {
+        "title": "Login",
+        "subtitle": "Record and analyze your spending",
+        "userCode": "User Code",
+        "userCodePlaceholder": "Enter your user code",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "submit": "Login",
+        "loggingIn": "Logging in...",
+        "noAccount": "New here?",
+        "signup": "Create an account",
+        "validation": {
+            "userCodeRequired": "Please enter your user code.",
+            "passwordRequired": "Please enter your password.",
+            "passwordMinLength": "Password must be at least 8 characters."
+        },
+        "toast": {
+            "loginFailed": "Unable to log in.",
+            "loginSuccess": "Logged in successfully.",
+            "serverError": "Unable to connect to the server."
+        }
+    },
+    "register": {
+        "title": "Create Account",
+        "subtitle": "Set up your user code and password",
+        "userCode": "User Code",
+        "userCodePlaceholder": "Enter your user code",
+        "userCodeHint": "4–20 characters: letters, numbers, hyphens, and underscores",
+        "password": "Password",
+        "passwordPlaceholder": "Enter your password",
+        "passwordHint": "At least 8 characters",
+        "confirmPassword": "Confirm Password",
+        "confirmPasswordPlaceholder": "Re-enter your password",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "termsPrefix": "I agree to the ",
+        "terms": "Terms of Service",
+        "and": " and ",
+        "privacy": "Privacy Policy",
+        "agreement": ".",
+        "creating": "Creating account...",
+        "created": "Account created",
+        "submit": "Create Account",
+        "haveAccount": "Already have an account?",
+        "login": "Login",
+        "validation": {
+            "userCodeRequired": "Please enter your user code.",
+            "userCodeFormat": "Use 4–20 letters, numbers, hyphens, or underscores.",
+            "passwordRequired": "Please enter your password.",
+            "passwordMinLength": "Password must be at least 8 characters.",
+            "confirmRequired": "Please confirm your password.",
+            "passwordMismatch": "Passwords do not match.",
+            "agreementRequired": "You must agree to the Terms of Service and Privacy Policy."
+        },
+        "success": {
+            "title": "Registration Complete",
+            "description": "You will be redirected to the login page.",
+            "ok": "OK"
+        },
+        "toast": {
+            "createFailed": "Unable to create your account. Please try again."
+        }
+    },
+    "dashboard": {
+        "loading": "Loading dashboard...",
+        "fetchError": "Unable to retrieve dashboard data.",
+        "header": {
+            "admin": "Admin Dashboard",
+            "logout": "Logout",
+            "loggingOut": "Logging out...",
+            "logoutSuccess": "Logged out successfully",
+            "logoutError": "Unable to log out from the server."
+        },
+        "summary": {
+            "working": {
+                "title": "Working Account",
+                "description": "All your income goes here",
+                "recordIncome": "Record Income",
+                "transfer": "Transfer Money"
+            },
+            "daily": {
+                "title": "Daily Expenses",
+                "description": "Use this money for your daily spending",
+                "recordExpense": "Record Expense"
+            },
+            "emergency": {
+                "title": "Emergency Fund",
+                "description": "Money saved for unexpected expenses"
+            }
+        },
+        "moneyFlow": {
+            "title": "How Your Money Flows",
+            "steps": {
+                "income": {
+                    "title": "Receive Income",
+                    "description": "Money goes into your Working Account"
+                },
+                "transfer": {
+                    "title": "Transfer Weekly",
+                    "description": "Working Account → Daily Expenses"
+                },
+                "savings": {
+                    "title": "Save What's Left",
+                    "description": "Working Account → Emergency Fund / Goals"
+                }
+            }
+        },
+        "charts": {
+            "title": "This Month's Expenses",
+            "subtitle": "By Category",
+            "empty": "No expenses recorded this month yet."
+        },
+        "recentTransactions": {
+            "title": "Recent Transactions",
+            "viewAll": "View All",
+            "empty": "No transactions yet"
+        }
+    },
+    "accounts": {
+        "working": "Working Account",
+        "daily": "Daily Expenses",
+        "emergency": "Emergency Account"
+    },
+    "categories": {
+        "food": "Food",
+        "transport": "Transport",
+        "shopping": "Shopping",
+        "entertainment": "Entertainment",
+        "housing": "Housing",
+        "utilities": "Utilities",
+        "education": "Education",
+        "health": "Health",
+        "other": "Other"
+    },
+    "navigation": {
+        "mainMenu": "Main menu",
+        "home": "Home",
+        "savings": "Savings",
+        "expenses": "Expenses",
+        "transactions": "Transactions",
+        "account": "Account"
+    },
+    "user": {
+        "title": "Account",
+        "userCode": "User Code",
+        "loading": "Loading...",
+        "fetchError": "Unable to retrieve account data.",
+        "language": {
+            "title": "Language",
+            "description": "Choose your preferred language."
+        },
+        "delete": {
+            "title": "Delete Account",
+            "description": "If you delete your account, you will no longer be able to log in or view your recorded data. This action cannot be undone.",
+            "button": "Delete My Account"
+        }
+    },
+    "savings": {
+        "title": "Savings",
+        "description": "View your Emergency Fund, Working Account, and savings goals.",
+        "loading": "Loading savings...",
+        "fetchError": "Unable to retrieve savings data.",
+        "emergency": {
+            "title": "Emergency Fund",
+            "description": "Money saved for unexpected expenses.",
+            "transfer": "Save from Working Account"
+        },
+        "working": {
+            "title": "Working Account",
+            "description": "All your income goes here.",
+            "recordIncome": "Record Income",
+            "transfer": "Transfer Money"
+        },
+        "goals": {
+            "title": "Savings Goals",
+            "count_one": "{{count}} goal",
+            "count_other": "{{count}} goals",
+            "create": "Create Goal",
+            "empty": "You haven't created any savings goals yet.",
+            "createFirst": "Create Your First Goal",
+            "description": "Money saved for your goal.",
+            "deposit": "Add Savings",
+            "delete": "Delete This Goal"
+        }
+    },
+    "createGoal": {
+        "title": "Create Savings Goal",
+        "description": "Add an account to save money for your goals.",
+        "nameLabel": "Goal Name",
+        "placeholder": "e.g. Travel, Laptop",
+        "submitting": "Creating...",
+        "submit": "Create Goal",
+        "success": "Savings goal created successfully.",
+        "error": "Unable to create the goal. Please try again.",
+        "validation": {
+            "required": "Please enter a goal name.",
+            "maxLength": "Goal name must be 30 characters or fewer."
+        }
+    },
+    "deleteGoal": {
+        "transferRequired": {
+            "title": "Transfer Your Money First",
+            "description": "\"{{name}}\" still has {{amount}} remaining. Please transfer the money to another account until the balance reaches ¥0 before deleting this goal.",
+            "transfer": "Transfer Money"
+        },
+        "confirm": {
+            "title": "Delete This Savings Goal?",
+            "description": "Are you sure you want to delete \"{{name}}\"? Your past transaction history will remain.",
+            "delete": "Delete"
+        },
+        "deleting": "Deleting...",
+        "success": "Savings goal deleted successfully.",
+        "error": "Unable to delete the goal. Please try again."
+    },
+    "transaction": {
+        "title": "Record Transaction",
+        "amount": "Amount",
+        "date": "Date",
+        "note": "Note",
+        "saving": "Saving...",
+        "save": "Save {{mode}}",
+        "success": "Transaction saved successfully.",
+        "error": "Unable to save the transaction. Please try again.",
+        "fixed": "Fixed",
+        "balance": "Balance",
+        "availableBalance": "Available balance",
+        "category": "Category",
+        "modes": {
+            "income": {
+                "label": "Income",
+                "description": "Record money received in your Working Account."
+            },
+            "transfer": {
+                "label": "Transfer",
+                "description": "Move money between accounts."
+            },
+            "expense": {
+                "label": "Expense",
+                "description": "Record money spent from your Daily Expenses account."
+            }
+        },
+        "income": {
+            "destination": "Deposit To"
+        },
+        "transfer": {
+            "from": "Transfer From",
+            "to": "Transfer To"
+        },
+        "expense": {
+            "source": "Payment From"
+        },
+        "notePlaceholder": {
+            "income": "e.g. Part-time job salary",
+            "transfer": "e.g. Transfer to emergency fund",
+            "expense": "e.g. Lunch with friends"
+        },
+        "validation": {
+            "invalidAmount": "Please enter a whole number of at least ¥1.",
+            "dateRequired": "Please select a date.",
+            "accountRequired": "Please select both accounts.",
+            "sameAccount": "Please select different source and destination accounts.",
+            "insufficientAccount": "Insufficient balance in {{account}} (Balance: {{balance}}).",
+            "insufficientDaily": "Insufficient balance in Daily Expenses (Balance: {{balance}})."
+        }
+    },
+    "accountPicker": {
+        "balance": "Balance: {{amount}}",
+        "goalsHeading": "Goal Accounts ({{count}})"
+    },
+    "expenses": {
+        "title": "Expenses",
+        "loading": "Loading...",
+        "fetchError": "Failed to load expense data.",
+        "copyReport": "Copy {{month}} report",
+        "daily": {
+            "title": "Daily Expenses",
+            "description": "Use this account for your everyday spending.",
+            "recordExpense": "Record Expense"
+        },
+        "monthFilter": {
+            "previousMonth": "Previous month",
+            "nextMonth": "Next month",
+            "thisMonth": "This month",
+            "backToThisMonth": "Back to this month",
+            "totalExpenses": "Total expenses",
+            "count_one": "{{count}} transaction",
+            "count_other": "{{count}} transactions"
+        },
+        "copyReportButton": {
+            "successToast": "Copied! Paste it into your AI chat.",
+            "errorToast": "Could not copy. Please try again.",
+            "copied": "Copied",
+            "description": "Paste the copied content into an AI chat to receive expense analysis and saving advice."
+        },
+        "categories": {
+            "title": "{{month}} Expenses by Category",
+            "sortDescription": "Sorted by highest amount",
+            "empty": "No expenses this month"
+        }
+    },
+    "transactions": {
+        "title": "Transaction History",
+        "loading": "Loading...",
+        "fetchError": "Failed to load transaction data.",
+        "periodSummary": {
+            "income": "Income",
+            "count": "Transactions",
+            "countSuffix": ""
+        },
+        "list": {
+            "title": "All Transactions",
+            "empty": "No transactions during this period",
+            "edit": "Edit {{name}}"
+        },
+        "edit": {
+            "title": "Edit Transaction",
+            "cannotChange": "Type, account, and category cannot be changed.",
+            "amount": "Amount",
+            "date": "Date",
+            "note": "Note",
+            "saving": "Saving...",
+            "save": "Save Changes",
+            "success": "Changes saved successfully.",
+            "error": "Unable to save changes. Please try again.",
+            "validation": {
+                "invalidAmount": "Please enter a whole number of at least ¥1.",
+                "dateRequired": "Please select a date."
+            }
+        }
+    }
+}

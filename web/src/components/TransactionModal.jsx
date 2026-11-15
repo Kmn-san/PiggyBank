@@ -1,35 +1,75 @@
+
 import {
-    X, Plus, ArrowLeftRight, ArrowDown, ShoppingBag, CircleAlert, Loader2,
-    Coffee, Car, GraduationCap, ShoppingCart, Film, MoreHorizontal,
+    X,
+    Plus,
+    ArrowLeftRight,
+    ArrowDown,
+    ShoppingBag,
+    CircleAlert,
+    Loader2,
+    Coffee,
+    Car,
+    GraduationCap,
+    ShoppingCart,
+    Film,
+    MoreHorizontal,
 } from 'lucide-react';
-import { formatYen } from '../lib/utlis';
-import { AccountPicker } from './AccountPicker';
-import { ACCT, getAccountMeta } from '../lib/accounts';
+
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 
+import { formatYen } from '../lib/utlis';
+import { getAccountMeta } from '../lib/accounts';
+import { AccountPicker } from './AccountPicker';
 
-// Category ids are sent to the backend, names are shown as-is (English)
-const CATEGORIES = [
-    { id: 'food', name: 'Food', Icon: Coffee },
-    { id: 'transport', name: 'Transport', Icon: Car },
-    { id: 'education', name: 'Education', Icon: GraduationCap },
-    { id: 'shopping', name: 'Shopping', Icon: ShoppingCart },
-    { id: 'entertainment', name: 'Entertainment', Icon: Film },
-    { id: 'other', name: 'Other', Icon: MoreHorizontal },
-];
-
-const MODES = {
-    income: { label: '収入', Icon: Plus, desc: 'メイン口座に入るお金を記録します' },
-    transfer: { label: '振替', Icon: ArrowLeftRight, desc: '口座の間でお金を移します' },
-    expense: { label: '支出', Icon: ShoppingBag, desc: '日々の支出口座から使ったお金を記録します' },
+// Fixed account names stored in the database.
+// Do not translate these values.
+const FIXED_ACCOUNT_NAMES = {
+    working: 'Working Account',
+    daily: 'Daily Expenses',
+    emergency: 'Emergency Account',
 };
 
-// Today's date in Japan as YYYY-MM-DD
-const todayJst = () => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
+// Translate fixed account labels.
+// Custom goal account names remain unchanged.
+const getTranslatedAccountLabel = (account, t) => {
+    if (!account) return '';
+
+    const translationKeys = {
+        'Working Account': 'accounts.working',
+        'Daily Expenses': 'accounts.daily',
+        'Emergency Account': 'accounts.emergency',
+    };
+
+    const key = translationKeys[account.name];
+
+    return key
+        ? t(key)
+        : getAccountMeta(account).label;
+};
+
+// Category IDs are sent to the backend.
+// Only displayed category names are translated.
+const CATEGORIES = [
+    { id: 'food', Icon: Coffee },
+    { id: 'transport', Icon: Car },
+    { id: 'education', Icon: GraduationCap },
+    { id: 'shopping', Icon: ShoppingCart },
+    { id: 'entertainment', Icon: Film },
+    { id: 'other', Icon: MoreHorizontal },
+];
+
+const todayJst = () =>
+    new Intl.DateTimeFormat('sv-SE', {
+        timeZone: 'Asia/Tokyo',
+    }).format(new Date());
 
 const Label = ({ htmlFor, children }) => (
-    <label htmlFor={htmlFor} className="block text-sm font-semibold text-[#12202F] mb-2">
+    <label
+        htmlFor={htmlFor}
+        className="block text-sm font-semibold text-[#12202F] mb-2"
+    >
         {children}
     </label>
 );
@@ -37,7 +77,14 @@ const Label = ({ htmlFor, children }) => (
 const inputBase =
     'w-full bg-white border border-[#D9DDD8] rounded-xl text-base text-[#12202F] placeholder:text-[#12202F]/35 focus:outline-none focus:border-[#0F7B5F] focus:ring-2 focus:ring-[#0F7B5F]/40';
 
-const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [], onClose, onSubmit }) => {
+const TransactionModal = ({
+    isOpen,
+    mode: initialMode = 'income',
+    accounts = [],
+    onClose,
+    onSubmit,
+}) => {
+    const { t } = useTranslation();
 
     const [mode, setMode] = useState(initialMode);
     const [amount, setAmount] = useState('');
@@ -49,27 +96,57 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    useEffect(() => {
-        if (isOpen) {
-            setMode(initialMode);
-            setAmount('');
-            setNote('');
-            setDate(todayJst());
-            // default transfer: Working Account -> Daily Expenses
-            const idOf = (name) => accounts.find((a) => a.name === name)?.id ?? '';
-            setFromId(idOf(ACCT.working.name));
-            setToId(idOf(ACCT.daily.name));
-            setCategory(CATEGORIES[0].id);
-            setError('');
-        }
-    }, [isOpen, initialMode]);
+    const MODES = {
+        income: {
+            label: t('transaction.modes.income.label'),
+            description: t('transaction.modes.income.description'),
+            Icon: Plus,
+        },
+        transfer: {
+            label: t('transaction.modes.transfer.label'),
+            description: t('transaction.modes.transfer.description'),
+            Icon: ArrowLeftRight,
+        },
+        expense: {
+            label: t('transaction.modes.expense.label'),
+            description: t('transaction.modes.expense.description'),
+            Icon: ShoppingBag,
+        },
+    };
 
-    // Escape to close, and lock the page behind the sheet
+    // Reset form when the modal opens.
     useEffect(() => {
         if (!isOpen) return;
-        const onKey = (e) => e.key === 'Escape' && onClose?.();
+
+        setMode(initialMode);
+        setAmount('');
+        setNote('');
+        setDate(todayJst());
+
+        // Default transfer: Working Account -> Daily Expenses
+        const idOf = (name) =>
+            accounts.find((a) => a.name === name)?.id ?? '';
+
+        setFromId(idOf(FIXED_ACCOUNT_NAMES.working));
+        setToId(idOf(FIXED_ACCOUNT_NAMES.daily));
+
+        setCategory(CATEGORIES[0].id);
+        setError('');
+    }, [isOpen, initialMode]);
+
+    // Handle Escape key and background scrolling.
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const onKey = (e) => {
+            if (e.key === 'Escape') {
+                onClose?.();
+            }
+        };
+
         window.addEventListener('keydown', onKey);
         document.body.style.overflow = 'hidden';
+
         return () => {
             window.removeEventListener('keydown', onKey);
             document.body.style.overflow = '';
@@ -78,39 +155,90 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
 
     if (!isOpen) return null;
 
-    const byName = (key) => accounts.find((a) => a.name === ACCT[key].name);
-    const balanceOf = (key) => Number(byName(key)?.currentAmount ?? 0);
-    const byId = (id) => accounts.find((a) => a.id === id);
+    // Find fixed accounts by their database names.
+    const byName = (key) =>
+        accounts.find(
+            (a) => a.name === FIXED_ACCOUNT_NAMES[key]
+        );
+
+    const balanceOf = (key) =>
+        Number(byName(key)?.currentAmount ?? 0);
+
+    const byId = (id) =>
+        accounts.find((a) => a.id === id);
 
     const selectFrom = (id) => {
         setFromId(id);
-        // if the new source is the current destination, pick another destination
-        if (id === toId) setToId(accounts.find((a) => a.id !== id)?.id ?? '');
+
+        // If the new source is the current destination,
+        // select another destination.
+        if (id === toId) {
+            setToId(
+                accounts.find((a) => a.id !== id)?.id ?? ''
+            );
+        }
     };
 
+    // Validate transaction data.
     const validate = () => {
         const num = Number(amount);
-        if (!amount || !Number.isInteger(num) || num <= 0) return '1円以上の金額を整数で入力してください';
-        if (!date) return '日付を選択してください';
+
+        if (!amount || !Number.isInteger(num) || num <= 0) {
+            return t('transaction.validation.invalidAmount');
+        }
+
+        if (!date) {
+            return t('transaction.validation.dateRequired');
+        }
+
         if (mode === 'transfer') {
             const from = byId(fromId);
-            if (!from || !byId(toId)) return '口座を選択してください';
-            if (fromId === toId) return '移動元と移動先は別の口座を選んでください';
-            if (num > Number(from.currentAmount ?? 0))
-                return `${getAccountMeta(from).label}の残高が足りません（残高 ${formatYen(Number(from.currentAmount ?? 0))}）`;
+            const to = byId(toId);
+
+            if (!from || !to) {
+                return t('transaction.validation.accountRequired');
+            }
+
+            if (fromId === toId) {
+                return t('transaction.validation.sameAccount');
+            }
+
+            if (num > Number(from.currentAmount ?? 0)) {
+                return t(
+                    'transaction.validation.insufficientAccount',
+                    {
+                        account: getTranslatedAccountLabel(from, t),
+                        balance: formatYen(
+                            Number(from.currentAmount ?? 0)
+                        ),
+                    }
+                );
+            }
         }
-        if (mode === 'expense' && num > balanceOf('daily'))
-            return `日々の支出口座の残高が足りません（残高 ${formatYen(balanceOf('daily'))}）`;
+
+        if (mode === 'expense' && num > balanceOf('daily')) {
+            return t(
+                'transaction.validation.insufficientDaily',
+                {
+                    balance: formatYen(balanceOf('daily')),
+                }
+            );
+        }
+
         return null;
     };
 
+    // Submit transaction.
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         const message = validate();
+
         if (message) {
             setError(message);
             return;
         }
+
         setError('');
         setIsSubmitting(true);
 
@@ -119,18 +247,33 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
             amount: Number(amount),
             note: note.trim() || null,
             transactionDate: date,
-            ...(mode === 'transfer' && { fromAccount: fromId, toAccount: toId }),
-            ...(mode === 'expense' && { category }),
+
+            ...(mode === 'transfer' && {
+                fromAccount: fromId,
+                toAccount: toId,
+            }),
+
+            ...(mode === 'expense' && {
+                category,
+            }),
         };
 
         try {
             await onSubmit?.(payload);
-            toast.success('保存しました', { id: 'transaction' });
-            onClose?.();
-        } catch (err) {
-            toast.error(err?.response?.data?.message ?? '保存できませんでした。もう一度お試しください。', {
+
+            toast.success(t('transaction.success'), {
                 id: 'transaction',
             });
+
+            onClose?.();
+        } catch (err) {
+            toast.error(
+                err?.response?.data?.message ??
+                t('transaction.error'),
+                {
+                    id: 'transaction',
+                }
+            );
         } finally {
             setIsSubmitting(false);
         }
@@ -138,21 +281,37 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
 
     const ActiveIcon = MODES[mode].Icon;
 
-    // Fixed (locked) account row
-    const LockedAccount = ({ k, balanceText }) => {
-        const { Icon, label } = ACCT[k];
+    // Display fixed account information.
+    const LockedAccount = ({ accountKey, balanceText }) => {
+        const account = byName(accountKey);
+
+        if (!account) return null;
+
+        const { Icon } = getAccountMeta(account);
+        const label = getTranslatedAccountLabel(account, t);
+
         return (
             <div className="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-[#D9DDD8]">
                 <div className="w-10 h-10 rounded-lg bg-[#12202F] text-white flex items-center justify-center shrink-0">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
+                    <Icon
+                        className="h-5 w-5"
+                        aria-hidden="true"
+                    />
                 </div>
+
                 <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold">{label}</p>
+                    <p className="text-sm font-bold">
+                        {label}
+                    </p>
+
                     <p className="text-xs text-[#12202F]/60">
-                        {balanceText} {formatYen(balanceOf(k))}
+                        {balanceText} {formatYen(balanceOf(accountKey))}
                     </p>
                 </div>
-                <span className="text-[11px] font-bold px-2 py-1 rounded-full bg-[#12202F]/5 text-[#12202F]/60">固定</span>
+
+                <span className="text-[11px] font-bold px-2 py-1 rounded-full bg-[#12202F]/5 text-[#12202F]/60">
+                    {t('transaction.fixed')}
+                </span>
             </div>
         );
     };
@@ -167,24 +326,37 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
         >
             <div
                 className="w-full sm:max-w-md bg-[#F5F6F4] rounded-t-2xl sm:rounded-2xl shadow-xl max-h-[92dvh] overflow-y-auto overflow-x-hidden"
-                style={{ fontFamily: "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif" }}
+                style={{
+                    fontFamily:
+                        "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif",
+                }}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
                 <div className="sticky top-0 z-10 bg-[#F5F6F4] border-b border-[#D9DDD8] px-5 py-3 flex items-center justify-between">
                     <div>
-                        <h2 id="tx-title" className="text-lg font-bold text-[#12202F]">
-                            取引を記録
+                        <h2
+                            id="tx-title"
+                            className="text-lg font-bold text-[#12202F]"
+                        >
+                            {t('transaction.title')}
                         </h2>
-                        <p className="text-xs text-[#12202F]/60 mt-0.5">{MODES[mode].desc}</p>
+
+                        <p className="text-xs text-[#12202F]/60 mt-0.5">
+                            {MODES[mode].description}
+                        </p>
                     </div>
+
                     <button
                         type="button"
                         onClick={onClose}
                         className="-mr-2 w-11 h-11 flex items-center justify-center rounded-lg text-[#12202F]/70 active:bg-black/5"
-                        aria-label="閉じる"
+                        aria-label={t('common.close')}
                     >
-                        <X className="h-5 w-5" aria-hidden="true" />
+                        <X
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                        />
                     </button>
                 </div>
 
@@ -194,7 +366,10 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                     className="p-5 space-y-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] text-[#12202F]"
                 >
                     {/* Mode tabs */}
-                    <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#12202F]/5" role="tablist">
+                    <div
+                        className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-[#12202F]/5"
+                        role="tablist"
+                    >
                         {Object.entries(MODES).map(([key, cfg]) => (
                             <button
                                 key={key}
@@ -205,20 +380,31 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                                     setMode(key);
                                     setError('');
                                 }}
-                                className={`h-11 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 transition ${mode === key ? 'bg-[#0F7B5F] text-white' : 'text-[#12202F]/60 active:bg-black/5'
+                                className={`h-11 rounded-lg text-sm font-semibold flex items-center justify-center gap-1.5 transition ${mode === key
+                                        ? 'bg-[#0F7B5F] text-white'
+                                        : 'text-[#12202F]/60 active:bg-black/5'
                                     }`}
                             >
-                                <cfg.Icon className="h-4 w-4" aria-hidden="true" />
+                                <cfg.Icon
+                                    className="h-4 w-4"
+                                    aria-hidden="true"
+                                />
                                 {cfg.label}
                             </button>
                         ))}
                     </div>
 
-                    {/* Amount (whole yen) */}
+                    {/* Amount */}
                     <div>
-                        <Label htmlFor="tx-amount">金額</Label>
+                        <Label htmlFor="tx-amount">
+                            {t('transaction.amount')}
+                        </Label>
+
                         <div className="relative">
-                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-[#12202F]/40">¥</span>
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-[#12202F]/40">
+                                ¥
+                            </span>
+
                             <input
                                 id="tx-amount"
                                 type="number"
@@ -227,62 +413,115 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                                 min="1"
                                 placeholder="0"
                                 value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
+                                onChange={(e) =>
+                                    setAmount(e.target.value)
+                                }
                                 className={`${inputBase} h-16 pl-10 pr-4 text-2xl font-bold`}
                                 autoFocus
                             />
                         </div>
                     </div>
 
-                    {/* Income: destination is fixed */}
+                    {/* Income */}
                     {mode === 'income' && (
                         <div>
-                            <Label>入金先</Label>
-                            <LockedAccount k="working" balanceText="残高" />
+                            <Label>
+                                {t('transaction.income.destination')}
+                            </Label>
+
+                            <LockedAccount
+                                accountKey="working"
+                                balanceText={t('transaction.balance')}
+                            />
                         </div>
                     )}
 
-                    {/* Transfer: from Working (fixed) to Daily Expenses or Emergency */}
+                    {/* Transfer */}
                     {mode === 'transfer' && (
                         <>
-                            <AccountPicker legend="移動元" accounts={accounts} value={fromId} onChange={selectFrom} />
-                            <div className="flex justify-center -my-2" aria-hidden="true">
+                            <AccountPicker
+                                legend={t('transaction.transfer.from')}
+                                accounts={accounts}
+                                value={fromId}
+                                onChange={selectFrom}
+                            />
+
+                            <div
+                                className="flex justify-center -my-2"
+                                aria-hidden="true"
+                            >
                                 <div className="w-9 h-9 rounded-full bg-white border border-[#D9DDD8] flex items-center justify-center">
                                     <ArrowDown className="h-4 w-4 text-[#12202F]/50" />
                                 </div>
                             </div>
 
-                            <AccountPicker legend="移動先" accounts={accounts} value={toId} onChange={setToId} disabledId={fromId} />
+                            <AccountPicker
+                                legend={t('transaction.transfer.to')}
+                                accounts={accounts}
+                                value={toId}
+                                onChange={setToId}
+                                disabledId={fromId}
+                            />
                         </>
                     )}
 
-                    {/* Expense: source is fixed, choose a category */}
+                    {/* Expense */}
                     {mode === 'expense' && (
                         <>
                             <div>
-                                <Label>支払い元</Label>
-                                <LockedAccount k="daily" balanceText="使える金額" />
+                                <Label>
+                                    {t('transaction.expense.source')}
+                                </Label>
+
+                                <LockedAccount
+                                    accountKey="daily"
+                                    balanceText={t('transaction.availableBalance')}
+                                />
                             </div>
+
                             <div>
-                                <Label>カテゴリ</Label>
-                                <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="カテゴリ">
-                                    {CATEGORIES.map(({ id, name, Icon }) => {
+                                <Label>
+                                    {t('transaction.category')}
+                                </Label>
+
+                                <div
+                                    className="grid grid-cols-2 gap-2"
+                                    role="radiogroup"
+                                    aria-label={t('transaction.category')}
+                                >
+                                    {CATEGORIES.map(({ id, Icon }) => {
                                         const selected = category === id;
+
                                         return (
                                             <button
                                                 key={id}
                                                 type="button"
                                                 role="radio"
                                                 aria-checked={selected}
-                                                onClick={() => setCategory(id)}
-                                                className={`h-14 flex items-center gap-2 px-3 rounded-xl border text-left transition ${selected ? 'border-[#0F7B5F] bg-green-50 ring-2 ring-[#0F7B5F]/30' : 'border-[#D9DDD8] bg-white'
+                                                onClick={() =>
+                                                    setCategory(id)
+                                                }
+                                                className={`h-14 flex items-center gap-2 px-3 rounded-xl border text-left transition ${selected
+                                                        ? 'border-[#0F7B5F] bg-green-50 ring-2 ring-[#0F7B5F]/30'
+                                                        : 'border-[#D9DDD8] bg-white'
                                                     }`}
                                             >
                                                 <Icon
-                                                    className={`h-5 w-5 shrink-0 ${selected ? 'text-[#0F7B5F]' : 'text-[#12202F]/50'}`}
+                                                    className={`h-5 w-5 shrink-0 ${selected
+                                                            ? 'text-[#0F7B5F]'
+                                                            : 'text-[#12202F]/50'
+                                                        }`}
                                                     aria-hidden="true"
                                                 />
-                                                <span className={`text-sm font-semibold truncate ${selected ? 'text-[#0F7B5F]' : ''}`}>{name}</span>
+
+                                                <span
+                                                    className={`text-sm font-semibold truncate ${selected
+                                                            ? 'text-[#0F7B5F]'
+                                                            : ''
+                                                        }`}
+                                                >
+                                                    {t(`categories.${id}`)}
+                                                </span>
                                             </button>
                                         );
                                     })}
@@ -293,13 +532,18 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
 
                     {/* Date */}
                     <div>
-                        <Label htmlFor="tx-date">日付</Label>
+                        <Label htmlFor="tx-date">
+                            {t('transaction.date')}
+                        </Label>
+
                         <input
                             id="tx-date"
                             type="date"
                             value={date}
                             max={todayJst()}
-                            onChange={(e) => setDate(e.target.value)}
+                            onChange={(e) =>
+                                setDate(e.target.value)
+                            }
                             className={`${inputBase} h-14 px-4 block min-w-0 max-w-full appearance-none text-left [&::-webkit-date-and-time-value]:text-left`}
                         />
                     </div>
@@ -307,27 +551,36 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                     {/* Note */}
                     <div>
                         <Label htmlFor="tx-note">
-                            メモ{' '}
-
-                            <span className="text-[#12202F]/50 font-normal">（任意）</span>
-
+                            {t('transaction.note')}{' '}
+                            <span className="text-[#12202F]/50 font-normal">
+                                ({t('common.optional')})
+                            </span>
                         </Label>
+
                         <textarea
                             id="tx-note"
                             rows={2}
-                            placeholder={
-                                mode === 'income' ? '例：10月のアルバイト代' : mode === 'transfer' ? '例：緊急資金に積み立て' : '例：友達とランチ'
-                            }
+                            placeholder={t(
+                                `transaction.notePlaceholder.${mode}`
+                            )}
                             value={note}
-                            onChange={(e) => setNote(e.target.value)}
+                            onChange={(e) =>
+                                setNote(e.target.value)
+                            }
                             className={`${inputBase} px-4 py-3 resize-none`}
                         />
                     </div>
 
                     {/* Validation error */}
                     {error && (
-                        <div role="alert" className="flex items-start gap-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">
-                            <CircleAlert className="h-5 w-5 shrink-0 mt-0.5" aria-hidden="true" />
+                        <div
+                            role="alert"
+                            className="flex items-start gap-3 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm"
+                        >
+                            <CircleAlert
+                                className="h-5 w-5 shrink-0 mt-0.5"
+                                aria-hidden="true"
+                            />
                             <span>{error}</span>
                         </div>
                     )}
@@ -339,8 +592,9 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                             onClick={onClose}
                             className="h-14 rounded-xl border border-[#D9DDD8] bg-white text-base font-semibold active:bg-black/5"
                         >
-                            キャンセル
+                            {t('common.cancel')}
                         </button>
+
                         <button
                             type="submit"
                             disabled={isSubmitting}
@@ -348,13 +602,21 @@ const TransactionModal = ({ isOpen, mode: initialMode = 'income', accounts = [],
                         >
                             {isSubmitting ? (
                                 <>
-                                    <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
-                                    保存中…
+                                    <Loader2
+                                        className="h-5 w-5 animate-spin"
+                                        aria-hidden="true"
+                                    />
+                                    {t('transaction.saving')}
                                 </>
                             ) : (
                                 <>
-                                    <ActiveIcon className="h-5 w-5" aria-hidden="true" />
-                                    {MODES[mode].label}を保存
+                                    <ActiveIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                    />
+                                    {t('transaction.save', {
+                                        mode: MODES[mode].label,
+                                    })}
                                 </>
                             )}
                         </button>

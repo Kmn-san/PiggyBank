@@ -1,0 +1,338 @@
+{
+    "common": {
+        "close": "閉じる",
+        "cancel": "キャンセル",
+        "optional": "任意"
+    },
+    "login": {
+        "title": "ログイン",
+        "subtitle": "あなたの支出を記録、分析する",
+        "userCode": "ユーザーコード",
+        "userCodePlaceholder": "ユーザーコードを入力",
+        "password": "パスワード",
+        "passwordPlaceholder": "パスワードを入力",
+        "showPassword": "パスワードを表示",
+        "hidePassword": "パスワードを隠す",
+        "submit": "ログイン",
+        "loggingIn": "ログイン中…",
+        "noAccount": "はじめての方は",
+        "signup": "アカウントを作成",
+        "validation": {
+            "userCodeRequired": "ユーザーコードを入力してください",
+            "passwordRequired": "パスワードを入力してください",
+            "passwordMinLength": "パスワードは8文字以上で入力してください"
+        },
+        "toast": {
+            "loginFailed": "ログインできませんでした。",
+            "loginSuccess": "ログインしました",
+            "serverError": "サーバーに接続できませんでした。"
+        }
+    },
+    "register": {
+        "title": "アカウント作成",
+        "subtitle": "ユーザーコードとパスワードを設定してください",
+        "userCode": "ユーザーコード",
+        "userCodePlaceholder": "ユーザーコードを入力",
+        "userCodeHint": "4〜20文字の英数字、ハイフン、アンダースコア",
+        "password": "パスワード",
+        "passwordPlaceholder": "パスワードを入力",
+        "passwordHint": "8文字以上",
+        "confirmPassword": "パスワード（確認）",
+        "confirmPasswordPlaceholder": "もう一度パスワードを入力",
+        "showPassword": "パスワードを表示",
+        "hidePassword": "パスワードを隠す",
+        "termsPrefix": "",
+        "terms": "利用規約",
+        "and": "と",
+        "privacy": "プライバシーポリシー",
+        "agreement": "に同意します",
+        "creating": "作成中…",
+        "created": "作成しました",
+        "submit": "アカウントを作成",
+        "haveAccount": "すでにアカウントをお持ちの方は",
+        "login": "ログイン",
+        "validation": {
+            "userCodeRequired": "ユーザーコードを入力してください",
+            "userCodeFormat": "4〜20文字の英数字、ハイフン、アンダースコアで入力してください",
+            "passwordRequired": "パスワードを入力してください",
+            "passwordMinLength": "パスワードは8文字以上で入力してください",
+            "confirmRequired": "確認用パスワードを入力してください",
+            "passwordMismatch": "パスワードが一致しません",
+            "agreementRequired": "利用規約とプライバシーポリシーへの同意が必要です"
+        },
+        "success": {
+            "title": "登録が完了しました",
+            "description": "ログインページに移動します。",
+            "ok": "OK"
+        },
+        "toast": {
+            "createFailed": "アカウントを作成できませんでした。もう一度お試しください。"
+        }
+    },
+    "dashboard": {
+        "loading": "読み込み中…",
+        "fetchError": "データを取得できませんでした。",
+        "header": {
+            "admin": "管理画面",
+            "logout": "ログアウト",
+            "loggingOut": "ログアウト中...",
+            "logoutSuccess": "ログアウトしました",
+            "logoutError": "サーバーでログアウトできませんでした。"
+        },
+        "summary": {
+            "working": {
+                "title": "メイン口座",
+                "description": "収入はすべてここに入ります",
+                "recordIncome": "収入を記録",
+                "transfer": "資金を移動"
+            },
+            "daily": {
+                "title": "日々の支出口座",
+                "description": "日々の支出はここから使います",
+                "recordExpense": "支出を記録"
+            },
+            "emergency": {
+                "title": "緊急資金口座",
+                "description": "急な出費に備えて貯めておくお金です"
+            }
+        },
+        "moneyFlow": {
+            "title": "お金の流れ",
+            "steps": {
+                "income": {
+                    "title": "収入を入金",
+                    "description": "メイン口座に入ります"
+                },
+                "transfer": {
+                    "title": "週ごとに振替",
+                    "description": "メイン口座 → 日々の支出口座"
+                },
+                "savings": {
+                    "title": "余ったら貯蓄",
+                    "description": "メイン口座 → 緊急資金・目標"
+                }
+            }
+        },
+        "charts": {
+            "title": "今月の支出内訳",
+            "subtitle": "カテゴリ別",
+            "empty": "今月の支出はまだありません"
+        },
+        "recentTransactions": {
+            "title": "最近の取引",
+            "viewAll": "すべて見る",
+            "empty": "取引はまだありません"
+        }
+    },
+    "categories": {
+        "food": "食費",
+        "transport": "交通費",
+        "shopping": "買い物",
+        "entertainment": "娯楽",
+        "housing": "住居費",
+        "utilities": "光熱費",
+        "education": "教育費",
+        "health": "医療費",
+        "other": "その他"
+    },
+    "accounts": {
+        "working": "メイン口座",
+        "daily": "日々の支出口座",
+        "emergency": "緊急資金口座"
+    },
+    "navigation": {
+        "mainMenu": "メインメニュー",
+        "home": "ホーム",
+        "savings": "貯蓄",
+        "expenses": "支出",
+        "transactions": "取引",
+        "account": "アカウント"
+    },
+    "user": {
+        "title": "アカウント",
+        "userCode": "ユーザーコード",
+        "loading": "読み込み中…",
+        "fetchError": "データを取得できませんでした。",
+        "language": {
+            "title": "言語設定",
+            "description": "使用する言語を選択してください。"
+        },
+        "delete": {
+            "title": "アカウントを削除",
+            "description": "アカウントを削除すると、ログインできなくなり、記録したデータも確認できなくなります。この操作は元に戻せません。",
+            "button": "アカウントを削除する"
+        }
+    },
+    "savings": {
+        "title": "貯蓄",
+        "description": "緊急資金、メイン口座、目標口座の残高を確認できます。",
+        "loading": "読み込み中…",
+        "fetchError": "データを取得できませんでした。",
+        "emergency": {
+            "title": "緊急資金口座",
+            "description": "急な出費に備えて貯めておくお金です。",
+            "transfer": "メイン口座から積み立てる"
+        },
+        "working": {
+            "title": "メイン口座",
+            "description": "収入はすべてここに入ります。",
+            "recordIncome": "収入を記録",
+            "transfer": "資金を移動"
+        },
+        "goals": {
+            "title": "目標口座",
+            "count_one": "{{count}}件",
+            "count_other": "{{count}}件",
+            "create": "目標を作成",
+            "empty": "目標口座はまだありません。",
+            "createFirst": "最初の目標を作成",
+            "description": "目標のために貯めているお金です。",
+            "deposit": "積み立てる",
+            "delete": "この目標を削除"
+        }
+    },
+    "createGoal": {
+        "title": "目標口座を作成",
+        "description": "目標のために貯める口座を追加します。",
+        "nameLabel": "目標の名前",
+        "placeholder": "例：旅行、ノートPC",
+        "submitting": "作成中…",
+        "submit": "作成する",
+        "success": "目標口座を作成しました。",
+        "error": "作成できませんでした。もう一度お試しください。",
+        "validation": {
+            "required": "目標の名前を入力してください。",
+            "maxLength": "目標の名前は30文字以内で入力してください。"
+        }
+    },
+    "deleteGoal": {
+        "transferRequired": {
+            "title": "先にお金を移してください",
+            "description": "「{{name}}」にはまだ {{amount}} 残っています。他の口座へ移して残高を0円にしてから、もう一度削除してください。",
+            "transfer": "お金を移す"
+        },
+        "confirm": {
+            "title": "目標口座を削除しますか？",
+            "description": "「{{name}}」を削除します。過去の取引履歴は残ります。",
+            "delete": "削除する"
+        },
+        "deleting": "削除中…",
+        "success": "目標口座を削除しました。",
+        "error": "削除できませんでした。もう一度お試しください。"
+    },
+    "transaction": {
+        "title": "取引を記録",
+        "amount": "金額",
+        "date": "日付",
+        "note": "メモ",
+        "saving": "保存中…",
+        "save": "{{mode}}を保存",
+        "success": "保存しました。",
+        "error": "保存できませんでした。もう一度お試しください。",
+        "fixed": "固定",
+        "balance": "残高",
+        "availableBalance": "使える金額",
+        "category": "カテゴリ",
+        "modes": {
+            "income": {
+                "label": "収入",
+                "description": "メイン口座に入るお金を記録します。"
+            },
+            "transfer": {
+                "label": "振替",
+                "description": "口座の間でお金を移します。"
+            },
+            "expense": {
+                "label": "支出",
+                "description": "日々の支出口座から使ったお金を記録します。"
+            }
+        },
+        "income": {
+            "destination": "入金先"
+        },
+        "transfer": {
+            "from": "移動元",
+            "to": "移動先"
+        },
+        "expense": {
+            "source": "支払い元"
+        },
+        "notePlaceholder": {
+            "income": "例：10月のアルバイト代",
+            "transfer": "例：緊急資金に積み立て",
+            "expense": "例：友達とランチ"
+        },
+        "validation": {
+            "invalidAmount": "1円以上の金額を整数で入力してください。",
+            "dateRequired": "日付を選択してください。",
+            "accountRequired": "口座を選択してください。",
+            "sameAccount": "移動元と移動先は別の口座を選んでください。",
+            "insufficientAccount": "{{account}}の残高が足りません（残高：{{balance}}）。",
+            "insufficientDaily": "日々の支出口座の残高が足りません（残高：{{balance}}）。"
+        }
+    },
+    "accountPicker": {
+        "balance": "残高 {{amount}}",
+        "goalsHeading": "目標口座（{{count}}）"
+    },
+    "expenses": {
+        "title": "支出",
+        "loading": "読み込み中…",
+        "fetchError": "支出データを取得できませんでした。",
+        "copyReport": "{{month}}のデータをコピー",
+        "daily": {
+            "title": "日々の支出口座",
+            "description": "日々の支出はここから使います",
+            "recordExpense": "支出を記録"
+        },
+        "monthFilter": {
+            "previousMonth": "前の月",
+            "nextMonth": "次の月",
+            "thisMonth": "今月",
+            "backToThisMonth": "今月に戻る",
+            "totalExpenses": "支出の合計",
+            "count": "{{count}}件"
+        },
+        "copyReportButton": {
+            "successToast": "コピーしました。AIに貼り付けてください。",
+            "errorToast": "コピーできませんでした。もう一度お試しください。",
+            "copied": "コピーしました",
+            "description": "コピーした内容をAIチャットに貼り付けると、支出の分析とアドバイスをもらえます。"
+        },
+        "categories": {
+            "title": "{{month}}のカテゴリ別支出",
+            "sortDescription": "金額の多い順",
+            "empty": "この月の支出はありません"
+        }
+    },
+    "transactions": {
+        "title": "取引履歴",
+        "loading": "読み込み中…",
+        "fetchError": "データを取得できませんでした。",
+        "periodSummary": {
+            "income": "収入",
+            "count": "件数",
+            "countSuffix": "件"
+        },
+        "list": {
+            "title": "すべての取引",
+            "empty": "この期間の取引はありません",
+            "edit": "{{name}}を編集"
+        },
+        "edit": {
+            "title": "取引を編集",
+            "cannotChange": "種類・口座・カテゴリは変更できません。",
+            "amount": "金額",
+            "date": "日付",
+            "note": "メモ",
+            "saving": "保存中…",
+            "save": "変更を保存",
+            "success": "変更しました。",
+            "error": "変更できませんでした。もう一度お試しください。",
+            "validation": {
+                "invalidAmount": "1円以上の金額を整数で入力してください。",
+                "dateRequired": "日付を選択してください。"
+            }
+        }
+    }
+}
