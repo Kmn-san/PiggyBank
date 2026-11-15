@@ -83,7 +83,6 @@ const ExpensesPage = () => {
                         month={month}
                         thisMonth={thisMonth}
                         isThisMonth={month >= thisMonth}
-                        count={categories.length}
                         total={total}
                         setMonth={setMonth}
                     />

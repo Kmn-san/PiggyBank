@@ -1,10 +1,17 @@
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '../Card';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatYen, monthLabel, shiftMonth } from '../../lib/utlis';
 
-function MonthFilter({ month, isThisMonth, count, total, setMonth, thisMonth }) {
+function MonthFilter({
+    month,
+    isThisMonth,
+    total,
+    setMonth,
+    thisMonth,
+}) {
     const { t } = useTranslation();
 
     return (
@@ -55,16 +62,11 @@ function MonthFilter({ month, isThisMonth, count, total, setMonth, thisMonth }) 
                     <p className="text-xs font-semibold text-[#12202F]/60">
                         {t('expenses.monthFilter.totalExpenses')}
                     </p>
+
                     <p className="text-2xl font-bold text-red-700">
                         {formatYen(total)}
                     </p>
                 </div>
-
-                <p className="text-sm text-[#12202F]/60">
-                    {t('expenses.monthFilter.count', {
-                        count: Number(count),
-                    })}
-                </p>
             </div>
         </Card>
     );

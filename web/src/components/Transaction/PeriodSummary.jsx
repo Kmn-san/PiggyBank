@@ -13,7 +13,7 @@ function PeriodSummary({ income, count }) {
                 <p className="text-sm font-semibold text-[#12202F]/60">
                     {t('transactions.periodSummary.income')}
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold text-[#0F7B5F] mt-2 wrap-break-word">
+                <p className="text-xl sm:text-2xl font-bold text-[#0F7B5F] mt-2 wrap-break-word">
                     {formatYen(income)}
                 </p>
             </Card>
@@ -22,7 +22,7 @@ function PeriodSummary({ income, count }) {
                 <p className="text-sm font-semibold text-[#12202F]/60">
                     {t('transactions.periodSummary.count', { count })}
                 </p>
-                <p className="text-2xl sm:text-3xl font-bold mt-2">
+                <p className="text-xl sm:text-3xl font-bold mt-2">
                     {count}
                 </p>
             </Card>

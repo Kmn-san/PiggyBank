@@ -53,7 +53,7 @@ const TransactionsPage = () => {
 
     useEffect(() => () => toast.dismiss('transactions'), []);
 
-    const { days, income, expense, count } = useMemo(() => {
+    const { days, income, expense } = useMemo(() => {
         const list = [
             ...(Array.isArray(data) ? data : data?.transactions ?? []),
         ].sort((a, b) =>
@@ -85,7 +85,6 @@ const TransactionsPage = () => {
             days: [...byDay.values()],
             income: sumOf('income'),
             expense: sumOf('expense'),
-            count: list.length,
         };
     }, [data]);
 
@@ -101,12 +100,12 @@ const TransactionsPage = () => {
                 month={month}
                 thisMonth={thisMonth}
                 isThisMonth={month >= thisMonth}
-                setMonth={setMonth}
                 total={expense}
+                setMonth={setMonth}
             />
 
             <PeriodSummary
-                count={count}
+                count={days.reduce((sum, day) => sum + day.items.length, 0)}
                 income={income}
             />
 
