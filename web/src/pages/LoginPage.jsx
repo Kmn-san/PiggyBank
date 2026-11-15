@@ -182,7 +182,8 @@ const LoginPage = () => {
                 </form>
 
                 {/* Footer pushes to bottom on tall phones */}
-                <div className="mt-auto pt-8">
+                {/* Footer */}
+                <div className="mt-6">
                     <p className="text-center text-sm text-[#12202F]/65">
                         はじめての方は{' '}
                         <a href="/signup" className="font-semibold text-[#0F7B5F]">
