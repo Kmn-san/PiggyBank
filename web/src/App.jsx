@@ -13,6 +13,7 @@ import TransactionPage from "./pages/TransactionPage"
 import AdminRoute from "./components/AdminRoute"
 import AdminPage from "./pages/AdminPage"
 import UserPage from "./pages/UserPage"
+import ForgetPasswordPage from "./pages/ForgetPasswordPage"
 
 function App() {
 
@@ -29,6 +30,11 @@ function App() {
           <Route
             path="/signup"
             element={<SignUpPage />}
+          />
+
+          <Route
+            path="/forget-password"
+            element={<ForgetPasswordPage />}
           />
         </Route>
 

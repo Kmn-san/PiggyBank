@@ -58,14 +58,14 @@ export const loginUser = async (user_code, password) => {
 
     const existUser = rows[0]
     if (!existUser) {
-        const error = new Error("ユーザーコードまたはパスワードが正しくありません。")
+        const error = new Error("Invalid usercode or password.")
         error.statusCode = 401
         throw error
     }
 
     const comparePassword = await bcrypt.compare(password, existUser.hash_password)
     if (!comparePassword) {
-        const error = new Error("ユーザーコードまたはパスワードが正しくありません。")
+        const error = new Error("Invalid usercode or password.")
         error.statusCode = 401
         throw error
     }
@@ -153,4 +153,37 @@ export const deleteAccount = async (userId) => {
         , [userId])
 
     return rows[0] || null
+}
+
+export const forgetPassword = async (user_code, password) => {
+    const client = await pool.connect()
+    try {
+        await client.query("BEGIN")
+
+        const hashedPassword = await bcrypt.hash(password, 12)
+
+        const { rows } = await client.query(
+            `UPDATE users
+            SET
+                hash_password = $2,updated_at = NOW()
+            WHERE user_code = $1
+                AND is_deleted IS FALSE
+                AND deleted_at IS NULL
+            RETURNING id`,
+            [user_code, hashedPassword]
+        )
+        if (rows.length === 0) {
+            const error = new Error("USER_NOT_FOUND")
+            error.statusCode = 404
+            throw error
+        }
+
+        await client.query("COMMIT")
+        return rows[0]
+    } catch (error) {
+        await client.query("ROLLBACK")
+        throw error
+    } finally {
+        client.release()
+    }
 }

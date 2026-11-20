@@ -54,7 +54,7 @@ export const loginUser = async (req, res) => {
 
         if (!user_code || !password) {
             return res.status(400).json({
-                success: false, message: "必要なところを埋めてください。"
+                success: false, message: "Fill in required fields"
             })
         }
 
@@ -78,7 +78,7 @@ export const loginUser = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "ログインしました。"
+            message: "Logged In."
         })
     } catch (error) {
         if (error.statusCode) {
@@ -201,6 +201,33 @@ export const deleteAccount = async (req, res) => {
         console.error("Error in deleteAccount controller: ", error.message);
         return res.status(500).json({
             success: false, message: "サーバーエラー"
+        })
+    }
+}
+
+export const forgetPassword = async (req, res) => {
+    try {
+        const { user_code, password } = req.body
+
+        if (!user_code || !password) {
+            return res.status(400).json({
+                success: false, code: "FILL_IN_ALL_FIELD"
+            })
+        }
+        await authService.forgetPassword(user_code, password)
+        return res.status(200).json({
+            success: true,
+            message: "Password reset successfully."
+        })
+    } catch (error) {
+        if (error.statusCode) {
+            return res.status(error.statusCode).json({
+                success: false, message: error.message
+            })
+        }
+        console.error("Error in forgetPassword controller: ", error.message);
+        return res.status(500).json({
+            success: false, code:"SERVER_ERROR"
         })
     }
 }

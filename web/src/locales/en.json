@@ -6,6 +6,7 @@
     },
     "login": {
         "title": "Login",
+        "forgotPassword": "Forgot password?",
         "subtitle": "Record and analyze your spending",
         "userCode": "User Code",
         "userCodePlaceholder": "Enter your user code",
@@ -26,6 +27,33 @@
             "loginFailed": "Unable to log in.",
             "loginSuccess": "Logged in successfully.",
             "serverError": "Unable to connect to the server."
+        }
+    },
+    "forgotPassword": {
+        "backToLogin": "Back to Login",
+        "title": "Reset Password",
+        "description": "Enter your user code and new password.",
+        "userCode": "User Code",
+        "userCodePlaceholder": "Enter your user code",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password",
+        "passwordPlaceholder": "Enter {{label}}",
+        "passwordHint": "At least 8 characters",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password",
+        "submitting": "Changing...",
+        "submit": "Change Password",
+        "validation": {
+            "userCodeRequired": "Please enter your user code.",
+            "passwordRequired": "Please enter a new password.",
+            "passwordMinLength": "Password must be at least 8 characters.",
+            "confirmRequired": "Please confirm your password.",
+            "passwordMismatch": "Passwords do not match."
+        },
+        "toast": {
+            "success": "Password changed successfully.",
+            "failed": "Unable to reset your password.",
+            "error": "Unable to change your password. Please try again."
         }
     },
     "register": {

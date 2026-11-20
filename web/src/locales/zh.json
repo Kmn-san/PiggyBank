@@ -6,6 +6,7 @@
     },
     "login": {
         "title": "登录",
+        "forgotPassword": "忘记密码？",
         "subtitle": "记录并分析你的支出",
         "userCode": "用户代码",
         "userCodePlaceholder": "请输入用户代码",
@@ -26,6 +27,33 @@
             "loginFailed": "登录失败",
             "loginSuccess": "登录成功",
             "serverError": "无法连接到服务器"
+        }
+    },
+    "forgotPassword": {
+        "backToLogin": "返回登录",
+        "title": "重设密码",
+        "description": "请输入用户代码和新密码。",
+        "userCode": "用户代码",
+        "userCodePlaceholder": "请输入用户代码",
+        "newPassword": "新密码",
+        "confirmPassword": "确认新密码",
+        "passwordPlaceholder": "请输入{{label}}",
+        "passwordHint": "至少8个字符",
+        "showPassword": "显示密码",
+        "hidePassword": "隐藏密码",
+        "submitting": "修改中…",
+        "submit": "修改密码",
+        "validation": {
+            "userCodeRequired": "请输入用户代码。",
+            "passwordRequired": "请输入新密码。",
+            "passwordMinLength": "密码至少需要8个字符。",
+            "confirmRequired": "请确认密码。",
+            "passwordMismatch": "两次输入的密码不一致。"
+        },
+        "toast": {
+            "success": "密码修改成功。",
+            "failed": "无法重设密码。",
+            "error": "无法修改密码，请重试。"
         }
     },
     "register": {
