@@ -14,6 +14,7 @@ export const forgetPassword = async (userCode, password) => {
     const response = await axiosInstance.post(`/auth/forget-password`, { user_code: userCode, password })
     return response.data
 }
+
 export const registerUser = async (userCode, password) => {
     const response = await axiosInstance.post(`/auth/register`, { user_code: userCode, password })
     return response.data
@@ -69,9 +70,27 @@ export const transferAccounts = async ({ amount, fromAccount, toAccount, note, t
     return response.data.data
 }
 
-export const fetchAdminDashboard = async (startDate, endDate) => {
-    const response = await axiosInstance.get("/admin", { params: { startDate, endDate } })
+
+export const fetchAdminDashboard = async (
+    startDate,
+    endDate,
+    participantIds = []
+) => {
+    const response = await axiosInstance.get("/admin/dashboard", {
+        params: {
+            startDate,
+            endDate,
+            participantIds: JSON.stringify(participantIds),
+        },
+    })
+
     return response.data.data
+}
+
+export const fetchAdminParticipants = async () => {
+    const response = await axiosInstance.get("/admin/participants")
+
+    return response.data.participants
 }
 
 export const fetchUserData = async () => {

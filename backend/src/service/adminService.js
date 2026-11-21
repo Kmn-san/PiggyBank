@@ -5,11 +5,18 @@ const PARTICIPANT = `
     AND u.deleted_at IS NULL
     AND u.role <> 'admin'`
 
+const PARTICIPANT_FILTER = `
+    AND (
+        cardinality($3::uuid[]) = 0
+        OR u.id = ANY($3::uuid[])
+    )
+    `
+
 const FROM = `($1::date)::timestamp AT TIME ZONE 'Asia/Tokyo'`
 const TO = `(($2::date + 1)::timestamp AT TIME ZONE 'Asia/Tokyo')`
 
-export const fetchData = async (startDate, endDate) => {
-    const params = [startDate, endDate]
+export const fetchData = async (startDate, endDate, participentIds = []) => {
+    const params = [startDate, endDate, participentIds]
 
     const [categoryResult, dailyResult, dayCategoryResult] = await Promise.all([
         // 1. Share of each category over the whole period
@@ -21,6 +28,7 @@ export const fetchData = async (startDate, endDate) => {
                 AND t.category IS NOT NULL
                 AND t.deleted_at IS NULL
                 AND ${PARTICIPANT}
+                ${PARTICIPANT_FILTER}
                 AND t.transaction_date >= ${FROM}
                 AND t.transaction_date <  ${TO}
             GROUP BY t.category
@@ -33,6 +41,7 @@ export const fetchData = async (startDate, endDate) => {
                 SELECT COUNT(*) AS user_count
                 FROM users u
                 WHERE ${PARTICIPANT}
+                ${PARTICIPANT_FILTER}
             ),
             calendar AS (
                 SELECT generate_series($1::date, $2::date, INTERVAL '1 day')::date AS day
@@ -46,17 +55,14 @@ export const fetchData = async (startDate, endDate) => {
                     AND t.category IS NOT NULL
                     AND t.deleted_at IS NULL
                     AND ${PARTICIPANT}
+                    ${PARTICIPANT_FILTER}
                     AND t.transaction_date >= ${FROM}
                     AND t.transaction_date <  ${TO}
                 GROUP BY 1
             )
             SELECT
                 calendar.day::text AS date,        -- plain "YYYY-MM-DD", so the server timezone cannot shift it
-                COALESCE(daily_totals.total_expense, 0) AS total_expense,
-                ROUND(
-                    COALESCE(daily_totals.total_expense, 0)::numeric / NULLIF(participants.user_count, 0),
-                    2
-                ) AS average_expense_per_user
+                COALESCE(daily_totals.total_expense, 0) AS total_expense
             FROM calendar
             CROSS JOIN participants
             LEFT JOIN daily_totals ON daily_totals.day = calendar.day
@@ -74,6 +80,7 @@ export const fetchData = async (startDate, endDate) => {
                 AND t.category IS NOT NULL
                 AND t.deleted_at IS NULL
                 AND ${PARTICIPANT}
+                ${PARTICIPANT_FILTER}
                 AND t.transaction_date >= ${FROM}
                 AND t.transaction_date <  ${TO}
             GROUP BY 1, t.category
@@ -89,14 +96,9 @@ export const fetchData = async (startDate, endDate) => {
     }))
 
     const DailyExpenses = dailyResult.rows
-    const totalAverageExpenses = DailyExpenses.length
-        ? Math.round(
-            DailyExpenses.reduce((sum, r) => sum + Number(r.average_expense_per_user), 0) / DailyExpenses.length
-        )
-        : 0
+
 
     return {
-        totalAverageExpenses,
         DailyExpenses,
         expensesChart,
         DailyCategoryExpenses: dayCategoryResult.rows,
