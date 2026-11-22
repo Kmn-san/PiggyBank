@@ -212,25 +212,32 @@
             "count_one": "{{count}}件",
             "count_other": "{{count}}件",
             "create": "目標を作成",
+            "edit": "目標を修正",
             "empty": "目標口座はまだありません。",
             "createFirst": "最初の目標を作成",
             "description": "目標のために貯めているお金です。",
             "deposit": "積み立てる",
-            "delete": "この目標を削除"
+            "delete": "この目標を削除",
+            "target": "目標金額"
         }
     },
     "createGoal": {
         "title": "目標口座を作成",
+        "editTitle": "目標口座を修正",
         "description": "目標のために貯める口座を追加します。",
+        "amountLabel": "目標金額",
         "nameLabel": "目標の名前",
         "placeholder": "例：旅行、ノートPC",
         "submitting": "作成中…",
+        "editSubmit": "変更を保存",
         "submit": "作成する",
         "success": "目標口座を作成しました。",
         "error": "作成できませんでした。もう一度お試しください。",
         "validation": {
             "required": "目標の名前を入力してください。",
-            "maxLength": "目標の名前は30文字以内で入力してください。"
+            "maxLength": "目標の名前は30文字以内で入力してください。",
+            "amountRequired": "目標金額を入力してください。",
+            "invalidAmount": "1以上の整数を入力してください。"
         }
     },
     "deleteGoal": {

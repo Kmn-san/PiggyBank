@@ -7,19 +7,25 @@ import { useTranslation } from 'react-i18next';
 const inputBase =
     'w-full bg-white border border-[#D9DDD8] rounded-xl text-base text-[#12202F] placeholder:text-[#12202F]/35 focus:outline-none focus:border-[#0F7B5F] focus:ring-2 focus:ring-[#0F7B5F]/40';
 
-const CreateGoalModal = ({ isOpen, onClose, onSubmit }) => {
+const CreateGoalModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     const { t } = useTranslation();
 
     const [name, setName] = useState('');
+    const [targetAmount, setTargetAmount] = useState('');
     const [error, setError] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
-            setName('');
-            setError('');
+            setName(initialData?.name ?? '')
+            setTargetAmount(
+                initialData?.targetAmount != null
+                    ? String(initialData.targetAmount)
+                    : ''
+            )
+            setError('')
         }
-    }, [isOpen]);
+    }, [isOpen, initialData])
 
     useEffect(() => {
         if (!isOpen) return;
@@ -43,6 +49,14 @@ const CreateGoalModal = ({ isOpen, onClose, onSubmit }) => {
         if (!n) return t('createGoal.validation.required');
         if (n.length > 30) return t('createGoal.validation.maxLength');
 
+        if (!targetAmount) return t('createGoal.validation.amountRequired');
+
+        const amount = Number(targetAmount);
+
+        if (!Number.isInteger(amount) || amount <= 0) {
+            return t('createGoal.validation.invalidAmount');
+        }
+
         return null;
     };
 
@@ -57,7 +71,7 @@ const CreateGoalModal = ({ isOpen, onClose, onSubmit }) => {
         setIsSubmitting(true);
 
         try {
-            await onSubmit?.({ name: name.trim() });
+            await onSubmit?.({ name: name.trim(), targetAmount: Number(targetAmount) });
 
             toast.success(t('createGoal.success'), { id: 'goal' });
             onClose?.();
@@ -90,12 +104,15 @@ const CreateGoalModal = ({ isOpen, onClose, onSubmit }) => {
                 <div className="sticky top-0 bg-[#F5F6F4] border-b border-[#D9DDD8] px-5 py-3 flex items-center justify-between">
                     <div>
                         <h2 id="goal-title" className="text-lg font-bold">
-                            {t('createGoal.title')}
+                            {initialData
+                                ? t('createGoal.editTitle')
+                                : t('createGoal.title')}
                         </h2>
 
                         <p className="text-xs text-[#12202F]/60 mt-0.5">
                             {t('createGoal.description')}
                         </p>
+
                     </div>
 
                     <button
@@ -139,6 +156,29 @@ const CreateGoalModal = ({ isOpen, onClose, onSubmit }) => {
                                 autoFocus
                             />
                         </div>
+                        <label
+                            htmlFor="goal-amount"
+                            className="block text-sm font-semibold mb-2"
+                        >
+                            {t('createGoal.amountLabel')}
+                        </label>
+                        <div className="relative">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#12202F]/50">
+                                ¥
+                            </span>
+
+                            <input
+                                id="goal-amount"
+                                type="number"
+                                min="1"
+                                step="1"
+                                placeholder="10000"
+                                value={targetAmount}
+                                onChange={(e) => setTargetAmount(e.target.value)}
+                                className={`${inputBase} h-14 pl-12 pr-4`}
+                                autoFocus
+                            />
+                        </div>
                     </div>
 
                     {error && (
@@ -178,7 +218,9 @@ const CreateGoalModal = ({ isOpen, onClose, onSubmit }) => {
                                     {t('createGoal.submitting')}
                                 </>
                             ) : (
-                                t('createGoal.submit')
+                                initialData
+                                    ? t('createGoal.editSubmit')
+                                    : t('createGoal.submit')
                             )}
                         </button>
                     </div>

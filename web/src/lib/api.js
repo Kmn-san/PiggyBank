@@ -45,8 +45,13 @@ export const editTransaction = async ({ transactionId, amount, transactionDate, 
     return response.data.result
 }
 
-export const createGoal = async (name) => {
-    const response = await axiosInstance.post('/savings/createGoal', name)
+export const createGoal = async (name, targetAmount) => {
+    const response = await axiosInstance.post('/savings/createGoal', name, targetAmount)
+    return response.data.data
+}
+
+export const editGoal = async ({ goalId, name, targetAmount }) => {
+    const response = await axiosInstance.patch(`/savings/${goalId}`, { name, targetAmount: Number(targetAmount) })
     return response.data.data
 }
 

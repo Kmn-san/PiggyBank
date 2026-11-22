@@ -22,13 +22,13 @@ export const getSavings = async (req, res) => {
 export const createGoal = async (req, res) => {
     try {
         const { userId } = req.user;
-        const { name } = req.body;
+        const { name, targetAmount } = req.body;
 
-        if (typeof name !== 'string' || !name.trim()) {
-            return res.status(400).json({ success: false, message: "Goal name can't be empty." })
+        if (typeof name !== 'string' || !name.trim() || !targetAmount) {
+            return res.status(400).json({ success: false, message: "Goal name and target amount can't be empty." })
         }
 
-        const result = await savingsService.createGoal(userId, name.trim())
+        const result = await savingsService.createGoal(userId, name.trim(), targetAmount)
 
         return res.status(201).json({
             success: true, message: "Create goal account successfully!",
@@ -51,16 +51,17 @@ export const createGoal = async (req, res) => {
 export const editGoal = async (req, res) => {
     try {
         const { userId } = req.user;
-        const { name } = req.body;
+        const { name, targetAmount } = req.body;
+
         const { goalId } = req.params
         if (!goalId) {
             return res.status(400).json({ success: false, message: "Goal id can't be empty." })
         }
-        if (typeof name !== 'string' || !name.trim()) {
-            return res.status(400).json({ success: false, message: "Goal name can't be empty." })
+        if (typeof name !== 'string' || !name.trim() || !targetAmount) {
+            return res.status(400).json({ success: false, message: "Goal name and target amount can't be empty." })
         }
 
-        const result = await savingsService.editGoal(userId, goalId, name)
+        const result = await savingsService.editGoal(userId, goalId, name, targetAmount)
 
         return res.status(201).json({
             success: true, message: "Update successfully!",

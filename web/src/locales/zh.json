@@ -213,24 +213,31 @@
             "count_other": "{{count}}个目标",
             "create": "创建目标",
             "empty": "您还没有创建任何储蓄目标。",
+            "edit": "修改目标",
             "createFirst": "创建第一个目标",
             "description": "为实现目标而储蓄的钱。",
             "deposit": "存入储蓄",
-            "delete": "删除此目标"
+            "delete": "删除此目标",
+            "target": "目标金额"
         }
     },
     "createGoal": {
         "title": "创建储蓄目标",
+        "editTitle": "修改储蓄目标",
         "description": "添加一个用于实现储蓄目标的账户。",
+        "amountLabel": "目标金额",
         "nameLabel": "目标名称",
         "placeholder": "例如：旅行、笔记本电脑",
         "submitting": "正在创建...",
         "submit": "创建目标",
+        "editSubmit": "保存修改",
         "success": "储蓄目标创建成功。",
         "error": "无法创建目标，请重试。",
         "validation": {
             "required": "请输入目标名称。",
-            "maxLength": "目标名称不能超过30个字符。"
+            "maxLength": "目标名称不能超过30个字符。",
+            "amountRequired": "请输入目标金额。",
+            "invalidAmount": "请输入大于0的整数。"
         }
     },
     "deleteGoal": {

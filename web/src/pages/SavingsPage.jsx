@@ -1,6 +1,7 @@
 
 import {
     ArrowLeftRight,
+    Pencil,
     Plus,
     ShieldCheck,
     Target,
@@ -19,6 +20,7 @@ import CreateGoalModal from '../components/Savings/CreateGoalModal';
 import useDeleteGoal from '../hooks/useDeleteGoal';
 import DeleteGoalModal from '../components/Savings/DeleteGoalModal';
 import { useTranslation } from 'react-i18next';
+import useEditGoal from '../hooks/useEditGoal';
 
 const WORKING = 'Working Account';
 const EMERGENCY = 'Emergency Account';
@@ -33,11 +35,28 @@ const SavingsPage = () => {
     const [modalMode, setModalMode] = useState('income');
     const [goalOpen, setGoalOpen] = useState(false);
     const [deleting, setDeleting] = useState(null);
+    const [editing, setEditing] = useState(null);
 
+    const editGoalMutation = useEditGoal()
+    const createGoalMutation = useCreateGoal()
     const deleteMutation = useDeleteGoal();
     const { data, isPending, error, isError } = useSavings();
     const { submit } = useTransferAccounts();
-    const createGoal = useCreateGoal();
+
+    const handleGoalSubmit = async ({ name, targetAmount }) => {
+
+        if (editing) {
+            await editGoalMutation.mutateAsync({
+                goalId: editing.id,
+                name, targetAmount
+            })
+        } else {
+            await createGoalMutation.mutateAsync({
+                name, targetAmount
+            })
+        }
+    }
+
 
     const newGoalBtn =
         'h-11 px-4 rounded-xl bg-[#0F7B5F] text-white text-sm font-semibold flex items-center gap-1.5 active:bg-[#0B5F49]';
@@ -176,6 +195,7 @@ const SavingsPage = () => {
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {goals.map((goal) => (
+
                             <AccountCard
                                 key={goal.id ?? goal.name}
                                 Icon={Target}
@@ -183,28 +203,45 @@ const SavingsPage = () => {
                                 amount={Number(goal.currentAmount ?? 0)}
                                 desc={t('savings.goals.description')}
                                 amountClass="text-[#0F7B5F]"
-                                target={goal.target ? Number(goal.target) : null}
-                            >
-                                <div className="space-y-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => openModal('transfer')}
-                                        className={primaryBtn}
-                                    >
-                                        <Plus className="h-5 w-5" aria-hidden="true" />
-                                        {t('savings.goals.deposit')}
-                                    </button>
+                                target={
+                                    goal.targetAmount != null
+                                        ? Number(goal.targetAmount)
+                                        : null
+                                }
+                                actions={
+                                    <>
+                                        <button
+                                            type="button"
+                                            onClick={() => setEditing(goal)}
+                                            aria-label={t('savings.goals.edit')}
+                                            title={t('savings.goals.edit')}
+                                            className="h-9 w-9 rounded-lg flex items-center justify-center text-[#0F7B5F] hover:bg-green-50 active:bg-green-100"
+                                        >
+                                            <Pencil className="h-4 w-4" aria-hidden="true" />
+                                        </button>
 
-                                    <button
-                                        type="button"
-                                        onClick={() => setDeleting(goal)}
-                                        className="h-11 w-full rounded-xl text-sm font-semibold text-red-700 flex items-center justify-center gap-1.5 active:bg-red-50"
-                                    >
-                                        <Trash2 className="h-4 w-4" aria-hidden="true" />
-                                        {t('savings.goals.delete')}
-                                    </button>
-                                </div>
+                                        <button
+                                            type="button"
+                                            onClick={() => setDeleting(goal)}
+                                            aria-label={t('savings.goals.delete')}
+                                            title={t('savings.goals.delete')}
+                                            className="h-9 w-9 rounded-lg flex items-center justify-center text-red-600 hover:bg-red-50 active:bg-red-100"
+                                        >
+                                            <Trash2 className="h-4 w-4" aria-hidden="true" />
+                                        </button>
+                                    </>
+                                }
+                            >
+                                <button
+                                    type="button"
+                                    onClick={() => openModal('transfer')}
+                                    className={primaryBtn}
+                                >
+                                    <Plus className="h-5 w-5" aria-hidden="true" />
+                                    {t('savings.goals.deposit')}
+                                </button>
                             </AccountCard>
+
                         ))}
                     </div>
                 )}
@@ -220,9 +257,13 @@ const SavingsPage = () => {
             />
 
             <CreateGoalModal
-                isOpen={goalOpen}
-                onClose={() => setGoalOpen(false)}
-                onSubmit={createGoal.mutateAsync}
+                isOpen={goalOpen || !!editing}
+                onClose={() => {
+                    setGoalOpen(false);
+                    setEditing(null);
+                }}
+                onSubmit={handleGoalSubmit}
+                initialData={editing}
             />
 
             {deleting && (

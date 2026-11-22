@@ -2,7 +2,8 @@ import { pool } from "../utlis/db.js"
 
 export const getSavings = async (userId) => {
     const { rows } = await pool.query(`
-        SELECT id,name,type,current_amount AS "currentAmount"
+        SELECT id,name,type,current_amount AS "currentAmount",
+        target_amount AS "targetAmount"
         FROM accounts
         WHERE user_id = $1
             AND is_archived = FALSE
@@ -12,14 +13,14 @@ export const getSavings = async (userId) => {
     return rows
 }
 
-export const createGoal = async (userId, name) => {
+export const createGoal = async (userId, name, targetAmount) => {
     const { rows } = await pool.query(`
         INSERT INTO accounts
-            (user_id,name,type)
+            (user_id,name,type,target_amount)
         VALUES
-            ($1,$2,$3)
-        RETURNING id,name,type,current_amount AS "currentAmount"`,
-        [userId, name, 'savings'])
+            ($1,$2,$3,$4)
+        RETURNING id,name,type,current_amount AS "currentAmount",target_amount AS "targetAmount"`,
+        [userId, name, 'savings', targetAmount])
     return rows[0]
 }
 
@@ -32,7 +33,7 @@ export const archiveGoal = async (userId, goalId) => {
                 AND user_id = $2
                 AND type = 'savings'
                 AND current_amount = 0
-        RETURNING id,name,type,current_amount AS "currentAmount",is_archived AS "isArchived"
+        RETURNING id,name,type,current_amount AS "currentAmount",target_amount AS "targetAmount,is_archived AS "isArchived"
             `, [goalId, userId])
 
     if (rows.length === 0) {
@@ -45,14 +46,16 @@ export const archiveGoal = async (userId, goalId) => {
     return rows[0]
 }
 
-export const editGoal = async (userId, goalId, name) => {
+export const editGoal = async (userId, goalId, name, targetAmount) => {
     const { rows } = await pool.query(`
         UPDATE accounts
-        SET name = $1
+        SET name = $1,
+            target_amount = $4
         WHERE user_id = $2
             AND id = $3
             AND is_archived = FALSE
-        RETURNING id,name,type,current_amount AS "currentAmount",is_archived AS "isArchived"`, [name, userId, goalId])
+            AND type = 'savings'
+        RETURNING id,name,type,current_amount AS "currentAmount",target_amount AS "targetAmount",is_archived AS "isArchived"`, [name, userId, goalId, targetAmount])
     if (rows.length === 0) {
         const error = new Error(
             "Goal not found or already archived."
@@ -80,16 +83,16 @@ export const deleteGoal = async (userId, goalId) => {
 
         const goal = rows[0]
         if (!goal) {
-            throw Object.assign(new Error('口座が見つかりません。'), { statusCode: 404 })
+            throw Object.assign(new Error('NOT_FOUND'), { statusCode: 404 })
         }
 
         // Only savings goals can be removed
         if (goal.type !== 'savings' || FIXED_ACCOUNTS.includes(goal.name)) {
-            throw Object.assign(new Error('この口座は削除できません。'), { statusCode: 403 })
+            throw Object.assign(new Error('UNABLE_TO_DELETE'), { statusCode: 403 })
         }
 
         if (Number(goal.currentAmount) !== 0) {
-            throw Object.assign(new Error('金額を空にしてから、もう一度やり直してください。'), { statusCode: 400 })
+            throw Object.assign(new Error('EMPTY_ACCOUNT_TRY_AGAIN'), { statusCode: 400 })
         }
         await client.query(
             `

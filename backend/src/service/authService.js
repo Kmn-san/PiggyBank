@@ -12,7 +12,7 @@ export const registerUser = async (user_code, password) => {
             WHERE user_code = $1`
             , [user_code])
         if (existUser.length > 0) {
-            const error = new Error("このユーザーコードはすでに使用されています。別のコードをお試しください。")
+            const error = new Error("Please try other user code.")
             error.statusCode = 409
             throw error
         }
@@ -30,11 +30,11 @@ export const registerUser = async (user_code, password) => {
 
         await client.query(`
             INSERT INTO accounts
-                (user_id,name,type,current_amount)
+                (user_id,name,type,current_amount,target_amount)
             VALUES
-                ($1,'Emergency Account','savings',0),
-                ($1,'Working Account','spending',0),
-                ($1,'Daily Expenses','spending',0)`,
+                ($1,'Emergency Account','savings',0,NULL),
+                ($1,'Working Account','spending',0,NULL),
+                ($1,'Daily Expenses','spending',0,NULL)`,
             [rows[0].id])
 
         await client.query("COMMIT")

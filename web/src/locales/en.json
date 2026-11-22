@@ -213,24 +213,31 @@
             "count_other": "{{count}} goals",
             "create": "Create Goal",
             "empty": "You haven't created any savings goals yet.",
+            "edit": "Edit Goal",
             "createFirst": "Create Your First Goal",
             "description": "Money saved for your goal.",
             "deposit": "Add Savings",
-            "delete": "Delete This Goal"
+            "delete": "Delete This Goal",
+            "target": "Target Amount"
         }
     },
     "createGoal": {
         "title": "Create Savings Goal",
+        "editTitle": "Edit Savings Goal",
+        "amountLabel": "Target Amount",
         "description": "Add an account to save money for your goals.",
         "nameLabel": "Goal Name",
         "placeholder": "e.g. Travel, Laptop",
         "submitting": "Creating...",
+        "editSubmit": "Save Change",
         "submit": "Create Goal",
         "success": "Savings goal created successfully.",
         "error": "Unable to create the goal. Please try again.",
         "validation": {
             "required": "Please enter a goal name.",
-            "maxLength": "Goal name must be 30 characters or fewer."
+            "maxLength": "Goal name must be 30 characters or fewer.",
+            "amountRequired": "Please enter a target amount.",
+            "invalidAmount": "Please enter a valid positive whole number."
         }
     },
     "deleteGoal": {
