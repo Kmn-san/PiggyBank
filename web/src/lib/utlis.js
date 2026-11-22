@@ -58,7 +58,11 @@ export const CATEGORY_COLORS = {
     entertainment: '#D9480F',
     shopping: '#7C5CBF',
 }
-export const FALLBACK_COLORS = ['#64748B', '#B45309', '#7C5CBF']
+export const FALLBACK_COLORS = [
+    '#64748B',
+    '#94A3B8',
+    '#CBD5E1',
+]
 
 export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1)
 
