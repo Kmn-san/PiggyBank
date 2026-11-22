@@ -370,5 +370,18 @@
                 "dateRequired": "Please select a date."
             }
         }
+    },
+    "deleteAccount": {
+        "title": "Delete your account?",
+        "description": "After deletion, you will no longer be able to log in or access your recorded data. This action cannot be undone.",
+        "confirmLabel": "Enter your user code to confirm",
+        "enterCode": "Code to enter: ",
+        "cancel": "Cancel",
+        "submit": "Delete Account",
+        "deleting": "Deleting...",
+        "toast": {
+            "success": "Your account has been deleted.",
+            "failed": "Unable to delete your account. Please try again."
+        }
     }
 }

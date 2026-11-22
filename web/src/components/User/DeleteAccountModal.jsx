@@ -5,11 +5,14 @@ import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const FONT_JP =
     "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif";
 
 function DeleteAccountModal({ userCode, onClose }) {
+    const { t } = useTranslation();
+
     const [typed, setTyped] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -49,7 +52,7 @@ function DeleteAccountModal({ userCode, onClose }) {
             await deleteAccount.mutateAsync();
             queryClient.clear();
 
-            toast.success("アカウントを削除しました", {
+            toast.success(t("deleteAccount.toast.success"), {
                 id: "delete-account",
             });
 
@@ -58,7 +61,7 @@ function DeleteAccountModal({ userCode, onClose }) {
         } catch (err) {
             toast.error(
                 err?.response?.data?.message ??
-                "削除できませんでした。もう一度お試しください。",
+                t("deleteAccount.toast.failed"),
                 { id: "delete-account" }
             );
 
@@ -87,22 +90,22 @@ function DeleteAccountModal({ userCode, onClose }) {
                 </div>
 
                 <h2 id="delete-title" className="text-lg font-bold">
-                    アカウントを削除しますか？
+                    {t("deleteAccount.title")}
                 </h2>
 
                 <p id="delete-desc" className="text-sm text-[#12202F]/70 mt-2 leading-relaxed">
-                    削除すると、ログインできなくなり、記録したデータも確認できなくなります。この操作は元に戻せません。
+                    {t("deleteAccount.description")}
                 </p>
 
                 <label
                     htmlFor="confirm-code"
                     className="block text-sm font-semibold mt-5 mb-2"
                 >
-                    確認のため、ユーザーコードを入力してください
+                    {t("deleteAccount.confirmLabel")}
                 </label>
 
                 <p className="text-xs text-[#12202F]/55 mb-2 wrap-break-word">
-                    入力するコード：
+                    {t("deleteAccount.enterCode")}
                     <span className="font-bold text-[#12202F]">
                         {userCode}
                     </span>
@@ -128,7 +131,7 @@ function DeleteAccountModal({ userCode, onClose }) {
                         disabled={isSubmitting}
                         className="h-14 rounded-xl border border-[#D9DDD8] bg-white text-base font-semibold active:bg-black/5"
                     >
-                        キャンセル
+                        {t("deleteAccount.cancel")}
                     </button>
 
                     <button
@@ -142,10 +145,12 @@ function DeleteAccountModal({ userCode, onClose }) {
                                     className="h-5 w-5 animate-spin"
                                     aria-hidden="true"
                                 />
-                                <span className="sr-only">削除中...</span>
+                                <span className="sr-only">
+                                    {t("deleteAccount.deleting")}
+                                </span>
                             </>
                         ) : (
-                            "削除する"
+                            t("deleteAccount.submit")
                         )}
                     </button>
                 </div>
