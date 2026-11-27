@@ -1,18 +1,22 @@
+
 import { ArrowLeft, PiggyBank } from 'lucide-react';
 
-const FONT_JP = "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-serif";
+const FONT = "Arial, sans-serif";
 
 const H2 = ({ children }) => (
     <h2 className="text-xl font-bold text-[#12202F] mt-10 mb-3">{children}</h2>
 );
+
 const P = ({ children }) => (
     <p className="text-base text-[#12202F]/80 leading-8 mb-4">{children}</p>
 );
+
 const OL = ({ children }) => (
     <ol className="list-decimal pl-6 mb-4 space-y-2 text-base text-[#12202F]/80 leading-8 marker:text-[#0F7B5F]">
         {children}
     </ol>
 );
+
 const UL = ({ children }) => (
     <ul className="list-disc pl-6 mb-4 space-y-2 text-base text-[#12202F]/80 leading-8 marker:text-[#0F7B5F]">
         {children}
@@ -20,14 +24,14 @@ const UL = ({ children }) => (
 );
 
 const PrivacyPolicy = () => (
-    <div className="min-h-screen bg-[#F5F6F4]" style={{ fontFamily: FONT_JP }}>
+    <div className="min-h-screen bg-[#F5F6F4]" style={{ fontFamily: FONT }}>
         <header className="sticky top-0 z-10 bg-[#F5F6F4]/95 backdrop-blur border-b border-[#D9DDD8] pt-[env(safe-area-inset-top)]">
             <div className="max-w-2xl mx-auto h-14 px-2 flex items-center gap-1">
                 <button
                     type="button"
                     onClick={() => window.history.back()}
                     className="w-11 h-11 flex items-center justify-center rounded-lg text-[#12202F] active:bg-black/5"
-                    aria-label="前のページに戻る"
+                    aria-label="Go back"
                 >
                     <ArrowLeft className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -39,68 +43,84 @@ const PrivacyPolicy = () => (
         </header>
 
         <main className="max-w-2xl mx-auto px-6 pt-8 pb-[max(3rem,env(safe-area-inset-bottom))]">
-            <h1 className="text-3xl font-bold text-[#12202F] leading-tight">プライバシーポリシー</h1>
-            <p className="text-sm text-[#12202F]/55 mt-2 mb-8">個人情報保護方針</p>
+            <h1 className="text-3xl font-bold text-[#12202F] leading-tight">
+                Privacy Policy
+            </h1>
+            <p className="text-sm text-[#12202F]/55 mt-2 mb-8">
+                Personal Information Protection Policy
+            </p>
 
             <P>
-                {import.meta.env.VITE_ADMIN}（以下「管理者」といいます。）は、本調査および本サービスにおけるユーザーの情報の取扱いについて、以下のとおりプライバシーポリシー（以下「本ポリシー」といいます。）を定め、適切に管理いたします。
+                {import.meta.env.VITE_ADMIN} (hereinafter referred to as the "Administrator") establishes this Privacy Policy (hereinafter referred to as the "Policy") regarding the handling of User information in this research study and the Service, and will manage such information appropriately.
             </P>
 
-            <H2>1. 取得する情報</H2>
-            <P>本サービスでは、以下の情報を取得・保持します。</P>
+            <H2>1. Information Collected</H2>
+            <P>
+                The Service collects and retains the following information:
+            </P>
             <UL>
                 <li>
-                    <strong>アカウント識別情報：</strong>ユーザーコード、ハッシュ化されたパスワード
+                    <strong>Account Identification Information:</strong> User Codes and hashed passwords.
                 </li>
                 <li>
-                    <strong>取引・利用データ：</strong>収入・支出の金額、取引日、カテゴリー、メモ、口座情報（口座種別・貯金額等）
+                    <strong>Transaction and Usage Data:</strong> Income and expense amounts, transaction dates, categories, notes, and account information (such as account types and savings balances).
                 </li>
                 <li>
-                    <strong>集計・分析データ：</strong>1週間の支出合計、1日平均支出額、利用前後における支出の変化率など
+                    <strong>Aggregated and Analytical Data:</strong> Weekly total expenses, average daily expenses, and changes in spending patterns before and after using the Service.
                 </li>
             </UL>
 
-            <H2>2. 利用目的</H2>
-            <P>取得したデータは、以下の目的でのみ利用します。</P>
-            <OL>
-                <li>本サービス上でのユーザー自身による支出状況の確認および管理機能の提供</li>
-                <li>学術研究・調査における「支出見直し効果および支出変化率」の集計・分析</li>
-                <li>研究成果発表（論文、レポート、発表資料等）への活用</li>
-            </OL>
-
-            <H2>3. データの匿名化と管理</H2>
+            <H2>2. Purpose of Use</H2>
+            <P>
+                The collected data will be used solely for the following purposes:
+            </P>
             <OL>
                 <li>
-                    調査結果の分析・公表において、ユーザーの本名や個人が直ちに特定される情報は使用せず、すべて「ユーザーA」「ユーザーB」等の匿名ID（符号）で処理されます。
+                    To provide Users with features for reviewing and managing their own spending activities through the Service.
                 </li>
                 <li>
-                    パスワードは暗号化（ハッシュ化）してデータベースに保管され、管理者であっても平文（元のパスワード）を参照することはできません。
+                    To aggregate and analyze the effectiveness of spending reviews and changes in spending patterns for academic research.
+                </li>
+                <li>
+                    To support the presentation of research findings in academic papers, reports, presentation materials, and other research-related publications.
                 </li>
             </OL>
 
-            <H2>4. 第三者提供の有無</H2>
+            <H2>3. Data Anonymization and Management</H2>
+            <OL>
+                <li>
+                    When analyzing and publishing research results, Users' real names and other information that could directly identify individuals will not be used. All data will be processed using anonymous IDs (identifiers), such as "User A" and "User B."
+                </li>
+                <li>
+                    Passwords are hashed before being stored in the database. Even the Administrator cannot view the original plain-text passwords.
+                </li>
+            </OL>
+
+            <H2>4. Disclosure of Information to Third Parties</H2>
             <P>
-                管理者は、法令に基づく場合を除き、取得したユーザーの情報を事前に本人の同意を得ることなく第三者に提供することはありません。なお、AI Bot利用時にユーザーが手動でコピー＆ペーストして外部AIサービスに入力するデータについては、ユーザーご自身の操作に基づくものとします。
+                The Administrator will not provide collected User information to any third party without the User's prior consent, except where required by applicable laws and regulations. Please note that when using the AI Bot, any data that Users manually copy and paste into an external AI service is provided based on the Users' own actions.
             </P>
 
-            <H2>5. データの保存期間と消去</H2>
+            <H2>5. Data Retention and Deletion</H2>
             <P>
-                本調査のために取得したデータは、研究・報告書の作成完了後、適切な方法で安全に消去または復元不可能な状態で破棄いたします。
+                Data collected for this research will be securely deleted or permanently destroyed in a manner that prevents recovery after the completion of the research and preparation of the final report.
             </P>
 
-            <H2>6. 参加の任意性と撤回</H2>
+            <H2>6. Voluntary Participation and Withdrawal</H2>
             <P>
-                本調査への参加は任意です。参加同意後であっても、ユーザーはいつでも不利益を被ることなく参加を撤回することができます。撤回のお申し出があった場合、該当するユーザーのデータは集計対象から除外します。
+                Participation in this research study is entirely voluntary. Even after providing consent, Users may withdraw from the study at any time without suffering any disadvantage. If a User requests to withdraw, their data will be excluded from the research analysis.
             </P>
 
-            <H2>7. お問い合わせ窓口</H2>
-            <P>本ポリシーおよびデータの取扱いに関するお問い合わせ・ご相談は、下記までご連絡ください。</P>
+            <H2>7. Contact Information</H2>
+            <P>
+                For inquiries or concerns regarding this Policy or the handling of personal information, please contact:
+            </P>
             <UL>
                 <li>
-                    <strong>担当者（管理者）：</strong>{import.meta.env.VITE_ADMIN}
+                    <strong>Person in Charge (Administrator):</strong> {import.meta.env.VITE_ADMIN}
                 </li>
                 <li>
-                    <strong>連絡先：</strong>{import.meta.env.VITE_EMAIL}
+                    <strong>Contact Email:</strong> {import.meta.env.VITE_EMAIL}
                 </li>
             </UL>
         </main>

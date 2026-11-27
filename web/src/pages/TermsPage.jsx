@@ -1,4 +1,4 @@
-// pages/TermsOfService.jsx
+
 import React from 'react';
 import { ArrowLeft, PiggyBank } from 'lucide-react';
 
@@ -8,9 +8,11 @@ const FONT_JP = "'Hiragino Sans', 'Noto Sans JP', 'Yu Gothic', 'Meiryo', sans-se
 const H2 = ({ children }) => (
     <h2 className="text-xl font-bold text-[#12202F] mt-10 mb-3">{children}</h2>
 );
+
 const P = ({ children }) => (
     <p className="text-base text-[#12202F]/80 leading-8 mb-4">{children}</p>
 );
+
 const OL = ({ children }) => (
     <ol className="list-decimal pl-6 mb-4 space-y-2 text-base text-[#12202F]/80 leading-8 marker:text-[#0F7B5F]">
         {children}
@@ -25,7 +27,7 @@ const TermsOfService = () => (
                     type="button"
                     onClick={() => window.history.back()}
                     className="w-11 h-11 flex items-center justify-center rounded-lg text-[#12202F] active:bg-black/5"
-                    aria-label="前のページに戻る"
+                    aria-label="Go back"
                 >
                     <ArrowLeft className="h-5 w-5" aria-hidden="true" />
                 </button>
@@ -37,58 +39,76 @@ const TermsOfService = () => (
         </header>
 
         <main className="max-w-2xl mx-auto px-6 pt-8 pb-[max(3rem,env(safe-area-inset-bottom))]">
-            <h1 className="text-3xl font-bold text-[#12202F] leading-tight mb-8">利用規約</h1>
+            <h1 className="text-3xl font-bold text-[#12202F] leading-tight mb-8">
+                Terms of Service
+            </h1>
 
             <P>
-                本利用規約（以下「本規約」といいます。）は、{import.meta.env.VITE_ADMIN}（以下「管理者」といいます。）が提供する支出記録WebアプリおよびAIアドバイス機能（以下「本サービス」といいます。）の利用条件を定めるものです。本サービスを利用する調査参加者（以下「ユーザー」といいます。）は、本規約に同意の上、本サービスを利用するものとします。
+                These Terms of Service (hereinafter referred to as the "Terms") set forth the conditions for using the expense-tracking web application and AI advice features (hereinafter referred to as the "Service") provided by {import.meta.env.VITE_ADMIN} (hereinafter referred to as the "Administrator"). Participants in the research study who use the Service (hereinafter referred to as "Users") shall use the Service only after agreeing to these Terms.
             </P>
 
-            <H2>第1条（目的）</H2>
+            <H2>Article 1 (Purpose)</H2>
             <P>
-                本サービスは、大学生の支出見直しおよび節約・貯金に関するAI Botのアドバイス効果を検証する学術調査・実証実験を目的として提供される試作アプリです。
+                The Service is a prototype application provided for the purpose of conducting academic research and practical experiments to evaluate the effectiveness of AI Bot advice on reviewing spending habits, saving money, and building savings among university students.
             </P>
 
-            <H2>第2条（アカウントおよびログイン情報の管理）</H2>
-            <OL>
-                <li>管理者は、ユーザーに対して専用の「ユーザーコード」を発行・付与します。</li>
-                <li>ユーザーは、設定したパスワードおよびユーザーコードを適切に管理するものとします。</li>
-                <li>ユーザーコードおよびパスワードの第三者への譲渡、貸与、開示は禁止します。</li>
-            </OL>
-
-            <H2>第3条（利用条件およびデータ記録）</H2>
+            <H2>Article 2 (Account and Login Information Management)</H2>
             <OL>
                 <li>
-                    ユーザーは、調査期間中（第1期間および第2期間）、指定された方法で日々の収入・支出・貯蓄口座情報を本サービスに記録するものとします。
+                    The Administrator will issue and assign each User a dedicated "User Code."
                 </li>
                 <li>
-                    ユーザーは、本サービス上の記録内容を自らコピーし、AI Botへ手動で提供してアドバイスを受ける機能を利用できます。
+                    Users are responsible for appropriately managing their passwords and User Codes.
                 </li>
                 <li>
-                    本サービスは試作段階（MVP）であるため、個人設定画面やアプリとAI Botの自動連携機能等は含まれません。
+                    Users must not transfer, lend, or disclose their User Codes or passwords to any third party.
                 </li>
             </OL>
 
-            <H2>第4条（禁止事項）</H2>
-            <P>ユーザーは、本サービスの利用にあたり、以下の行為を行ってはなりません。</P>
-            <OL>
-                <li>他のユーザーのユーザーコードやパスワードを使用する行為</li>
-                <li>本サービスのシステムに対する不正アクセスやリバースエンジニアリング行為</li>
-                <li>虚偽の情報を意図的に連続して入力し、本調査のデータ精度を著しく阻害する行為</li>
-                <li>本サービスおよび他のユーザー、管理者の権利・利益を侵害する行為</li>
-            </OL>
-
-            <H2>第5条（サービスの停止・変更・終了）</H2>
-            <P>
-                管理者は、調査期間の終了、システムのメンテナンス、またはやむを得ない事情がある場合、ユーザーへの事前の通知なく本サービスの提供を中断、変更、または終了することができるものとします。
-            </P>
-
-            <H2>第6条（免責事項）</H2>
+            <H2>Article 3 (Usage Conditions and Data Recording)</H2>
             <OL>
                 <li>
-                    本サービス（AI Botのアドバイスを含む）が提供する情報は参考情報であり、特定の金融成果や貯蓄成功を保証するものではありません。
+                    During the research period (Period 1 and Period 2), Users shall record their daily income, expenses, and savings account information in the Service using the specified methods.
                 </li>
                 <li>
-                    管理者は、本サービスの利用によりユーザーに生じた損害について、故意または重大な過失がある場合を除き、一切の責任を負わないものとします。
+                    Users may manually copy their records from the Service and provide them to the AI Bot to receive advice.
+                </li>
+                <li>
+                    As the Service is currently in the prototype (MVP) stage, certain features, such as a personal settings page and automatic integration between the application and the AI Bot, are not included.
+                </li>
+            </OL>
+
+            <H2>Article 4 (Prohibited Activities)</H2>
+            <P>
+                Users must not engage in any of the following activities when using the Service:
+            </P>
+            <OL>
+                <li>
+                    Using another User's User Code or password.
+                </li>
+                <li>
+                    Unauthorized access to the Service's systems or reverse engineering.
+                </li>
+                <li>
+                    Intentionally and repeatedly entering false information in a manner that significantly compromises the accuracy of the research data.
+                </li>
+                <li>
+                    Any activity that infringes upon the rights or interests of the Service, other Users, or the Administrator.
+                </li>
+            </OL>
+
+            <H2>Article 5 (Suspension, Modification, and Termination of the Service)</H2>
+            <P>
+                The Administrator may suspend, modify, or terminate the provision of the Service without prior notice to Users in the event of the end of the research period, system maintenance, or other unavoidable circumstances.
+            </P>
+
+            <H2>Article 6 (Disclaimer)</H2>
+            <OL>
+                <li>
+                    Information provided by the Service, including advice from the AI Bot, is for reference purposes only and does not guarantee any specific financial results or successful savings outcomes.
+                </li>
+                <li>
+                    The Administrator shall not be liable for any damages incurred by Users as a result of using the Service, except in cases involving intentional misconduct or gross negligence.
                 </li>
             </OL>
         </main>
