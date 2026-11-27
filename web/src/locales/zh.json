@@ -382,5 +382,27 @@
             "success": "账户已成功删除。",
             "failed": "无法删除账户，请重试。"
         }
+    },
+    "report": {
+        "currency": "日元",
+        "introduction": "以下是我{{month}}的支出记录。",
+        "instructions": "请根据这些数据，用中文回答以下问题。",
+        "tasks": {
+            "trend": "支出的特点与趋势",
+            "waste": "可能存在的不必要开销",
+            "advice": "下个月可以开始实行的具体节约和储蓄建议（约3条）"
+        },
+        "summary": "■ 本月总结",
+        "income": "总收入",
+        "expense": "总支出",
+        "accounts": "■ 账户余额",
+        "categories": "■ 分类支出",
+        "transactions": "■ 交易记录（{{count}}笔）",
+        "empty": "（无）",
+        "types": {
+            "income": "收入",
+            "expense": "支出",
+            "transfer": "转账"
+        }
     }
 }

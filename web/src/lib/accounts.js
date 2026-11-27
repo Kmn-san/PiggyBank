@@ -4,17 +4,17 @@ import { Target, Wallet, ShoppingBag, ShieldCheck } from 'lucide-react';
 const FIXED = [
     {
         name: 'Working Account',
-        label: 'メイン口座',
+        label: 'Main Account',
         Icon: Wallet,
     },
     {
         name: 'Daily Expenses',
-        label: '日々の支出口座',
+        label: 'Daily Expenses Account',
         Icon: ShoppingBag,
     },
     {
         name: 'Emergency Account',
-        label: '緊急資金口座',
+        label: 'Emergency Fund',
         Icon: ShieldCheck,
     },
 ];

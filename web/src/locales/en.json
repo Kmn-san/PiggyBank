@@ -383,5 +383,27 @@
             "success": "Your account has been deleted.",
             "failed": "Unable to delete your account. Please try again."
         }
+    },
+    "report": {
+        "currency": "JPY",
+        "introduction": "Here is my expense report for {{month}}.",
+        "instructions": "Based on this data, please explain the following in English.",
+        "tasks": {
+            "trend": "Spending characteristics and trends",
+            "waste": "Potential unnecessary spending",
+            "advice": "Around 3 practical saving tips I can start using next month"
+        },
+        "summary": "■ Monthly Summary",
+        "income": "Total income",
+        "expense": "Total expenses",
+        "accounts": "■ Account Balances",
+        "categories": "■ Expenses by Category",
+        "transactions": "■ Transaction History ({{count}} transactions)",
+        "empty": "(None)",
+        "types": {
+            "income": "Income",
+            "expense": "Expense",
+            "transfer": "Transfer"
+        }
     }
 }

@@ -382,5 +382,27 @@
             "success": "アカウントを削除しました",
             "failed": "削除できませんでした。もう一度お試しください。"
         }
+    },
+    "report": {
+        "currency": "円",
+        "introduction": "以下は私の{{month}}の支出データです。",
+        "instructions": "このデータをもとに、次のことを日本語で教えてください。",
+        "tasks": {
+            "trend": "支出の特徴や傾向",
+            "waste": "無駄遣いになっていそうな点",
+            "advice": "来月からできる具体的な節約・貯金のアドバイス（3つ程度）"
+        },
+        "summary": "■ 今月のまとめ",
+        "income": "収入の合計",
+        "expense": "支出の合計",
+        "accounts": "■ 口座の残高",
+        "categories": "■ カテゴリ別の支出",
+        "transactions": "■ 取引の一覧（{{count}}件）",
+        "empty": "（なし）",
+        "types": {
+            "income": "収入",
+            "expense": "支出",
+            "transfer": "振替"
+        }
     }
 }

@@ -1,50 +1,117 @@
-import { dayKeyOf, monthLabel } from './utlis';
+
+import i18n from '../lib/i18n';
+import { dayKeyOf } from './utlis';
 import { getAccountMeta } from './accounts';
 
-// Plain numbers read better for an AI than ¥ with full-width symbols
-const yen = (n) => `${Number(n || 0).toLocaleString('ja-JP')}円`;
-const TYPE_JP = { income: '収入', expense: '支出', transfer: '振替' };
-const cap = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : '');
+const cap = (s) =>
+    s ? s.charAt(0).toUpperCase() + s.slice(1) : '';
 
-export const buildExpenseReport = ({ month, accounts = [], categories = [], transactions = [] }) => {
-    // Oldest first, so the AI reads the month in order
-    const list = [...transactions].sort((a, b) => a.transactionDate.localeCompare(b.transactionDate));
-    const sumOf = (type) => list.filter((t) => t.type === type).reduce((s, t) => s + Number(t.amount), 0);
-    const catTotal = categories.reduce((s, c) => s + Number(c.amount), 0);
+export const buildExpenseReport = ({
+    month,
+    accounts = [],
+    categories = [],
+    transactions = [],
+    language = i18n.language,
+}) => {
+    // Use the default translation namespace
+    const t = i18n.getFixedT(language, 'translation');
 
-    const accountLines = accounts.map((a) => `- ${getAccountMeta(a).label}: ${yen(a.currentAmount)}`);
+    // Format currency according to selected language
+    const locale =
+        language === 'ja' ? 'ja-JP' :
+            language === 'zh' ? 'zh-CN' :
+                'en-US';
 
+    const formatAmount = (amount) => {
+        const value = Number(amount || 0).toLocaleString(locale);
+        return `${value} ${t('report.currency')}`;
+    };
+
+    // Oldest transactions first
+    const list = [...transactions].sort((a, b) =>
+        a.transactionDate.localeCompare(b.transactionDate)
+    );
+
+    // Calculate totals by transaction type
+    const sumOf = (type) =>
+        list
+            .filter((tx) => tx.type === type)
+            .reduce((sum, tx) => sum + Number(tx.amount), 0);
+
+    // Calculate total categorized expenses
+    const catTotal = categories.reduce(
+        (sum, c) => sum + Number(c.amount),
+        0
+    );
+
+    // Account balances
+    const accountLines = accounts.map((a) =>
+        `- ${getAccountMeta(a).label}: ${formatAmount(a.currentAmount)}`
+    );
+
+    // Category expenses, sorted from highest to lowest
     const categoryLines = [...categories]
         .sort((a, b) => Number(b.amount) - Number(a.amount))
-        .map((c) => `- ${cap(c.category)}: ${yen(c.amount)}（${catTotal ? Math.round((Number(c.amount) / catTotal) * 100) : 0}%）`);
+        .map((c) => {
+            const categoryName = i18n.t(`categories.${c.category}`, {
+                lng: language,
+                defaultValue: cap(c.category),
+            });
 
-    const txLines = list.map((t) => {
-        const date = dayKeyOf(t.transactionDate).slice(5).replace('-', '/');          // 10/29
-        const detail = t.category
-            ? cap(t.category)
-            : [t.fromAccountName, t.toAccountName].filter(Boolean).join(' → ');
-        const note = t.note ? `（${t.note}）` : '';
-        return `${date} ${TYPE_JP[t.type] ?? t.type} ${detail} ${yen(t.amount)}${note}`;
+            const percentage = catTotal
+                ? Math.round((Number(c.amount) / catTotal) * 100)
+                : 0;
+
+            return `- ${categoryName}: ${formatAmount(c.amount)} (${percentage}%)`;
+        });
+
+    // Transaction history
+    const txLines = list.map((tx) => {
+        const date = dayKeyOf(tx.transactionDate)
+            .slice(5)
+            .replace('-', '/');
+
+        const detail = tx.category
+            ? i18n.t(`categories.${tx.category}`, {
+                lng: language,
+                defaultValue: cap(tx.category),
+            })
+            : [tx.fromAccountName, tx.toAccountName]
+                .filter(Boolean)
+                .join(' → ');
+
+        const note = tx.note ? ` (${tx.note})` : '';
+
+        return `${date} ${t(`report.types.${tx.type}`, {
+            defaultValue: tx.type,
+        })} ${detail} ${formatAmount(tx.amount)}${note}`;
     });
 
+    // Build final report
     return [
-        `以下は私の${monthLabel(month)}の支出データです。`,
-        'このデータをもとに、次のことを日本語で教えてください。',
-        '1. 支出の特徴や傾向',
-        '2. 無駄遣いになっていそうな点',
-        '3. 来月からできる具体的な節約・貯金のアドバイス（3つ程度）',
+        t('report.introduction', { month }),
+        t('report.instructions'),
+        `1. ${t('report.tasks.trend')}`,
+        `2. ${t('report.tasks.waste')}`,
+        `3. ${t('report.tasks.advice')}`,
         '',
-        '■ 今月のまとめ',
-        `- 収入の合計: ${yen(sumOf('income'))}`,
-        `- 支出の合計: ${yen(sumOf('expense'))}`,
+        t('report.summary'),
+        `- ${t('report.income')}: ${formatAmount(sumOf('income'))}`,
+        `- ${t('report.expense')}: ${formatAmount(sumOf('expense'))}`,
         '',
-        '■ 口座の残高',
-        ...(accountLines.length ? accountLines : ['（なし）']),
+        t('report.accounts'),
+        ...(accountLines.length
+            ? accountLines
+            : [t('report.empty')]),
         '',
-        '■ カテゴリ別の支出',
-        ...(categoryLines.length ? categoryLines : ['（なし）']),
+        t('report.categories'),
+        ...(categoryLines.length
+            ? categoryLines
+            : [t('report.empty')]),
         '',
-        `■ 取引の一覧（${list.length}件）`,
-        ...(txLines.length ? txLines : ['（なし）']),
+        t('report.transactions', { count: list.length }),
+        ...(txLines.length
+            ? txLines
+            : [t('report.empty')]),
     ].join('\n');
 };
