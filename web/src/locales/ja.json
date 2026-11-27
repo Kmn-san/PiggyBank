@@ -8,8 +8,8 @@
         "title": "ログイン",
         "forgotPassword": "パスワードをお忘れですか？",
         "subtitle": "あなたの支出を記録、分析する",
-        "userCode": "ユーザーコード",
-        "userCodePlaceholder": "ユーザーコードを入力",
+        "userCode": "ユーザーID",
+        "userCodePlaceholder": "ユーザーIDを入力",
         "password": "パスワード",
         "passwordPlaceholder": "パスワードを入力",
         "showPassword": "パスワードを表示",
@@ -19,7 +19,7 @@
         "noAccount": "はじめての方は",
         "signup": "アカウントを作成",
         "validation": {
-            "userCodeRequired": "ユーザーコードを入力してください",
+            "userCodeRequired": "ユーザーIDを入力してください",
             "passwordRequired": "パスワードを入力してください",
             "passwordMinLength": "パスワードは8文字以上で入力してください"
         },
@@ -32,9 +32,9 @@
     "forgotPassword": {
         "backToLogin": "ログインに戻る",
         "title": "パスワードの再設定",
-        "description": "ユーザーコードと新しいパスワードを入力してください。",
-        "userCode": "ユーザーコード",
-        "userCodePlaceholder": "ユーザーコードを入力",
+        "description": "ユーザーIDと新しいパスワードを入力してください。",
+        "userCode": "ユーザーID",
+        "userCodePlaceholder": "ユーザーIDを入力",
         "newPassword": "新しいパスワード",
         "confirmPassword": "新しいパスワード（確認）",
         "passwordPlaceholder": "{{label}}を入力",
@@ -44,7 +44,7 @@
         "submitting": "変更中…",
         "submit": "パスワードを変更する",
         "validation": {
-            "userCodeRequired": "ユーザーコードを入力してください。",
+            "userCodeRequired": "ユーザーIDを入力してください。",
             "passwordRequired": "新しいパスワードを入力してください。",
             "passwordMinLength": "パスワードは8文字以上で入力してください。",
             "confirmRequired": "確認用パスワードを入力してください。",
@@ -58,9 +58,9 @@
     },
     "register": {
         "title": "アカウント作成",
-        "subtitle": "ユーザーコードとパスワードを設定してください",
-        "userCode": "ユーザーコード",
-        "userCodePlaceholder": "ユーザーコードを入力",
+        "subtitle": "ユーザーIDとパスワードを設定してください",
+        "userCode": "ユーザーID",
+        "userCodePlaceholder": "ユーザーIDを入力",
         "userCodeHint": "4〜20文字の英数字、ハイフン、アンダースコア",
         "password": "パスワード",
         "passwordPlaceholder": "パスワードを入力",
@@ -80,7 +80,7 @@
         "haveAccount": "すでにアカウントをお持ちの方は",
         "login": "ログイン",
         "validation": {
-            "userCodeRequired": "ユーザーコードを入力してください",
+            "userCodeRequired": "ユーザーIDを入力してください",
             "userCodeFormat": "4〜20文字の英数字、ハイフン、アンダースコアで入力してください",
             "passwordRequired": "パスワードを入力してください",
             "passwordMinLength": "パスワードは8文字以上で入力してください",
@@ -178,7 +178,7 @@
     },
     "user": {
         "title": "アカウント",
-        "userCode": "ユーザーコード",
+        "userCode": "ユーザーID",
         "loading": "読み込み中…",
         "fetchError": "データを取得できませんでした。",
         "language": {
@@ -373,8 +373,8 @@
     "deleteAccount": {
         "title": "アカウントを削除しますか？",
         "description": "削除すると、ログインできなくなり、記録したデータも確認できなくなります。この操作は元に戻せません。",
-        "confirmLabel": "確認のため、ユーザーコードを入力してください",
-        "enterCode": "入力するコード：",
+        "confirmLabel": "確認のため、ユーザーIDを入力してください",
+        "enterCode": "入力するID：",
         "cancel": "キャンセル",
         "submit": "削除する",
         "deleting": "削除中...",

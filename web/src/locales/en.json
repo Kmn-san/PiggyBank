@@ -8,8 +8,8 @@
         "title": "Login",
         "forgotPassword": "Forgot password?",
         "subtitle": "Record and analyze your spending",
-        "userCode": "User Code",
-        "userCodePlaceholder": "Enter your user code",
+        "userCode": "User ID",
+        "userCodePlaceholder": "Enter your user ID",
         "password": "Password",
         "passwordPlaceholder": "Enter your password",
         "showPassword": "Show password",
@@ -19,7 +19,7 @@
         "noAccount": "New here?",
         "signup": "Create an account",
         "validation": {
-            "userCodeRequired": "Please enter your user code.",
+            "userCodeRequired": "Please enter your user ID.",
             "passwordRequired": "Please enter your password.",
             "passwordMinLength": "Password must be at least 8 characters."
         },
@@ -32,9 +32,9 @@
     "forgotPassword": {
         "backToLogin": "Back to Login",
         "title": "Reset Password",
-        "description": "Enter your user code and new password.",
-        "userCode": "User Code",
-        "userCodePlaceholder": "Enter your user code",
+        "description": "Enter your user ID and new password.",
+        "userCode": "User ID",
+        "userCodePlaceholder": "Enter your user ID",
         "newPassword": "New Password",
         "confirmPassword": "Confirm New Password",
         "passwordPlaceholder": "Enter {{label}}",
@@ -44,7 +44,7 @@
         "submitting": "Changing...",
         "submit": "Change Password",
         "validation": {
-            "userCodeRequired": "Please enter your user code.",
+            "userCodeRequired": "Please enter your user ID.",
             "passwordRequired": "Please enter a new password.",
             "passwordMinLength": "Password must be at least 8 characters.",
             "confirmRequired": "Please confirm your password.",
@@ -58,9 +58,9 @@
     },
     "register": {
         "title": "Create Account",
-        "subtitle": "Set up your user code and password",
-        "userCode": "User Code",
-        "userCodePlaceholder": "Enter your user code",
+        "subtitle": "Set up your user ID and password",
+        "userCode": "User ID",
+        "userCodePlaceholder": "Enter your user ID",
         "userCodeHint": "4–20 characters: letters, numbers, hyphens, and underscores",
         "password": "Password",
         "passwordPlaceholder": "Enter your password",
@@ -80,7 +80,7 @@
         "haveAccount": "Already have an account?",
         "login": "Login",
         "validation": {
-            "userCodeRequired": "Please enter your user code.",
+            "userCodeRequired": "Please enter your user ID.",
             "userCodeFormat": "Use 4–20 letters, numbers, hyphens, or underscores.",
             "passwordRequired": "Please enter your password.",
             "passwordMinLength": "Password must be at least 8 characters.",
@@ -178,7 +178,7 @@
     },
     "user": {
         "title": "Account",
-        "userCode": "User Code",
+        "userCode": "User ID",
         "loading": "Loading...",
         "fetchError": "Unable to retrieve account data.",
         "language": {
@@ -374,8 +374,8 @@
     "deleteAccount": {
         "title": "Delete your account?",
         "description": "After deletion, you will no longer be able to log in or access your recorded data. This action cannot be undone.",
-        "confirmLabel": "Enter your user code to confirm",
-        "enterCode": "Code to enter: ",
+        "confirmLabel": "Enter your user ID to confirm",
+        "enterCode": "ID to enter: ",
         "cancel": "Cancel",
         "submit": "Delete Account",
         "deleting": "Deleting...",
